@@ -98,7 +98,7 @@ button {
 .brand {
   display: flex;
   align-items: center;
-  gap: 0.5em;
+  gap: 10px;
   font-family: "Fraunces", serif;
   font-size: 20px;
   font-weight: 500;
@@ -107,7 +107,7 @@ button {
   font-variation-settings: "opsz" 144;
 }
 .brand img {
-  height: 1.25em;
+  height: 1.05em;
   width: auto;
   display: block;
 }
@@ -329,7 +329,60 @@ button {
 }
 .term-body {
   padding: 16px 18px;
-  white-space: pre-wrap;
+  display: grid;
+  gap: 12px;
+  white-space: normal;
+}
+.term-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.term-steps {
+  display: grid;
+  gap: 6px;
+}
+.term-step {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 10px;
+}
+.term-fill {
+  border-bottom: 1px dotted var(--line-3);
+  transform: translateY(1px);
+}
+.term-finding {
+  display: grid;
+  gap: 4px;
+}
+.term-finding-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.term-chip {
+  color: var(--fg-2);
+  border: 1px solid var(--line-2);
+  padding: 1px 6px;
+  font-size: 10.5px;
+}
+.term-kv-row {
+  display: grid;
+  grid-template-columns: 78px 1fr;
+  gap: 8px;
+}
+.term-trace {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+}
+.term-summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 .term-body .prompt {
   color: var(--fg-3);
@@ -358,7 +411,7 @@ button {
 .term-body hr {
   border: 0;
   border-top: 1px solid var(--line);
-  margin: 10px 0;
+  margin: 4px 0;
 }
 .term-body .cursor::after {
   content: "▍";

@@ -21,20 +21,19 @@
   <body>
     <!-- NAV -->
     <header class="nav">
-      <div class="nav-inner">
-        <div class="brand">
-          <img src="ward.svg" />
-          <!-- <svg class="brand-mark" viewBox="0 0 120 160" aria-hidden="true"> -->
-          <!--   <path d="M 8 36 Q 60 26 112 36 L 112 72 C 112 106, 88 130, 60 142 C 32 130, 8 106, 8 72 Z" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="round"/> -->
-          <!--   <g stroke="currentColor" stroke-width="9" stroke-linecap="round" fill="none"> -->
-          <!--     <line x1="60" y1="48" x2="60" y2="118"/> -->
-          <!--     <line x1="60" y1="66" x2="34" y2="42"/> -->
-          <!--     <line x1="60" y1="66" x2="86" y2="42"/> -->
-          <!--   </g> -->
-          <!-- </svg> -->
-          <b>ward</b>
-          <span class="nav-ver">pre-release</span>
-        </div>
+        <div class="nav-inner">
+          <div class="brand">
+            <img src="ward-with-word.svg" alt="Ward" />
+            <!-- <svg class="brand-mark" viewBox="0 0 120 160" aria-hidden="true"> -->
+            <!--   <path d="M 8 36 Q 60 26 112 36 L 112 72 C 112 106, 88 130, 60 142 C 32 130, 8 106, 8 72 Z" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="round"/> -->
+            <!--   <g stroke="currentColor" stroke-width="9" stroke-linecap="round" fill="none"> -->
+            <!--     <line x1="60" y1="48" x2="60" y2="118"/> -->
+            <!--     <line x1="60" y1="66" x2="34" y2="42"/> -->
+            <!--     <line x1="60" y1="66" x2="86" y2="42"/> -->
+            <!--   </g> -->
+            <!-- </svg> -->
+            <span class="nav-ver">pre-release</span>
+          </div>
         <nav class="nav-links">
           <a href="#benchmark">Results</a>
           <a href="#how">Evidence model</a>
@@ -102,35 +101,78 @@
               <span class="title">zsh · ward</span>
             </div>
             <div class="term-body">
-              <span class="prompt">$</span> <span class="cmd">ward review</span>
-              <span class="dim">
-                loading rules .......................
-                <span class="ok">ok</span> analyzing repo
-                ....................... <span class="ok">ok</span> building
-                evidence .................... <span class="ok">ok</span> ranking
-                findings .................... <span class="ok">ok</span></span
-              >
+              <div class="term-line">
+                <span class="prompt">$</span> <span class="cmd">ward review</span>
+              </div>
+              <div class="term-steps dim">
+                <div class="term-step">
+                  <span>loading rules</span>
+                  <span class="term-fill"></span>
+                  <span class="ok">ok</span>
+                </div>
+                <div class="term-step">
+                  <span>analyzing repo</span>
+                  <span class="term-fill"></span>
+                  <span class="ok">ok</span>
+                </div>
+                <div class="term-step">
+                  <span>building evidence</span>
+                  <span class="term-fill"></span>
+                  <span class="ok">ok</span>
+                </div>
+                <div class="term-step">
+                  <span>ranking findings</span>
+                  <span class="term-fill"></span>
+                  <span class="ok">ok</span>
+                </div>
+              </div>
               <hr />
-              <span class="warn">▸ finding #1</span>
-              <span class="kv">severity</span> <span class="warn">high</span>
-              <span class="kv">class</span> <span>path traversal</span>
-              <span class="kv">confidence</span> <span>0.91</span>
-              <span class="dim"> &lt;path&gt;:&lt;line&gt; trace: </span
-              ><span class="tok">source</span><span class="dim"> ─▸ </span
-              ><span class="tok">…</span><span class="dim"> ─▸ </span
-              ><span class="tok">sink</span> <span class="kv">bundle</span>
-              <span>witness:draft</span>
-              <span class="warn">▸ finding #2</span>
-              <span class="kv">severity</span> <span class="warn">med</span>
-              <span class="kv">class</span> <span>path traversal</span>
-              <span class="kv">confidence</span> <span>0.70</span>
-              <span class="kv">grade</span> <span>config-dependent</span>
-              <span class="dim"> trigger: </span
-              ><span class="tok">follow_symlinks</span
-              ><span class="dim"> False → True</span>
+              <div class="term-finding">
+                <div class="term-finding-head">
+                  <span class="warn">▸ finding #1</span>
+                  <span class="term-chip">witness:draft</span>
+                </div>
+                <div class="term-kv-row">
+                  <span class="kv">class</span><span>path traversal</span>
+                </div>
+                <div class="term-kv-row">
+                  <span class="kv">severity</span><span class="warn">high</span>
+                </div>
+                <div class="term-kv-row">
+                  <span class="kv">confidence</span><span>0.91</span>
+                </div>
+                <div class="term-trace">
+                  <span class="dim">&lt;path&gt;:&lt;line&gt; trace:</span>
+                  <span class="tok">source</span><span class="dim"> → </span><span class="tok">…</span><span class="dim"> → </span><span class="tok">sink</span>
+                </div>
+              </div>
+              <div class="term-finding">
+                <div class="term-finding-head">
+                  <span class="warn">▸ finding #2</span>
+                  <span class="term-chip">config-trigger</span>
+                </div>
+                <div class="term-kv-row">
+                  <span class="kv">class</span><span>path traversal</span>
+                </div>
+                <div class="term-kv-row">
+                  <span class="kv">severity</span><span class="warn">med</span>
+                </div>
+                <div class="term-kv-row">
+                  <span class="kv">confidence</span><span>0.70</span>
+                </div>
+                <div class="term-kv-row">
+                  <span class="kv">grade</span><span>config-dependent</span>
+                </div>
+                <div class="term-trace">
+                  <span class="dim">trigger:</span>
+                  <span class="tok">follow_symlinks</span><span class="dim"> False → True</span>
+                </div>
+              </div>
               <hr />
-              <span class="ok">findings ranked with evidence attached</span
-              ><span class="cursor"></span>
+              <div class="term-summary">
+                <span class="ok">2 findings retained</span>
+                <span class="dim">ranked with evidence attached</span><span class="cursor"></span>
+              </div>
             </div>
           </div>
 
@@ -705,8 +747,7 @@
       <div class="foot-inner" style="grid-template-columns: 1fr">
         <div>
           <div class="brand" style="margin-bottom: 14px">
-            <img src="ward.svg" />
-            <b>ward</b>
+            <img src="ward-with-word.svg" alt="Ward" />
             <span class="nav-ver">pre-release</span>
           </div>
           <p
