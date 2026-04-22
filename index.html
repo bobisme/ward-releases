@@ -1,0 +1,690 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ward</title>
+    <meta
+      name="description"
+      content="Ward — a static security scanner. In development."
+    />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <!-- NAV -->
+    <header class="nav">
+      <div class="nav-inner">
+        <div class="brand">
+          <img src="ward.svg" />
+          <!-- <svg class="brand-mark" viewBox="0 0 120 160" aria-hidden="true"> -->
+          <!--   <path d="M 8 36 Q 60 26 112 36 L 112 72 C 112 106, 88 130, 60 142 C 32 130, 8 106, 8 72 Z" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="round"/> -->
+          <!--   <g stroke="currentColor" stroke-width="9" stroke-linecap="round" fill="none"> -->
+          <!--     <line x1="60" y1="48" x2="60" y2="118"/> -->
+          <!--     <line x1="60" y1="66" x2="34" y2="42"/> -->
+          <!--     <line x1="60" y1="66" x2="86" y2="42"/> -->
+          <!--   </g> -->
+          <!-- </svg> -->
+          <b>ward</b>
+          <span class="nav-ver">pre-release</span>
+        </div>
+        <nav class="nav-links">
+          <a href="#benchmark">Benchmark</a>
+          <a href="#how">How it works</a>
+          <a href="#methodology">Methodology</a>
+        </nav>
+        <div class="nav-cta">
+          <a class="btn btn-primary" href="#contact">Get notified</a>
+        </div>
+      </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero" id="hero">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <div class="eyebrow">
+            <span>pre-release</span>
+            <span style="color: var(--fg-4)">·</span>
+            <b>in development</b>
+          </div>
+
+          <h1 class="h1" data-tone>
+            A static scanner that actually catches the
+            <span class="under">bugs you shipped</span><em>.</em>
+          </h1>
+
+          <p class="lede" data-tone-lede>
+            Ward is a new approach to static security analysis — grounded in
+            real vulnerabilities, not synthetic benchmarks. Evaluated against
+            thousands of historical CVEs, it catches substantially more real
+            bugs than the tools most teams run today.
+          </p>
+
+          <div class="hero-ctas">
+            <a class="btn btn-primary" href="#contact"
+              >Get notified
+              <span
+                class="k"
+                style="
+                  color: var(--accent-ink);
+                  opacity: 0.7;
+                  border-color: rgba(0, 0, 0, 0.25);
+                "
+                >↵</span
+              ></a
+            >
+            <a class="btn" href="#benchmark">See the results</a>
+          </div>
+
+          <div class="hero-note">
+            <span>Rust, Go, Python, JavaScript, Java</span>
+            <span>Local-first</span>
+            <span>Pre-release</span>
+          </div>
+        </div>
+
+        <div class="hero-term">
+          <div class="term" role="region" aria-label="Terminal example">
+            <div class="term-head">
+              <div class="dots">
+                <i class="dot"></i><i class="dot"></i><i class="dot"></i>
+              </div>
+              <span class="path">~/src/project</span>
+              <span class="title">zsh · ward</span>
+            </div>
+            <div class="term-body">
+              <span class="prompt">$</span> <span class="cmd">ward review</span>
+              <span class="dim">
+                analyzing ...........................
+                <span class="ok">ok</span> evaluating ..........................
+                <span class="ok">ok</span> triaging ............................
+                <span class="ok">ok</span></span
+              >
+              <hr />
+              <span class="warn">▸ finding #1</span>
+              <span class="kv">severity</span> <span class="warn">high</span>
+              <span class="kv">class</span> <span>[redacted]</span>
+              <span class="dim"> &lt;path&gt;:&lt;line&gt; trace: </span
+              ><span class="tok">source</span><span class="dim"> ─▸ </span
+              ><span class="tok">…</span><span class="dim"> ─▸ </span
+              ><span class="tok">sink</span>
+              <span class="warn">▸ finding #2</span>
+              <span class="kv">severity</span> <span class="warn">med</span>
+              <span class="kv">class</span> <span>[redacted]</span>
+              <span class="dim"> &lt;path&gt;:&lt;line&gt;</span>
+              <hr />
+              <span class="ok">findings ranked by confidence</span
+              ><span class="cursor"></span>
+            </div>
+          </div>
+
+          <div class="hero-note" style="margin-top: 14px">
+            <span>output shown is illustrative</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BENCHMARK -->
+    <section class="section" id="benchmark">
+      <div class="section-inner">
+        <div class="sec-head">
+          <div class="tag">
+            <span class="dot">01</span> &nbsp;
+            <span class="n">The benchmark</span>
+          </div>
+          <h2>Evaluated on real CVEs, not only handcrafted tests.</h2>
+          <p>
+            We ran Ward and the tools teams most commonly rely on over the same
+            corpus — thousands of historical CVEs across five ecosystems — and
+            counted only findings that reproduced on the vulnerable commit
+            <em>and</em> vanished on the fix commit.
+          </p>
+        </div>
+
+        <div class="cmp" id="cmp">
+          <div class="cmp-head">
+            <h4>Real CVEs caught · same corpus, same harness</h4>
+            <span class="src">paired scoring · values relative</span>
+          </div>
+
+          <div class="bars">
+            <div class="bar-row">
+              <div class="lbl me">ward</div>
+              <div class="bar-track">
+                <i class="bar-fill me" style="--w: 100%"></i>
+              </div>
+              <div class="bar-val">most</div>
+            </div>
+            <div class="bar-row">
+              <div class="lbl">[redacted]</div>
+              <div class="bar-track">
+                <i class="bar-fill" style="--w: 58%"></i>
+              </div>
+              <div class="bar-val">less</div>
+            </div>
+            <div class="bar-row">
+              <div class="lbl">[redacted]</div>
+              <div class="bar-track">
+                <i class="bar-fill" style="--w: 17%"></i>
+              </div>
+              <div class="bar-val">far less</div>
+            </div>
+            <div
+              class="bar-row"
+              style="
+                padding-top: 6px;
+                border-top: 1px dashed var(--line);
+                margin-top: 4px;
+              "
+            >
+              <div class="lbl" style="color: var(--fg-3)">ward advantage</div>
+              <div
+                class="bar-track"
+                style="
+                  background: transparent;
+                  border: 0;
+                  display: flex;
+                  align-items: center;
+                  gap: 12px;
+                "
+              >
+                <span class="mono" style="color: var(--accent); font-size: 12px"
+                  >substantially higher recall, at higher precision</span
+                >
+              </div>
+              <div class="bar-val" style="color: var(--fg-3)">Δ</div>
+            </div>
+          </div>
+        </div>
+
+        <p
+          class="mono"
+          style="
+            margin-top: 18px;
+            font-size: 11px;
+            color: var(--fg-3);
+            letter-spacing: 0.02em;
+          "
+        >
+          ▸ Paired scoring: a finding is &ldquo;real&rdquo; only if present on
+          the vulnerable commit <em>and</em> absent on the fix commit.
+          <a
+            href="#methodology"
+            style="color: var(--fg-1); border-bottom: 1px dashed var(--line-3)"
+            >Read the methodology →</a
+          >
+        </p>
+      </div>
+    </section>
+
+    <!-- CREDIBILITY -->
+    <section class="section" id="credibility">
+      <div class="section-inner">
+        <div class="sec-head">
+          <div class="tag">
+            <span class="dot">02</span> &nbsp;
+            <span class="n">Grounded in real CVEs</span>
+          </div>
+          <h2>Thousands of historical CVEs.</h2>
+          <p>
+            Our evaluation corpus is built from published CVEs with verifiable
+            vuln and fix commits across five ecosystems. Every tool we compare
+            runs through the same harness on the same repos at the same SHAs.
+          </p>
+        </div>
+
+        <div class="cred-grid">
+          <div class="cred-l">
+            <!-- <div class="cred-num">Thousands</div> -->
+            <div class="cred-k">
+              historical CVEs · 5 languages · many repositories
+            </div>
+            <p class="cred-body">
+              Each entry is a (repo, vuln_sha, fix_sha, CVE-id, class) tuple. We
+              run each scanner against both SHAs, diff the findings, and only
+              count alerts that appear on the vuln commit and disappear on the
+              fix.
+            </p>
+            <ul class="cred-list">
+              <li>Reproducible harness · same inputs for every tool</li>
+              <li>Tool configs frozen and versioned per run</li>
+              <li>Findings classified by CWE</li>
+              <li>Re-run periodically; results dated on every chart</li>
+            </ul>
+          </div>
+
+          <div class="cred-r">
+            <div class="cred-right-head">
+              <span>corpus by language</span>
+              <span>relative ▸</span>
+            </div>
+            <div class="corpus">
+              <div class="row head">
+                <span>lang</span><span>share</span><span></span><span></span>
+              </div>
+              <div class="row">
+                <span class="lang">python</span
+                ><span
+                  ><span class="meter"><i style="width: 90%"></i></span></span
+                ><span class="count">·</span><span class="rec">·</span>
+              </div>
+              <div class="row">
+                <span class="lang">javascript</span
+                ><span
+                  ><span class="meter"><i style="width: 75%"></i></span></span
+                ><span class="count">·</span><span class="rec">·</span>
+              </div>
+              <div class="row">
+                <span class="lang">go</span
+                ><span
+                  ><span class="meter"><i style="width: 60%"></i></span></span
+                ><span class="count">·</span><span class="rec">·</span>
+              </div>
+              <div class="row">
+                <span class="lang">rust</span
+                ><span
+                  ><span class="meter"><i style="width: 50%"></i></span></span
+                ><span class="count">·</span><span class="rec">·</span>
+              </div>
+              <div class="row">
+                <span class="lang">java</span
+                ><span
+                  ><span class="meter"><i style="width: 45%"></i></span></span
+                ><span class="count">·</span><span class="rec">·</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="section" id="how">
+      <div class="section-inner">
+        <div class="sec-head">
+          <div class="tag">
+            <span class="dot">03</span> &nbsp;
+            <span class="n">How it works</span>
+          </div>
+          <h2>A new approach to static analysis.</h2>
+          <p>
+            Ward combines program analysis with evaluation methodology designed
+            to reflect real-world bug-finding. Further details at launch.
+          </p>
+        </div>
+
+        <div class="how">
+          <div class="how-card">
+            <div class="how-head">
+              <div class="i">I · ANALYSIS</div>
+              <h3>Cross-file reasoning</h3>
+            </div>
+            <div class="how-body">
+              <div class="how-viz">
+                <div class="trace" data-anim="trace" id="trace">
+                  <svg
+                    class="links"
+                    viewBox="0 0 420 180"
+                    preserveAspectRatio="none"
+                    aria-hidden="true"
+                  >
+                    <path d="M 130 42 C 180 42, 200 92, 260 92" />
+                    <path d="M 260 92  C 320 92, 330 140, 380 140" />
+                  </svg>
+                  <div class="file" style="left: 12px; top: 20px">
+                    <div class="n"><b>&lt;source&gt;</b></div>
+                    <code>input</code>
+                  </div>
+                  <div class="file" style="left: 140px; top: 70px">
+                    <div class="n"><b>&lt;intermediate&gt;</b></div>
+                    <code>…</code>
+                  </div>
+                  <div class="file hit" style="left: 252px; top: 118px">
+                    <div class="n">
+                      <b>&lt;sink&gt;</b>
+                      <span style="color: var(--danger)">· risk</span>
+                    </div>
+                    <code>action</code>
+                  </div>
+                  <div class="badge" id="traceBadge">finding</div>
+                </div>
+              </div>
+              <p>
+                Reasons across files to surface issues that single-file
+                pattern-matching misses.
+              </p>
+            </div>
+          </div>
+
+          <div class="how-card">
+            <div class="how-head">
+              <div class="i">II · EVAL</div>
+              <h3>Paired scoring</h3>
+            </div>
+            <div class="how-body">
+              <div class="how-viz">
+                <div class="paired">
+                  <div>
+                    <div class="ph">
+                      <b>vuln commit</b> <span class="tag-pill v">caught</span>
+                    </div>
+                    <div class="ln">
+                      <span class="g">·</span
+                      ><span class="vuln">- vulnerable code</span>
+                    </div>
+                    <div class="ln">
+                      <span class="g">·</span
+                      ><span class="vuln">- risky call</span>
+                    </div>
+                    <div class="ln"><span class="g">·</span><span></span></div>
+                    <div class="ln">
+                      <span class="g">·</span
+                      ><span style="color: var(--fg-3)"> …</span>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="ph">
+                      <b>fix commit</b> <span class="tag-pill f">clean</span>
+                    </div>
+                    <div class="ln">
+                      <span class="g">·</span
+                      ><span class="fix">+ validated</span>
+                    </div>
+                    <div class="ln">
+                      <span class="g">·</span><span class="fix">+ guard</span>
+                    </div>
+                    <div class="ln">
+                      <span class="g">·</span
+                      ><span class="fix">+ allowlist</span>
+                    </div>
+                    <div class="ln">
+                      <span class="g">·</span
+                      ><span class="fix">+ safe call</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <p>
+                A finding only counts when it fires on the vulnerable commit
+                <em>and</em> disappears on the fix. That&rsquo;s how you prove
+                the scanner caught the bug, not just a bug.
+              </p>
+            </div>
+          </div>
+
+          <div class="how-card">
+            <div class="how-head">
+              <div class="i">III · TRIAGE</div>
+              <h3>Confidence ranking</h3>
+            </div>
+            <div class="how-body">
+              <div class="how-viz">
+                <div
+                  style="
+                    position: absolute;
+                    inset: 0;
+                    padding: 14px 16px;
+                    font-family: var(--mono);
+                    font-size: 10.5px;
+                    display: grid;
+                    gap: 6px;
+                    align-content: center;
+                  "
+                >
+                  <div
+                    style="
+                      display: grid;
+                      grid-template-columns: 1fr auto;
+                      align-items: center;
+                      gap: 10px;
+                    "
+                  >
+                    <div style="color: var(--fg)">#1 finding</div>
+                    <div
+                      style="
+                        color: var(--accent);
+                        font-variant-numeric: tabular-nums;
+                      "
+                    >
+                      high
+                    </div>
+                  </div>
+                  <div
+                    style="
+                      height: 4px;
+                      background: var(--bg-3);
+                      border: 1px solid var(--line);
+                    "
+                  >
+                    <div
+                      style="
+                        width: 91%;
+                        height: 100%;
+                        background: var(--accent);
+                      "
+                    ></div>
+                  </div>
+                  <div
+                    style="
+                      display: grid;
+                      grid-template-columns: 1fr auto;
+                      align-items: center;
+                      gap: 10px;
+                      margin-top: 6px;
+                    "
+                  >
+                    <div style="color: var(--fg-1)">#2 finding</div>
+                    <div
+                      style="
+                        color: var(--fg);
+                        font-variant-numeric: tabular-nums;
+                      "
+                    >
+                      med
+                    </div>
+                  </div>
+                  <div
+                    style="
+                      height: 4px;
+                      background: var(--bg-3);
+                      border: 1px solid var(--line);
+                    "
+                  >
+                    <div
+                      style="width: 70%; height: 100%; background: var(--fg-2)"
+                    ></div>
+                  </div>
+                  <div
+                    style="
+                      display: grid;
+                      grid-template-columns: 1fr auto;
+                      align-items: center;
+                      gap: 10px;
+                      margin-top: 6px;
+                    "
+                  >
+                    <div style="color: var(--fg-2)">#3 finding</div>
+                    <div
+                      style="
+                        color: var(--fg-2);
+                        font-variant-numeric: tabular-nums;
+                      "
+                    >
+                      low
+                    </div>
+                  </div>
+                  <div
+                    style="
+                      height: 4px;
+                      background: var(--bg-3);
+                      border: 1px solid var(--line);
+                    "
+                  >
+                    <div
+                      style="width: 35%; height: 100%; background: var(--fg-3)"
+                    ></div>
+                  </div>
+                  <div style="color: var(--fg-3); margin-top: 8px">
+                    ranked by confidence — nothing suppressed
+                  </div>
+                </div>
+              </div>
+              <p>
+                Every finding gets a confidence score. Ranking surfaces the
+                likely-real bugs first without hiding anything that&rsquo;s
+                uncertain.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- METHODOLOGY / FAQ -->
+    <section class="section" id="methodology">
+      <div class="section-inner">
+        <div class="sec-head">
+          <div class="tag">
+            <span class="dot">04</span> &nbsp;
+            <span class="n">Methodology</span>
+          </div>
+          <h2>Read the fine print. Please.</h2>
+          <p>
+            We&rsquo;re tired of vendor benchmarks and we assume you are too.
+            Here&rsquo;s what our evaluation means, and what it doesn&rsquo;t.
+          </p>
+        </div>
+
+        <div class="faq">
+          <details open>
+            <summary>What is paired scoring, precisely?</summary>
+            <p>
+              For each CVE we have a repo and two SHAs:
+              <span class="mono" style="color: var(--fg)">vuln_sha</span> (the
+              commit the CVE was filed against) and
+              <span class="mono" style="color: var(--fg)">fix_sha</span> (the
+              merge that closed it). We run the scanner on both and call the
+              finding &ldquo;real&rdquo; only if it fires on
+              <span class="mono" style="color: var(--fg)">vuln_sha</span> at a
+              location whose scope includes the fixed code, and does not fire on
+              <span class="mono" style="color: var(--fg)">fix_sha</span>. Any
+              other pattern is not credited. Raw alert counts across scanners
+              aren&rsquo;t comparable; paired scoring is.
+            </p>
+          </details>
+
+          <details>
+            <summary>Which tools did you compare against?</summary>
+            <p>
+              We&rsquo;ll publish the exact tool names, versions, and
+              configurations at launch, alongside the reproducible harness. For
+              now the comparison is against the tools most teams actually run
+              today.
+            </p>
+          </details>
+
+          <details>
+            <summary>Will the corpus be public?</summary>
+            <p>
+              Yes. The evaluation corpus and harness will be open and
+              reproducible. Configurations for every tool under test will be
+              pinned.
+            </p>
+          </details>
+
+          <details>
+            <summary>When can I try it?</summary>
+            <p>
+              Ward is pre-release and in active development. There&rsquo;s no
+              public install today. If you want to be notified when there is,
+              leave your email below.
+            </p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="section" id="contact">
+      <div class="section-inner" style="max-width: 720px">
+        <div class="sec-head">
+          <div class="tag">
+            <span class="dot">05</span> &nbsp;
+            <span class="n">Stay in the loop</span>
+          </div>
+          <h2>Get notified at launch.</h2>
+          <p>
+            One email when Ward is ready. No marketing list, no drip campaign.
+          </p>
+        </div>
+        <form
+          onsubmit="
+            event.preventDefault();
+            this.querySelector('button').textContent = 'noted.';
+          "
+          style="
+            display: flex;
+            gap: 8px;
+            border: 1px solid var(--line-2);
+            padding: 6px;
+            background: var(--bg-1);
+            max-width: 520px;
+          "
+        >
+          <input
+            type="email"
+            required
+            placeholder="you@company.com"
+            style="
+              flex: 1;
+              background: transparent;
+              border: 0;
+              color: var(--fg);
+              font-family: var(--mono);
+              font-size: 13px;
+              padding: 8px 10px;
+              outline: none;
+            "
+          />
+          <button class="btn btn-primary" type="submit" style="height: 38px">
+            Notify me
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="foot">
+      <div class="foot-inner" style="grid-template-columns: 1fr">
+        <div>
+          <div class="brand" style="margin-bottom: 14px">
+            <img src="ward.svg" />
+            <b>ward</b>
+            <span class="nav-ver">pre-release</span>
+          </div>
+          <p
+            class="mono"
+            style="color: var(--fg-2); font-size: 12px; max-width: 44ch"
+          >
+            Static analysis evaluated against real CVEs. In development.
+          </p>
+        </div>
+      </div>
+      <div class="foot-meta">
+        <span>Pre-release · details subject to change</span>
+        <span>© 2026</span>
+      </div>
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>
