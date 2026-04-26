@@ -1,0 +1,675 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ward — examples</title>
+    <meta
+      name="description"
+      content="Two findings, two adjudications. A real aiohttp path-traversal vulnerability confirmed under non-default config; a Sanic static-analysis false positive refuted with a counterexample."
+    />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <!-- NAV -->
+    <header class="nav">
+      <div class="nav-inner">
+        <div class="brand">
+          <a href="index.html" aria-label="Ward home">
+            <img src="ward-with-word.svg" alt="Ward" />
+          </a>
+          <span class="nav-ver">pre-release</span>
+        </div>
+        <nav class="nav-links">
+          <a href="index.html#benchmark">Results</a>
+          <a href="index.html#how">Evidence model</a>
+          <a href="index.html#methodology">Methodology</a>
+          <a href="examples.html" aria-current="page">Examples</a>
+        </nav>
+      </div>
+    </header>
+
+    <!-- PAGE TITLE -->
+    <section class="page-title">
+      <div class="page-title-inner">
+        <div class="page-title-eyebrow">examples</div>
+        <h1 class="page-title-h">Two findings, step by step.</h1>
+        <p class="page-title-sub">
+          Both start the same way — Ward's static analyzer flags a suspect
+          taint flow. From there an agent walks each candidate through the
+          same pipeline: read source, form a hypothesis, run it past an
+          oracle (or rule it out), file typed evidence, route to a
+          reviewer. One ends in a sandboxed proof; the other in a
+          structured counterexample.
+        </p>
+      </div>
+    </section>
+
+    <!-- EXAMPLE 1: aiohttp CONFIRMED -->
+    <section class="section example example--proved" id="aiohttp">
+      <div class="section-inner">
+        <div class="sec-head">
+          <div class="tag">
+            <span class="n">EXAMPLE 01</span>
+            <span class="dot">·</span>
+            <span class="ex-status ex-status--proved">confirmed</span>
+          </div>
+          <h2>aiohttp CVE-2024-23334 — path traversal under <span class="mono">follow_symlinks=True</span>.</h2>
+          <p>
+            A real, public CVE in <span class="mono">aiohttp</span>'s static
+            file route. Default-safe; exploitable only when the application
+            developer opts in to the unsafe parameter. Ward routes this to a
+            <em>config-dependent</em> evidence grade, not a raw "high
+            severity" alert.
+          </p>
+        </div>
+
+        <!-- Run stats banner -->
+        <div class="flow-stats">
+          <div class="flow-stat">
+            <div class="flow-stat-k">model</div>
+            <div class="flow-stat-v mono">claude-sonnet-4.6</div>
+          </div>
+          <div class="flow-stat">
+            <div class="flow-stat-k">turns used</div>
+            <div class="flow-stat-v mono">11 of 32</div>
+          </div>
+          <div class="flow-stat">
+            <div class="flow-stat-k">wall time</div>
+            <div class="flow-stat-v mono">3m 15s</div>
+          </div>
+          <div class="flow-stat">
+            <div class="flow-stat-k">api spend</div>
+            <div class="flow-stat-v mono">$0.1866</div>
+          </div>
+        </div>
+
+        <ol class="flow">
+          <!-- 01 · Static finding -->
+          <li class="flow-step">
+            <div class="flow-rail"><span class="flow-num">01</span></div>
+            <div class="flow-body">
+              <div class="flow-step-head">
+                <span class="flow-phase">Static finding</span>
+                <span class="ex-tag ex-tag--src">candidate</span>
+              </div>
+              <h3 class="flow-title">Ward's taint analyzer flags a candidate sink.</h3>
+              <p class="flow-lede">
+                The scanner traces a request URL's filepath segment into
+                the static-route handler and marks the
+                <span class="mono">FileResponse</span> call as a sink. The
+                output is conservative by design — by itself this is a
+                hypothesis worth investigating, nothing more.
+              </p>
+              <div class="flow-art">
+                <div class="flow-kv-row"><span class="flow-kv-k">rule</span><span class="flow-kv-v mono">TAINT-GENERIC</span></div>
+                <div class="flow-kv-row"><span class="flow-kv-k">class</span><span class="flow-kv-v mono">path_traversal</span></div>
+                <div class="flow-kv-row"><span class="flow-kv-k">file</span><span class="flow-kv-v mono">aiohttp/web_urldispatcher.py:668</span></div>
+                <div class="flow-kv-row"><span class="flow-kv-k">sink</span><span class="flow-kv-v mono">FileResponse(filepath, …)</span></div>
+                <div class="flow-kv-row"><span class="flow-kv-k">flow</span><span class="flow-kv-v mono">src[expect_handler] → sink[fileresponse.arg0]</span></div>
+                <div class="flow-kv-row"><span class="flow-kv-k">conf.</span><span class="flow-kv-v mono">0.80</span></div>
+              </div>
+            </div>
+          </li>
+
+          <!-- 02 · Investigation opens -->
+          <li class="flow-step">
+            <div class="flow-rail"><span class="flow-num">02</span></div>
+            <div class="flow-body">
+              <div class="flow-step-head">
+                <span class="flow-phase">Investigation opens</span>
+                <span class="ex-tag">turn 0</span>
+              </div>
+              <h3 class="flow-title">Discoverer agent picks up the candidate.</h3>
+              <p class="flow-lede">
+                A pinned model receives the finding alongside Ward's
+                v0.3.2 system prompt — tool catalogue, attachment
+                contracts per evidence grade, and a turn budget. Provider,
+                model snapshot, and generation id are all recorded so the
+                run can be replayed or audited later.
+              </p>
+              <div class="flow-art">
+                <div class="flow-kv-row"><span class="flow-kv-k">model</span><span class="flow-kv-v mono">anthropic/claude-4.6-sonnet-20260217</span></div>
+                <div class="flow-kv-row"><span class="flow-kv-k">prompt</span><span class="flow-kv-v mono">discoverer-system-v0.3.2</span></div>
+                <div class="flow-kv-row"><span class="flow-kv-k">backend</span><span class="flow-kv-v mono">OpenRouterPinned · zdr=true</span></div>
+                <div class="flow-kv-row"><span class="flow-kv-k">gen id</span><span class="flow-kv-v mono">gen-1777057578-7UaFDtUkdZcofpI8gHw7</span></div>
+              </div>
+            </div>
+          </li>
+
+          <!-- 03 · Read source -->
+          <li class="flow-step">
+            <div class="flow-rail"><span class="flow-num">03</span></div>
+            <div class="flow-body">
+              <div class="flow-step-head">
+                <span class="flow-phase">Read source</span>
+                <span class="ex-tag">turns 2–8</span>
+              </div>
+              <h3 class="flow-title">Agent walks the surrounding code.</h3>
+              <p class="flow-lede">
+                Three windows in <span class="mono">web_urldispatcher.py</span>:
+                the <span class="mono">_handle</span> body around the
+                sink, the containment-check that runs before it, and
+                <span class="mono">StaticResource.__init__</span> where
+                the <span class="mono">follow_symlinks</span> knob is set.
+              </p>
+<pre class="flow-code"><code><span class="flow-code-ln">643</span>filepath = self._directory.joinpath(filename).resolve()
+<span class="flow-code-ln">644</span>if not self._follow_symlinks:
+<span class="flow-code-ln">645</span>    filepath.relative_to(self._directory)   <span class="flow-code-cmt"># raises if escaped</span>
+<span class="flow-code-ln">…</span>
+<span class="flow-code-ln">667</span>elif filepath.is_file():
+<span class="flow-code-ln">668</span>    return FileResponse(filepath, chunk_size=self._chunk_size)</code></pre>
+            </div>
+          </li>
+
+          <!-- 04 · Form hypothesis -->
+          <li class="flow-step">
+            <div class="flow-rail"><span class="flow-num">04</span></div>
+            <div class="flow-body">
+              <div class="flow-step-head">
+                <span class="flow-phase">Form hypothesis</span>
+                <span class="ex-tag">turn 8</span>
+              </div>
+              <h3 class="flow-title">Agent isolates the gating condition.</h3>
+              <p class="flow-lede">
+                Default config blocks the traversal. The unsafe parameter
+                removes the containment check. The library is default-safe
+                — the bug only activates under a specific deployment
+                choice.
+              </p>
+              <div class="ex-oracle">
+                <div class="ex-oracle-head">discoverer · turn 8</div>
+                <p class="ex-oracle-quote">
+                  "With <span class="mono">follow_symlinks=True</span>, the
+                  <span class="mono">filepath.relative_to(self._directory)</span>
+                  check is skipped. A symlink inside the static directory
+                  pointing to <span class="mono">/etc/passwd</span> would
+                  be followed. This is the classic
+                  <span class="mono">follow_symlinks=True</span> path
+                  traversal."
+                </p>
+              </div>
+            </div>
+          </li>
+
+          <!-- 05 · Build & run repro -->
+          <li class="flow-step">
+            <div class="flow-rail"><span class="flow-num">05</span></div>
+            <div class="flow-body">
+              <div class="flow-step-head">
+                <span class="flow-phase">Build &amp; run repro</span>
+                <span class="ex-tag">4 attempts</span>
+              </div>
+              <h3 class="flow-title">Sandboxed exploit drafted, then iterated against the harness.</h3>
+              <p class="flow-lede">
+                A symlink inside the static dir pointing at a secret file
+                outside it, served through an app configured with
+                <span class="mono">follow_symlinks=True</span>. The first
+                three runs failed for harness-shape reasons — file served
+                but oracle didn't see the canary. The agent diagnosed each
+                miss and adapted.
+              </p>
+              <div class="flow-attempts">
+                <div class="flow-attempt flow-attempt--fail">
+                  <span class="flow-attempt-n mono">turn 9</span>
+                  <span class="flow-attempt-v">harness failed to start — top-level <span class="mono">web.run_app</span> blocked the import</span>
+                  <span class="flow-attempt-r mono">unproven</span>
+                </div>
+                <div class="flow-attempt flow-attempt--fail">
+                  <span class="flow-attempt-n mono">turn 13</span>
+                  <span class="flow-attempt-v">harness ran, file served (200) — oracle didn't see canary in body digest</span>
+                  <span class="flow-attempt-r mono">unproven</span>
+                </div>
+                <div class="flow-attempt flow-attempt--fail">
+                  <span class="flow-attempt-n mono">turn 15</span>
+                  <span class="flow-attempt-v">added <span class="mono">/check</span> echo handler — canary still not in oracle's view</span>
+                  <span class="flow-attempt-r mono">unproven</span>
+                </div>
+                <div class="flow-attempt flow-attempt--ok">
+                  <span class="flow-attempt-n mono">turn 18</span>
+                  <span class="flow-attempt-v">canary inlined in response prose — read of out-of-root file echoed back</span>
+                  <span class="flow-attempt-r mono">proved</span>
+                </div>
+              </div>
+            </div>
+          </li>
+
+          <!-- 06 · Oracle verdict -->
+          <li class="flow-step">
+            <div class="flow-rail"><span class="flow-num">06</span></div>
+            <div class="flow-body">
+              <div class="flow-step-head">
+                <span class="flow-phase">Oracle verdict</span>
+                <span class="ex-tag ex-tag--out">proven</span>
+              </div>
+              <h3 class="flow-title">An independent oracle confirms the read.</h3>
+              <p class="flow-lede">
+                The oracle is not the model. It's a separate check — a
+                harness canary planted in a file outside the static root
+                that has to surface in the response body for the verdict
+                to flip <span class="mono">proven=true</span>.
+              </p>
+              <div class="ex-oracle ex-oracle--proved">
+                <div class="ex-oracle-head">oracle response · turn 19</div>
+<pre class="flow-json">{
+  "oracle_type": "path_traversal_canary_echo",
+  "proven": true,
+  "evidence": "harness canary 'WARD_PATH_TRAVERSAL_CANARY' echoed
+               in response body — traversal read the out-of-root file",
+  "response": { "status": 200, "latency_ms": 0,
+                "body_digest": "blake3:903caef4…" }
+}</pre>
+              </div>
+            </div>
+          </li>
+
+          <!-- 07 · Submit evidence -->
+          <li class="flow-step">
+            <div class="flow-rail"><span class="flow-num">07</span></div>
+            <div class="flow-body">
+              <div class="flow-step-head">
+                <span class="flow-phase">Submit evidence</span>
+                <span class="ex-tag">3 attachments</span>
+              </div>
+              <h3 class="flow-title">Typed attachments filed against the bundle.</h3>
+              <p class="flow-lede">
+                The config-dependent grade has a fixed contract: name the
+                knob, pin the exploit source, attach the oracle's
+                verdict. Each artifact has a content digest — a reviewer
+                can verify nothing was edited after the fact.
+              </p>
+              <div class="flow-att-list">
+                <div class="flow-att">
+                  <div class="flow-att-head">
+                    <span class="flow-att-kind mono">config-trigger</span>
+                    <span class="flow-att-id mono">3aba08de…</span>
+                  </div>
+                  <div class="flow-att-body">
+                    Names <span class="mono">follow_symlinks</span>,
+                    default <span class="mono">False</span>, unsafe
+                    <span class="mono">True</span>, gating site
+                    <span class="mono">web_urldispatcher.py:529</span>.
+                  </div>
+                </div>
+                <div class="flow-att">
+                  <div class="flow-att-head">
+                    <span class="flow-att-kind mono">repro-test</span>
+                    <span class="flow-att-id mono">ca0c033e…</span>
+                  </div>
+                  <div class="flow-att-body">
+                    Byte-pinned aiohttp app: symlink inside
+                    <span class="mono">static_dir</span> pointing at a
+                    secret outside it, plus a
+                    <span class="mono">/check</span> handler that exposes
+                    the read for the oracle.
+                  </div>
+                </div>
+                <div class="flow-att">
+                  <div class="flow-att-head">
+                    <span class="flow-att-kind mono">repro-result</span>
+                    <span class="flow-att-id mono">105c404c…</span>
+                  </div>
+                  <div class="flow-att-body">
+                    <span class="mono">exit_code 0</span>,
+                    <span class="mono">proven=true</span>, response 200
+                    with the canary echoed.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+
+          <!-- 08 · Claim & bundle -->
+          <li class="flow-step">
+            <div class="flow-rail"><span class="flow-num">08</span></div>
+            <div class="flow-body">
+              <div class="flow-step-head">
+                <span class="flow-phase">Claim &amp; bundle</span>
+                <span class="ex-tag">turn 31</span>
+              </div>
+              <h3 class="flow-title">Discoverer claims; the ledger files the bundle.</h3>
+              <p class="flow-lede">
+                Notable: the ledger reports
+                <span class="mono">supported_grade: reproduced</span> —
+                the evidence is strong enough for the higher tier — but
+                the discoverer claimed
+                <span class="mono">config_dependent</span> because the
+                library is default-safe. Honest grading is part of the
+                contract, not the model's choice.
+              </p>
+<pre class="flow-json">make_claim(outcome="proved", grade_hint="config-dependent", …)
+
+→ bundle: {
+    "evidence_grade":   "config_dependent",
+    "review_status":    "under_review",
+    "supported_grade":  "reproduced",
+    "missing_for_next": ["patch + regression_test"],
+    "attachments":      3
+  }
+  claim_confidence_ppm: 900000</pre>
+            </div>
+          </li>
+
+          <!-- 09 · Analyst queue -->
+          <li class="flow-step">
+            <div class="flow-rail"><span class="flow-num">09</span></div>
+            <div class="flow-body">
+              <div class="flow-step-head">
+                <span class="flow-phase">Analyst queue</span>
+                <span class="ex-tag ex-tag--out">under review</span>
+              </div>
+              <h3 class="flow-title">Routed for human sign-off.</h3>
+              <p class="flow-lede">
+                <span class="mono">reason = config_dependent_approval</span>.
+                The reviewer sees the proof, the trigger, and the full
+                provenance chain. The "fix" here is a deployment
+                decision — audit application configs for
+                <span class="mono">follow_symlinks=True</span> — not a
+                library patch.
+              </p>
+            </div>
+          </li>
+        </ol>
+
+        <aside class="takeaway takeaway--proved">
+          <div class="takeaway-head">What this demonstrates</div>
+          <ul class="takeaway-list">
+            <li>Ward verified a real, public CVE — not a synthetic test case.</li>
+            <li>Pinned the exact config gate (<span class="mono">follow_symlinks=True</span>) that flips the bug from inert to exploitable.</li>
+            <li>Confirmed the read with an oracle that runs independently of the model — the agent can't fake the verdict.</li>
+            <li>Graded honestly as <em>config-dependent</em> even though the evidence supported the higher <em>reproduced</em> tier, because aiohttp is default-safe.</li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+
+    <!-- EXAMPLE 2: Sanic REFUTED -->
+    <section class="section example example--refuted" id="sanic">
+      <div class="section-inner">
+        <div class="sec-head">
+          <div class="tag">
+            <span class="n">EXAMPLE 02</span>
+            <span class="dot">·</span>
+            <span class="ex-status ex-status--refuted">refuted</span>
+          </div>
+          <h2>Sanic <span class="mono">cli/app.py:142</span> — taint reaches <span class="mono">import_module</span>, but isn't a vulnerability.</h2>
+          <p>
+            The same scanner flags a CLI-arg-controlled value flowing into
+            <span class="mono">import_module()</span> in Sanic's CLI loader. A
+            naïve "any tainted sink" rule would call this a path-traversal
+            hit. Ward investigates, finds the reason it can't actually be
+            exploited, and ships the explanation alongside the dismissal.
+          </p>
+        </div>
+
+        <!-- Run stats banner -->
+        <div class="flow-stats">
+          <div class="flow-stat">
+            <div class="flow-stat-k">model</div>
+            <div class="flow-stat-v mono">qwen3-next-80b-thinking</div>
+          </div>
+          <div class="flow-stat">
+            <div class="flow-stat-k">turns used</div>
+            <div class="flow-stat-v mono">2 of 32</div>
+          </div>
+          <div class="flow-stat">
+            <div class="flow-stat-k">wall time</div>
+            <div class="flow-stat-v mono">91s</div>
+          </div>
+          <div class="flow-stat">
+            <div class="flow-stat-k">api spend</div>
+            <div class="flow-stat-v mono">~$0.0025</div>
+          </div>
+        </div>
+
+        <ol class="flow">
+          <!-- 01 · Static finding -->
+          <li class="flow-step">
+            <div class="flow-rail"><span class="flow-num">01</span></div>
+            <div class="flow-body">
+              <div class="flow-step-head">
+                <span class="flow-phase">Static finding</span>
+                <span class="ex-tag ex-tag--src">candidate</span>
+              </div>
+              <h3 class="flow-title">Same scanner, same rule, similar shape.</h3>
+              <p class="flow-lede">
+                A CLI-arg flowing through to a module loader.
+                Conservative taint analysis says: this <em>looks</em>
+                like a sink. Twenty-four distinct taint paths in this
+                codebase converge on the same line — a strong static
+                signal worth verifying.
+              </p>
+              <div class="flow-art">
+                <div class="flow-kv-row"><span class="flow-kv-k">rule</span><span class="flow-kv-v mono">TAINT-GENERIC</span></div>
+                <div class="flow-kv-row"><span class="flow-kv-k">class</span><span class="flow-kv-v mono">path_traversal</span></div>
+                <div class="flow-kv-row"><span class="flow-kv-k">file</span><span class="flow-kv-v mono">sanic/cli/app.py:142</span></div>
+                <div class="flow-kv-row"><span class="flow-kv-k">sink</span><span class="flow-kv-v mono">import_module(module_name)</span></div>
+                <div class="flow-kv-row"><span class="flow-kv-k">flow</span><span class="flow-kv-v mono">src[path] → sink[import_module.arg0]</span></div>
+                <div class="flow-kv-row"><span class="flow-kv-k">conf.</span><span class="flow-kv-v mono">0.70</span></div>
+                <div class="flow-kv-row"><span class="flow-kv-k">variants</span><span class="flow-kv-v mono">24 distinct paths to same sink</span></div>
+              </div>
+            </div>
+          </li>
+
+          <!-- 02 · Investigation opens -->
+          <li class="flow-step">
+            <div class="flow-rail"><span class="flow-num">02</span></div>
+            <div class="flow-body">
+              <div class="flow-step-head">
+                <span class="flow-phase">Investigation opens</span>
+                <span class="ex-tag">turn 0</span>
+              </div>
+              <h3 class="flow-title">Different model, same pipeline.</h3>
+              <p class="flow-lede">
+                An open-weights model — pinned with the same
+                provenance-bearing backend Sonnet uses. The pipeline
+                isn't tied to one provider, and the run id is enough to
+                go pull the actual transcript.
+              </p>
+              <div class="flow-art">
+                <div class="flow-kv-row"><span class="flow-kv-k">model</span><span class="flow-kv-v mono">qwen/qwen3-next-80b-a3b-thinking-2509</span></div>
+                <div class="flow-kv-row"><span class="flow-kv-k">prompt</span><span class="flow-kv-v mono">discoverer-system-v0.3.2</span></div>
+                <div class="flow-kv-row"><span class="flow-kv-k">backend</span><span class="flow-kv-v mono">OpenRouterPinned · Alibaba</span></div>
+                <div class="flow-kv-row"><span class="flow-kv-k">gen id</span><span class="flow-kv-v mono">gen-1777084375-nbyQMafjbeGouwlniX5a</span></div>
+              </div>
+            </div>
+          </li>
+
+          <!-- 03 · Read source -->
+          <li class="flow-step">
+            <div class="flow-rail"><span class="flow-num">03</span></div>
+            <div class="flow-body">
+              <div class="flow-step-head">
+                <span class="flow-phase">Read source</span>
+                <span class="ex-tag">turn 1</span>
+              </div>
+              <h3 class="flow-title">Agent reads the surrounding window.</h3>
+              <p class="flow-lede">
+                One pass at <span class="mono">cli/app.py</span> lines
+                132–152. The <em>shape</em> of the API — module-name
+                resolver, not file opener — is enough to settle the
+                question. No further reading required.
+              </p>
+<pre class="flow-code"><code><span class="flow-code-ln">135</span>f"   eg. sanic {self.args.module} --simple"
+<span class="flow-code-ln">…</span>
+<span class="flow-code-ln">142</span>module = import_module(module_name)
+<span class="flow-code-ln">143</span>app = getattr(module, app_name, None)</code></pre>
+            </div>
+          </li>
+
+          <!-- 04 · Identify contract violation -->
+          <li class="flow-step">
+            <div class="flow-rail"><span class="flow-num">04</span></div>
+            <div class="flow-body">
+              <div class="flow-step-head">
+                <span class="flow-phase">Identify contract violation</span>
+                <span class="ex-tag">turn 2</span>
+              </div>
+              <h3 class="flow-title">Sink can't be exercised — wrong grammar.</h3>
+              <p class="flow-lede">
+                <span class="mono">import_module</span> resolves Python
+                module names — dot-separated identifiers. Path-traversal
+                characters aren't valid module names; the call raises
+                <span class="mono">ImportError</span> before any file is
+                touched. The taint flow is real; the sink is not.
+              </p>
+              <div class="ex-oracle ex-oracle--refuted">
+                <div class="ex-oracle-head">discoverer · refutation</div>
+                <p class="ex-oracle-quote">
+                  "Python module names cannot contain path traversal
+                  characters (must be valid identifiers).
+                  <span class="mono">import_module()</span> requires
+                  dot-separated module names (e.g.
+                  <span class="mono">app.main</span>), and user-provided
+                  input results in <span class="mono">ImportError</span>
+                  for invalid syntax, not actual path traversal."
+                </p>
+              </div>
+            </div>
+          </li>
+
+          <!-- 05 · Submit counterexample -->
+          <li class="flow-step">
+            <div class="flow-rail"><span class="flow-num">05</span></div>
+            <div class="flow-body">
+              <div class="flow-step-head">
+                <span class="flow-phase">Submit counterexample</span>
+                <span class="ex-tag">1 attachment</span>
+              </div>
+              <h3 class="flow-title">A structured refutation, not a flat dismissal.</h3>
+              <p class="flow-lede">
+                A reviewer doesn't see "ignored." They see the lines that
+                were considered, the contract that rules them out, and a
+                content digest that pins the artifact for replay.
+              </p>
+              <div class="flow-att-list">
+                <div class="flow-att">
+                  <div class="flow-att-head">
+                    <span class="flow-att-kind mono">counterexample</span>
+                    <span class="flow-att-id mono">4f3f7a7c…</span>
+                  </div>
+                  <div class="flow-att-body">
+                    Label: <em>"False positive — Path traversal
+                    misclassification"</em>. Cites
+                    <span class="mono">cli/app.py:142</span> and
+                    <span class="mono">cli/app.py:72</span> as evidence
+                    sites; reasoning rests on the
+                    <span class="mono">import_module</span> grammar.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+
+          <!-- 06 · Claim & bundle -->
+          <li class="flow-step">
+            <div class="flow-rail"><span class="flow-num">06</span></div>
+            <div class="flow-body">
+              <div class="flow-step-head">
+                <span class="flow-phase">Claim &amp; bundle</span>
+                <span class="ex-tag">turn 5</span>
+              </div>
+              <h3 class="flow-title">Discoverer claims unproven; ledger files the bundle.</h3>
+              <p class="flow-lede">
+                Suppression isn't boolean. Three states track the bundle
+                independently:
+              </p>
+              <ul class="flow-bullets">
+                <li><b>Filed at</b> <span class="mono">semantic_only</span> · the lowest grade compatible with an "unproven" claim.</li>
+                <li><b>Evidence supports</b> <span class="mono">semantic_plus_counterexample</span> · the structured counterexample is strong enough for a higher tier.</li>
+                <li><b>Awaits promotion</b> on review · a human can lift the grade after confirming the reasoning.</li>
+              </ul>
+<pre class="flow-json">make_claim(outcome="unproven", grade_hint="semantic-plus-counterexample", …)
+
+→ bundle: {
+    "evidence_grade":   "semantic_only",
+    "review_status":    "draft",
+    "supported_grade":  "semantic_plus_counterexample",
+    "missing_for_next": ["repro_result"],
+    "attachments":      1
+  }
+  claim_confidence_ppm: 900000</pre>
+            </div>
+          </li>
+
+          <!-- 07 · Analyst queue -->
+          <li class="flow-step">
+            <div class="flow-rail"><span class="flow-num">07</span></div>
+            <div class="flow-body">
+              <div class="flow-step-head">
+                <span class="flow-phase">Analyst queue</span>
+                <span class="ex-tag ex-tag--refuted">draft</span>
+              </div>
+              <h3 class="flow-title">Routed with the reasoning attached.</h3>
+              <p class="flow-lede">
+                <span class="mono">reason = semantic_only_draft</span>.
+                Next time the same code shape shows up, that knowledge
+                is still there. Ward correctly rejected a misranked
+                candidate, and the audit trail proves it.
+              </p>
+            </div>
+          </li>
+        </ol>
+
+        <aside class="takeaway takeaway--refuted">
+          <div class="takeaway-head">What this demonstrates</div>
+          <ul class="takeaway-list">
+            <li>Ward didn't stop at "any tainted sink." It checked whether the sink could actually be exercised.</li>
+            <li>Caught a contract mismatch — module-name grammar versus path-traversal characters — that a syntactic taint rule can't see.</li>
+            <li>Filed the suppression as a typed, auditable artifact, not a sticky-note dismissal.</li>
+            <li>Reduced reviewer load on this code shape <em>permanently</em>: the next match arrives with the reasoning already attached.</li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+
+    <!-- CLOSING -->
+    <section class="section" id="why">
+      <div class="section-inner" style="max-width: 880px">
+        <div class="sec-head">
+          <div class="tag">
+            <span class="n">WHY BOTH OUTCOMES MATTER</span>
+          </div>
+          <h2>The point of "evidence-backed" isn't that everything reaches "exploited."</h2>
+        </div>
+        <p style="color: var(--fg-1); max-width: 64ch; margin: 0 0 18px">
+          A scanner's job is to find candidate vulnerabilities. The harder
+          job — and the one that decides whether security teams actually
+          trust a tool — is telling them apart. Ward attaches structured
+          evidence to <em>both</em> outcomes:
+        </p>
+        <ul class="why-list">
+          <li>
+            <b>Confirmed bugs</b> arrive with a sandboxed proof, the
+            triggering config, and an oracle's independent verification.
+            Reviewer's question shifts from "is this real?" to "do we ship
+            the fix as a code change or a deployment guardrail?"
+          </li>
+          <li>
+            <b>Refuted findings</b> arrive with a counterexample explaining
+            why the static signal didn't translate to a real
+            vulnerability. Suppression is principled, not a sticky-note.
+          </li>
+        </ul>
+        <p style="color: var(--fg-2); margin-top: 32px; font-size: 14px">
+          Both bundles above were produced end-to-end by Ward's evidence
+          pipeline: static analysis → agentic investigation → sandboxed
+          repro or counterexample → typed evidence bundle → analyst
+          queue. No fixture shortcuts, no human steering between steps.
+          Combined model spend across both runs: about
+          <span class="mono">$0.19</span>.
+        </p>
+      </div>
+    </section>
+
+    <script src="app.js"></script>
+  </body>
+</html>

@@ -38,6 +38,7 @@
           <a href="#benchmark">Results</a>
           <a href="#how">Evidence model</a>
           <a href="#methodology">Methodology</a>
+          <a href="examples.html">Examples</a>
         </nav>
         <div style="display: none" class="nav-cta">
           <a class="btn btn-primary" href="#contact">Get notified</a>
@@ -50,9 +51,9 @@
       <div class="hero-grid">
         <div class="hero-copy">
           <div class="eyebrow">
-            <span>pre-release</span>
+            <span>not just a scanner</span>
             <span style="color: var(--fg-4)">·</span>
-            <b>in development</b>
+            <b>an evidence layer</b>
           </div>
 
           <h1 class="h1" data-tone>
@@ -61,10 +62,10 @@
           </h1>
 
           <p class="lede" data-tone-lede>
-            Ward starts with real-CVE-tested static analysis and carries
-            findings forward into traces, provenance, and reviewable evidence.
-            It is being built for private codebases that need more than a
-            scanner dashboard.
+            Ward starts with real-CVE-tested static analysis, then carries
+            each finding through agentic investigation to a typed evidence
+            bundle a reviewer can act on — trace, provenance, config-aware
+            risk, and reproducible proof where a proof lane exists.
           </p>
 
           <div class="hero-ctas" style="display: none">
@@ -87,7 +88,6 @@
             <span>Rust, Go, Python, JavaScript, Java</span>
             <span>19 vulnerability classes</span>
             <span>Evidence-backed findings</span>
-            <span>Pre-release</span>
           </div>
         </div>
 
@@ -106,22 +106,17 @@
               </div>
               <div class="term-steps dim">
                 <div class="term-step">
-                  <span>loading rules</span>
+                  <span>static analysis</span>
                   <span class="term-fill"></span>
-                  <span class="ok">ok</span>
+                  <span class="ok">11 candidates</span>
                 </div>
                 <div class="term-step">
-                  <span>analyzing repo</span>
+                  <span>investigating</span>
                   <span class="term-fill"></span>
-                  <span class="ok">ok</span>
+                  <span class="ok">2 bundled · 9 queued</span>
                 </div>
                 <div class="term-step">
-                  <span>building evidence</span>
-                  <span class="term-fill"></span>
-                  <span class="ok">ok</span>
-                </div>
-                <div class="term-step">
-                  <span>ranking findings</span>
+                  <span>evidence pipeline</span>
                   <span class="term-fill"></span>
                   <span class="ok">ok</span>
                 </div>
@@ -129,55 +124,57 @@
               <hr />
               <div class="term-finding">
                 <div class="term-finding-head">
-                  <span class="warn">▸ finding #1</span>
-                  <span class="term-chip">witness:draft</span>
+                  <span class="ok">▸ aiohttp CVE-2024-23334</span>
+                  <span class="term-chip term-chip--ok">evidence: under_review</span>
                 </div>
                 <div class="term-kv-row">
                   <span class="kv">class</span><span>path traversal</span>
                 </div>
                 <div class="term-kv-row">
-                  <span class="kv">severity</span><span class="warn">high</span>
-                </div>
-                <div class="term-kv-row">
-                  <span class="kv">confidence</span><span>0.91</span>
-                </div>
-                <div class="term-trace">
-                  <span class="dim">&lt;path&gt;:&lt;line&gt; trace:</span>
-                  <span class="tok">source</span><span class="dim"> → </span><span class="tok">…</span><span class="dim"> → </span><span class="tok">sink</span>
-                </div>
-              </div>
-              <div class="term-finding">
-                <div class="term-finding-head">
-                  <span class="warn">▸ finding #2</span>
-                  <span class="term-chip">config-trigger</span>
-                </div>
-                <div class="term-kv-row">
-                  <span class="kv">class</span><span>path traversal</span>
-                </div>
-                <div class="term-kv-row">
-                  <span class="kv">severity</span><span class="warn">med</span>
-                </div>
-                <div class="term-kv-row">
-                  <span class="kv">confidence</span><span>0.70</span>
-                </div>
-                <div class="term-kv-row">
-                  <span class="kv">grade</span><span>config-dependent</span>
+                  <span class="kv">grade</span><span class="warn">config-dependent</span>
                 </div>
                 <div class="term-kv-row">
                   <span class="kv">trigger</span>
                   <span><span class="tok">follow_symlinks</span><span class="dim"> False → True</span></span>
                 </div>
+                <div class="term-kv-row">
+                  <span class="kv">oracle</span><span class="ok">proven · canary echoed via symlink read</span>
+                </div>
+                <div class="term-kv-row">
+                  <span class="kv">evidence</span>
+                  <span class="dim">config-trigger · repro-test · repro-result</span>
+                </div>
+              </div>
+              <div class="term-finding">
+                <div class="term-finding-head">
+                  <span class="dim">▸ sanic cli/app.py:142</span>
+                  <span class="term-chip term-chip--refuted">evidence: draft</span>
+                </div>
+                <div class="term-kv-row">
+                  <span class="kv">class</span><span>path traversal</span>
+                </div>
+                <div class="term-kv-row">
+                  <span class="kv">grade</span><span class="dim">semantic-only · counterexample</span>
+                </div>
+                <div class="term-kv-row">
+                  <span class="kv">refuted</span>
+                  <span class="dim">import_module requires identifier grammar</span>
+                </div>
+                <div class="term-kv-row">
+                  <span class="kv">evidence</span>
+                  <span class="dim">counterexample · 4f3f7a7c…</span>
+                </div>
               </div>
               <hr />
               <div class="term-summary">
-                <span class="ok">2 findings retained</span>
-                <span class="dim">ranked with evidence attached</span><span class="cursor"></span>
+                <span class="ok">2 bundled</span>
+                <span class="dim">· 9 queued · $0.19 spent · 13 turns total</span><span class="cursor"></span>
               </div>
             </div>
           </div>
 
           <div class="hero-note" style="margin-top: 14px">
-            <span>output shown is illustrative</span>
+            <span>real output from the run on the <a href="examples.html" style="color: var(--fg-1); border-bottom: 1px dashed var(--line-3)">examples page</a></span>
           </div>
         </div>
       </div>
@@ -193,19 +190,37 @@
           </div>
           <h2>Real-CVE evaluation is the floor.</h2>
           <p>
-            We ran Ward and the tools teams most commonly rely on over the same
-            corpus of 2,068 entries grounded in historical CVEs across five
-            ecosystems. A tool only gets credit when it flags the vulnerable
-            code targeted by the patch and that finding disappears on the fix
-            commit. That tells you the scanner is real. It is not the whole
-            product story.
+            We ran Ward and the tools teams most commonly rely on over the
+            same corpus of 2,068 entries grounded in historical CVEs across
+            five ecosystems. A finding only counts when it flags the
+            vulnerable code targeted by the patch <em>and</em> disappears
+            on the fix commit.
           </p>
+        </div>
+
+        <div class="bench-headline">
+          <div class="bench-stat">
+            <div class="bench-stat-v">799</div>
+            <div class="bench-stat-k">paired true positives</div>
+          </div>
+          <div class="bench-stat">
+            <div class="bench-stat-v">72.6<span class="bench-stat-unit">%</span></div>
+            <div class="bench-stat-k">recall</div>
+          </div>
+          <div class="bench-stat">
+            <div class="bench-stat-v">73.1<span class="bench-stat-unit">%</span></div>
+            <div class="bench-stat-k">precision</div>
+          </div>
+          <div class="bench-stat bench-stat--note">
+            <div class="bench-stat-v bench-stat-v--small">2,068</div>
+            <div class="bench-stat-k">corpus entries · 5 ecosystems</div>
+          </div>
         </div>
 
         <div class="cmp" id="cmp">
           <div class="cmp-head">
-            <h4>Paired true positives · same corpus, same harness</h4>
-            <span class="src">paired scoring · dated 2026-04-11</span>
+            <h4>Same corpus, same harness · paired scoring</h4>
+            <span class="src">dated 2026-04-11</span>
           </div>
 
           <div class="bars">
@@ -224,36 +239,22 @@
               <div class="bar-val">58% of Ward</div>
             </div>
             <div class="bar-row">
-              <div class="lbl">codeql</div>
-              <div class="bar-track">
-                <i class="bar-fill" style="--w: 17%"></i>
-              </div>
-              <div class="bar-val">17% of Ward</div>
-            </div>
-            <div
-              class="bar-row"
-              style="
-                padding-top: 6px;
-                border-top: 1px dashed var(--line);
-                margin-top: 4px;
-              "
-            >
-              <div class="lbl" style="color: var(--fg-3)">ward advantage</div>
+              <div class="lbl" style="color: var(--fg-3)">codeql</div>
               <div
                 class="bar-track"
                 style="
                   background: transparent;
-                  border: 0;
+                  border-style: dashed;
                   display: flex;
                   align-items: center;
-                  gap: 12px;
+                  padding: 0 10px;
                 "
               >
-                <span class="mono" style="color: var(--accent); font-size: 12px"
-                  >Ward: 799 TP · 72.6% recall · 73.1% precision</span
+                <span class="mono" style="color: var(--fg-3); font-size: 11px"
+                  >pending full-corpus rerun</span
                 >
               </div>
-              <div class="bar-val" style="color: var(--fg-3)">Δ</div>
+              <div class="bar-val" style="color: var(--fg-3)">withheld</div>
             </div>
           </div>
         </div>
@@ -267,9 +268,11 @@
             letter-spacing: 0.02em;
           "
         >
-          ▸ Paired scoring: a finding is &ldquo;real&rdquo; only if present on
-          the vulnerable commit, localized to the code the patch fixed, and
-          absent on the fix commit.
+          ▸ Paired scoring: a finding is &ldquo;real&rdquo; only if present
+          on the vulnerable commit, localized to the code the patch fixed,
+          and absent on the fix commit. CodeQL numbers are withheld until
+          the full-corpus rerun completes cleanly enough to publish a
+          reproducible figure under the same harness.
           <a
             href="#methodology"
             style="color: var(--fg-1); border-bottom: 1px dashed var(--line-3)"
@@ -289,10 +292,11 @@
           </div>
           <h2>Findings should carry more than a severity label.</h2>
           <p>
-            Ward is being built as security review infrastructure, not a flat
-            alert stream. The scanner is the first layer; the longer arc is
-            evidence-backed investigation with witness bundles, provenance, and
-            config-aware risk classification.
+            A scanner dashboard tells you something might be wrong. Ward
+            ships the source-to-sink trace, the reproduction (or
+            counterexample), the config that decides whether the bug is
+            actually exploitable, and the execution history behind every
+            decision — bundled with the finding, not buried in a log.
           </p>
         </div>
 
@@ -300,7 +304,7 @@
           <div class="cred-l">
             <!-- <div class="cred-num">Thousands</div> -->
             <div class="cred-k">
-              witness bundles · provenance · config-aware grading
+              evidence bundles · provenance · config-aware grading
             </div>
             <p class="cred-body">
               A Ward finding can carry more than a rule match: a cross-file
@@ -310,14 +314,14 @@
             </p>
             <ul class="cred-list">
               <li>Cross-file trace from source to sink</li>
-              <li>Reviewable witness bundle for investigation state</li>
+              <li>Reviewable evidence bundle for investigation state</li>
               <li>Provenance and pinned execution context captured per run</li>
               <li>
                 Config-dependent risk distinguished from default-unsafe behavior
               </li>
               <li>
-                Pre-release: proof lanes are narrower than the scanner surface
-                today
+                Refuted findings carry a structured counterexample, not a
+                silent suppression
               </li>
             </ul>
           </div>
@@ -358,7 +362,7 @@
                 ><span
                   ><span class="meter"><i style="width: 100%"></i></span></span
                 ><span class="count">shipped</span
-                ><span class="rec">witness</span>
+                ><span class="rec">evidence</span>
               </div>
               <div class="row">
                 <span class="lang">config</span
@@ -381,12 +385,12 @@
             <span class="dot">03</span> &nbsp;
             <span class="n">From detection to evidence</span>
           </div>
-          <h2>Ward is aiming past flat scan output.</h2>
+          <h2>Detect, investigate, decide — with evidence at every step.</h2>
           <p>
-            The scanner remains the base layer. On top of it, Ward is adding an
-            investigation workflow that can carry forward traces, repro
-            artifacts, provenance, and evidence grades instead of ending at an
-            alert list.
+            The scanner remains the base layer. On top of it, Ward runs an
+            investigation loop that carries each finding from candidate
+            signal to a decision a reviewer can defend — with the trace,
+            repro, and provenance attached.
           </p>
         </div>
 
@@ -436,7 +440,7 @@
           <div class="how-card">
             <div class="how-head">
               <div class="i">II · INVESTIGATE</div>
-              <h3>Witness bundles</h3>
+              <h3>Evidence bundles</h3>
             </div>
             <div class="how-body">
               <div class="how-viz">
@@ -657,7 +661,7 @@
             <p>
               No. Static analysis is the entry point, not the whole story. Ward
               is being built as evidence-backed security review infrastructure:
-              scanner findings, witness bundles, provenance, and reviewable
+              scanner findings, evidence bundles, provenance, and reviewable
               investigation state. The scanner is farther along than the
               investigation layer today.
             </p>
@@ -666,9 +670,12 @@
           <details>
             <summary>Which tools did you compare against?</summary>
             <p>
-              The current comparison includes Semgrep and CodeQL. We&rsquo;ll
-              publish the exact versions, configurations, and harness at launch
-              so the runs are reproducible end to end.
+              The current comparison includes Semgrep. CodeQL is being rerun
+              under a stricter full-corpus setup, but those runs currently take
+              more than 24 hours and have not completed cleanly enough for us to
+              publish a reproducible headline number. We&rsquo;ll publish the exact
+              versions, configurations, and harness details alongside the
+              benchmark methodology.
             </p>
           </details>
 
@@ -748,7 +755,6 @@
         <div>
           <div class="brand" style="margin-bottom: 14px">
             <img src="ward-with-word.svg" alt="Ward" />
-            <span class="nav-ver">pre-release</span>
           </div>
           <p
             class="mono"
