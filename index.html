@@ -191,7 +191,7 @@
           <h2>Real-CVE evaluation is the floor.</h2>
           <p>
             We ran Ward and the tools teams most commonly rely on over the
-            same corpus of 2,068 entries grounded in historical CVEs across
+            same corpus of 3,408 entries grounded in historical CVEs across
             five ecosystems. A finding only counts when it flags the
             vulnerable code targeted by the patch <em>and</em> disappears
             on the fix commit.
@@ -200,19 +200,19 @@
 
         <div class="bench-headline">
           <div class="bench-stat">
-            <div class="bench-stat-v">799</div>
+            <div class="bench-stat-v">1,264</div>
             <div class="bench-stat-k">paired true positives</div>
           </div>
           <div class="bench-stat">
-            <div class="bench-stat-v">72.6<span class="bench-stat-unit">%</span></div>
+            <div class="bench-stat-v">74.5<span class="bench-stat-unit">%</span></div>
             <div class="bench-stat-k">recall</div>
           </div>
           <div class="bench-stat">
-            <div class="bench-stat-v">73.1<span class="bench-stat-unit">%</span></div>
+            <div class="bench-stat-v">71.8<span class="bench-stat-unit">%</span></div>
             <div class="bench-stat-k">precision</div>
           </div>
           <div class="bench-stat bench-stat--note">
-            <div class="bench-stat-v bench-stat-v--small">2,068</div>
+            <div class="bench-stat-v bench-stat-v--small">3,408</div>
             <div class="bench-stat-k">corpus entries · 5 ecosystems</div>
           </div>
         </div>
@@ -220,7 +220,7 @@
         <div class="cmp" id="cmp">
           <div class="cmp-head">
             <h4>Same corpus, same harness · paired scoring</h4>
-            <span class="src">dated 2026-04-11</span>
+            <span class="src">dated 2026-04-11 · semgrep/codeql rerun pending on expanded corpus</span>
           </div>
 
           <div class="bars">
