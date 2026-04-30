@@ -6,7 +6,7 @@
     <title>Ward</title>
     <meta
       name="description"
-      content="Ward — evidence-backed security review infrastructure for real vulnerabilities in real codebases. Pre-release."
+      content="Ward — verifiable security review infrastructure. Deterministic, replayable findings with signed evidence chains."
     />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -21,27 +21,29 @@
   <body>
     <!-- NAV -->
     <header class="nav">
-        <div class="nav-inner">
-          <div class="brand">
-            <img src="ward-with-word.svg" alt="Ward" />
-            <!-- <svg class="brand-mark" viewBox="0 0 120 160" aria-hidden="true"> -->
-            <!--   <path d="M 8 36 Q 60 26 112 36 L 112 72 C 112 106, 88 130, 60 142 C 32 130, 8 106, 8 72 Z" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="round"/> -->
-            <!--   <g stroke="currentColor" stroke-width="9" stroke-linecap="round" fill="none"> -->
-            <!--     <line x1="60" y1="48" x2="60" y2="118"/> -->
-            <!--     <line x1="60" y1="66" x2="34" y2="42"/> -->
-            <!--     <line x1="60" y1="66" x2="86" y2="42"/> -->
-            <!--   </g> -->
-            <!-- </svg> -->
-            <span class="nav-ver">pre-release</span>
-          </div>
+      <div class="nav-inner">
+        <div class="brand">
+          <img src="ward-with-word.svg" alt="Ward" />
+          <!-- <svg class="brand-mark" viewBox="0 0 120 160" aria-hidden="true"> -->
+          <!--   <path d="M 8 36 Q 60 26 112 36 L 112 72 C 112 106, 88 130, 60 142 C 32 130, 8 106, 8 72 Z" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="round"/> -->
+          <!--   <g stroke="currentColor" stroke-width="9" stroke-linecap="round" fill="none"> -->
+          <!--     <line x1="60" y1="48" x2="60" y2="118"/> -->
+          <!--     <line x1="60" y1="66" x2="34" y2="42"/> -->
+          <!--     <line x1="60" y1="66" x2="86" y2="42"/> -->
+          <!--   </g> -->
+          <!-- </svg> -->
+          <span class="nav-ver">pre-release</span>
+        </div>
         <nav class="nav-links">
           <a href="#benchmark">Results</a>
           <a href="#how">Evidence model</a>
           <a href="#methodology">Methodology</a>
           <a href="examples.html">Examples</a>
         </nav>
-        <div style="display: none" class="nav-cta">
-          <a class="btn btn-primary" href="#contact">Get notified</a>
+        <div class="nav-cta">
+          <a class="btn btn-primary" href="#contact" style="display: none"
+            >Get notified</a
+          >
         </div>
       </div>
     </header>
@@ -51,25 +53,25 @@
       <div class="hero-grid">
         <div class="hero-copy">
           <div class="eyebrow">
-            <span>not just a scanner</span>
+            <span>infrastructure</span>
             <span style="color: var(--fg-4)">·</span>
-            <b>an evidence layer</b>
+            <b>not a scanner</b>
           </div>
 
           <h1 class="h1" data-tone>
-            Security findings with
-            <span class="under">evidence</span><em>,</em> not just alerts.
+            Security findings you can
+            <span class="under">replay</span><em>,</em> verify, and trust.
           </h1>
 
           <p class="lede" data-tone-lede>
-            Ward starts with real-CVE-tested static analysis, then carries
-            each finding through agentic investigation to a typed evidence
-            bundle a reviewer can act on — trace, provenance, config-aware
-            risk, and reproducible proof where a proof lane exists.
+            Ward is security review infrastructure. Every finding ships with a
+            deterministic evidence chain, a calibrated probability, and a signed
+            witness — replayable bit-for-bit and verifiable by a third party
+            without trusting Ward. Runs in your environment.
           </p>
 
-          <div class="hero-ctas" style="display: none">
-            <a class="btn btn-primary" href="#contact"
+          <div class="hero-ctas">
+            <a class="btn btn-primary" href="#contact" style="display: none"
               >Get notified
               <span
                 class="k"
@@ -85,9 +87,9 @@
           </div>
 
           <div class="hero-note">
-            <span>Rust, Go, Python, JavaScript, Java</span>
-            <span>19 vulnerability classes</span>
-            <span>Evidence-backed findings</span>
+            <span>Deterministic replay</span>
+            <span>Signed witnesses · self-hostable</span>
+            <span>5 languages · 19 vulnerability classes</span>
           </div>
         </div>
 
@@ -102,7 +104,8 @@
             </div>
             <div class="term-body">
               <div class="term-line">
-                <span class="prompt">$</span> <span class="cmd">ward review</span>
+                <span class="prompt">$</span>
+                <span class="cmd">ward review</span>
               </div>
               <div class="term-steps dim">
                 <div class="term-step">
@@ -125,40 +128,56 @@
               <div class="term-finding">
                 <div class="term-finding-head">
                   <span class="ok">▸ aiohttp CVE-2024-23334</span>
-                  <span class="term-chip term-chip--ok">evidence: under_review</span>
+                  <span class="term-chip term-chip--ok"
+                    >evidence: under_review</span
+                  >
                 </div>
                 <div class="term-kv-row">
                   <span class="kv">class</span><span>path traversal</span>
                 </div>
                 <div class="term-kv-row">
-                  <span class="kv">grade</span><span class="warn">config-dependent</span>
+                  <span class="kv">grade</span
+                  ><span class="warn">config-dependent</span>
                 </div>
                 <div class="term-kv-row">
                   <span class="kv">trigger</span>
-                  <span><span class="tok">follow_symlinks</span><span class="dim"> False → True</span></span>
+                  <span
+                    ><span class="tok">follow_symlinks</span
+                    ><span class="dim"> False → True</span></span
+                  >
                 </div>
                 <div class="term-kv-row">
-                  <span class="kv">oracle</span><span class="ok">proven · canary echoed via symlink read</span>
+                  <span class="kv">oracle</span
+                  ><span class="ok"
+                    >proven · canary echoed via symlink read</span
+                  >
                 </div>
                 <div class="term-kv-row">
                   <span class="kv">evidence</span>
-                  <span class="dim">config-trigger · repro-test · repro-result</span>
+                  <span class="dim"
+                    >config-trigger · repro-test · repro-result</span
+                  >
                 </div>
               </div>
               <div class="term-finding">
                 <div class="term-finding-head">
                   <span class="dim">▸ sanic cli/app.py:142</span>
-                  <span class="term-chip term-chip--refuted">evidence: draft</span>
+                  <span class="term-chip term-chip--refuted"
+                    >evidence: draft</span
+                  >
                 </div>
                 <div class="term-kv-row">
                   <span class="kv">class</span><span>path traversal</span>
                 </div>
                 <div class="term-kv-row">
-                  <span class="kv">grade</span><span class="dim">semantic-only · counterexample</span>
+                  <span class="kv">grade</span
+                  ><span class="dim">semantic-only · counterexample</span>
                 </div>
                 <div class="term-kv-row">
                   <span class="kv">refuted</span>
-                  <span class="dim">import_module requires identifier grammar</span>
+                  <span class="dim"
+                    >import_module requires identifier grammar</span
+                  >
                 </div>
                 <div class="term-kv-row">
                   <span class="kv">evidence</span>
@@ -168,13 +187,25 @@
               <hr />
               <div class="term-summary">
                 <span class="ok">2 bundled</span>
-                <span class="dim">· 9 queued · $0.19 spent · 13 turns total</span><span class="cursor"></span>
+                <span class="dim"
+                  >· 9 queued · $0.19 spent · 13 turns total</span
+                ><span class="cursor"></span>
               </div>
             </div>
           </div>
 
           <div class="hero-note" style="margin-top: 14px">
-            <span>real output from the run on the <a href="examples.html" style="color: var(--fg-1); border-bottom: 1px dashed var(--line-3)">examples page</a></span>
+            <span
+              >real output from the run on the
+              <a
+                href="examples.html"
+                style="
+                  color: var(--fg-1);
+                  border-bottom: 1px dashed var(--line-3);
+                "
+                >examples page</a
+              ></span
+            >
           </div>
         </div>
       </div>
@@ -190,11 +221,10 @@
           </div>
           <h2>Real-CVE evaluation is the floor.</h2>
           <p>
-            We ran Ward and the tools teams most commonly rely on over the
-            same corpus of 3,408 entries grounded in historical CVEs across
-            five ecosystems. A finding only counts when it flags the
-            vulnerable code targeted by the patch <em>and</em> disappears
-            on the fix commit.
+            We ran Ward and the tools teams most commonly rely on over the same
+            corpus of 3,408 entries grounded in historical CVEs across five
+            ecosystems. A finding only counts when it flags the vulnerable code
+            targeted by the patch <em>and</em> disappears on the fix commit.
           </p>
         </div>
 
@@ -204,11 +234,15 @@
             <div class="bench-stat-k">paired true positives</div>
           </div>
           <div class="bench-stat">
-            <div class="bench-stat-v">82.1<span class="bench-stat-unit">%</span></div>
+            <div class="bench-stat-v">
+              82.1<span class="bench-stat-unit">%</span>
+            </div>
             <div class="bench-stat-k">recall</div>
           </div>
           <div class="bench-stat">
-            <div class="bench-stat-v">73.6<span class="bench-stat-unit">%</span></div>
+            <div class="bench-stat-v">
+              73.6<span class="bench-stat-unit">%</span>
+            </div>
             <div class="bench-stat-k">precision</div>
           </div>
           <div class="bench-stat bench-stat--note">
@@ -220,7 +254,10 @@
         <div class="cmp" id="cmp">
           <div class="cmp-head">
             <h4>Same corpus, same harness · paired scoring</h4>
-            <span class="src">dated 2026-04-28 · 3,381-entry overlap · codeql full-corpus rerun pending</span>
+            <span class="src"
+              >dated 2026-04-28 · 3,381-entry overlap · codeql full-corpus rerun
+              pending</span
+            >
           </div>
 
           <div class="bars">
@@ -268,11 +305,11 @@
             letter-spacing: 0.02em;
           "
         >
-          ▸ Paired scoring: a finding is &ldquo;real&rdquo; only if present
-          on the vulnerable commit, localized to the code the patch fixed,
-          and absent on the fix commit. CodeQL numbers are withheld until
-          the full-corpus rerun completes cleanly enough to publish a
-          reproducible figure under the same harness.
+          ▸ Paired scoring: a finding is &ldquo;real&rdquo; only if present on
+          the vulnerable commit, localized to the code the patch fixed, and
+          absent on the fix commit. CodeQL numbers are withheld until the
+          full-corpus rerun completes cleanly enough to publish a reproducible
+          figure under the same harness.
           <a
             href="#methodology"
             style="color: var(--fg-1); border-bottom: 1px dashed var(--line-3)"
@@ -288,88 +325,155 @@
         <div class="sec-head">
           <div class="tag">
             <span class="dot">02</span> &nbsp;
-            <span class="n">Evidence, not vibes</span>
+            <span class="n">Verifiable, not vibes</span>
           </div>
-          <h2>Findings should carry more than a severity label.</h2>
+          <h2>A finding should be reproducible — by anyone, not just us.</h2>
           <p>
-            A scanner dashboard tells you something might be wrong. Ward
-            ships the source-to-sink trace, the reproduction (or
-            counterexample), the config that decides whether the bug is
-            actually exploitable, and the execution history behind every
-            decision — bundled with the finding, not buried in a log.
+            A typical scanner emits an alert and a severity. Ward emits a
+            deterministic record: the source-to-sink trace, the calibrated
+            probability, the signed evidence chain that produced the decision,
+            and a hermetic capsule a third party can replay bit-for-bit.
+            Verifiable, not trust-me.
           </p>
         </div>
 
         <div class="cred-grid">
           <div class="cred-l">
-            <!-- <div class="cred-num">Thousands</div> -->
-            <div class="cred-k">
-              evidence bundles · provenance · config-aware grading
-            </div>
+            <div class="cred-k">deterministic · signed · sandboxed</div>
             <p class="cred-body">
-              A Ward finding can carry more than a rule match: a cross-file
-              trace, reproducible evidence where a proof lane exists, a
-              reviewable bundle state, and the provenance needed to explain why
-              the system believes the issue is real.
+              Ward treats a finding as a verifiable record, not a flag in a
+              dashboard. The pipeline is deterministic, the evidence chain is
+              signed, and the inputs and tools are pinned — everything needed to
+              reproduce the result, including a skeptic.
             </p>
             <ul class="cred-list">
-              <li>Cross-file trace from source to sink</li>
-              <li>Reviewable evidence bundle for investigation state</li>
-              <li>Provenance and pinned execution context captured per run</li>
               <li>
-                Config-dependent risk distinguished from default-unsafe behavior
+                Deterministic pipeline · same inputs produce bit-identical
+                outputs
               </li>
               <li>
-                Refuted findings carry a structured counterexample, not a
-                silent suppression
+                Hermetic replay capsule per run · re-derivable without our
+                cooperation
+              </li>
+              <li>
+                Signed evidence chain · attestations anchored to an external
+                transparency log
+              </li>
+              <li>
+                Calibrated probability with empirical bounds · not a severity
+                label
+              </li>
+              <li>
+                Sandbox-by-default · analyzers run with capability restrictions,
+                not network trust
+              </li>
+              <li>
+                Refutations carry a structured counterexample · not a silent
+                suppression
               </li>
             </ul>
           </div>
 
           <div class="cred-r">
             <div class="cred-right-head">
-              <span>bundle surface</span>
-              <span>current state ▸</span>
+              <span>verify a run</span>
+              <span>third-party reproducible ▸</span>
             </div>
-            <div class="corpus">
-              <div class="row head">
-                <span>signal</span><span>surface</span><span>state</span
-                ><span>notes</span>
+            <div
+              style="
+                padding: 22px 22px 24px;
+                font-family: var(--mono);
+                font-size: 11.5px;
+                color: var(--fg-1);
+                line-height: 1.85;
+              "
+            >
+              <div style="color: var(--fg)">
+                <span style="color: var(--accent)">$</span>
+                ward verify ./run-2026-04-29.capsule
               </div>
-              <div class="row">
-                <span class="lang">trace</span
-                ><span
-                  ><span class="meter"><i style="width: 100%"></i></span></span
-                ><span class="count">shipped</span
-                ><span class="rec">cross-file</span>
+              <div style="margin-top: 14px; display: grid; gap: 4px">
+                <div
+                  style="
+                    display: grid;
+                    grid-template-columns: 16px 1fr auto;
+                    gap: 10px;
+                    align-items: baseline;
+                  "
+                >
+                  <span style="color: var(--accent)">✓</span>
+                  <span>capsule integrity</span>
+                  <span style="color: var(--fg-3)">blake3:7a9f…</span>
+                </div>
+                <div
+                  style="
+                    display: grid;
+                    grid-template-columns: 16px 1fr auto;
+                    gap: 10px;
+                    align-items: baseline;
+                  "
+                >
+                  <span style="color: var(--accent)">✓</span>
+                  <span>analyzer attestations</span>
+                  <span style="color: var(--fg-3)">ed25519 valid</span>
+                </div>
+                <div
+                  style="
+                    display: grid;
+                    grid-template-columns: 16px 1fr auto;
+                    gap: 10px;
+                    align-items: baseline;
+                  "
+                >
+                  <span style="color: var(--accent)">✓</span>
+                  <span>commitment chain</span>
+                  <span style="color: var(--fg-3)">externally anchored</span>
+                </div>
+                <div
+                  style="
+                    display: grid;
+                    grid-template-columns: 16px 1fr auto;
+                    gap: 10px;
+                    align-items: baseline;
+                  "
+                >
+                  <span style="color: var(--accent)">✓</span>
+                  <span>inputs match digest</span>
+                  <span style="color: var(--fg-3)">bit-identical</span>
+                </div>
+                <div
+                  style="
+                    display: grid;
+                    grid-template-columns: 16px 1fr auto;
+                    gap: 10px;
+                    align-items: baseline;
+                  "
+                >
+                  <span style="color: var(--accent)">✓</span>
+                  <span>findings re-derived</span>
+                  <span style="color: var(--fg-3)">1,392 / 1,392</span>
+                </div>
               </div>
-              <div class="row">
-                <span class="lang">repro</span
-                ><span
-                  ><span class="meter"><i style="width: 62%"></i></span></span
-                ><span class="count">pilot</span
-                ><span class="rec">proof lanes</span>
+              <div
+                style="
+                  margin-top: 16px;
+                  padding-top: 12px;
+                  border-top: 1px solid var(--line);
+                  color: var(--fg);
+                "
+              >
+                trust: <span style="color: var(--accent)">verified</span>
               </div>
-              <div class="row">
-                <span class="lang">patch</span
-                ><span
-                  ><span class="meter"><i style="width: 38%"></i></span></span
-                ><span class="count">pilot</span
-                ><span class="rec">fixture-first</span>
-              </div>
-              <div class="row">
-                <span class="lang">proof</span
-                ><span
-                  ><span class="meter"><i style="width: 100%"></i></span></span
-                ><span class="count">shipped</span
-                ><span class="rec">evidence</span>
-              </div>
-              <div class="row">
-                <span class="lang">config</span
-                ><span
-                  ><span class="meter"><i style="width: 55%"></i></span></span
-                ><span class="count">shipped</span
-                ><span class="rec">path c</span>
+              <div
+                style="
+                  margin-top: 8px;
+                  color: var(--fg-3);
+                  font-size: 10.5px;
+                  line-height: 1.6;
+                "
+              >
+                a Ward run is a record anyone can re-derive from the capsule and
+                verify against the signed chain — without trusting Ward.
               </div>
             </div>
           </div>
@@ -388,9 +492,9 @@
           <h2>Detect, investigate, decide — with evidence at every step.</h2>
           <p>
             The scanner remains the base layer. On top of it, Ward runs an
-            investigation loop that carries each finding from candidate
-            signal to a decision a reviewer can defend — with the trace,
-            repro, and provenance attached.
+            investigation loop that carries each finding from candidate signal
+            to a decision a reviewer can defend — with the trace, repro, and
+            provenance attached.
           </p>
         </div>
 
@@ -488,8 +592,10 @@
                 </div>
               </div>
               <p>
-                For supported lanes, Ward can carry a candidate forward into
-                repro artifacts, provenance, and review state.
+                Investigation runs inside a capability-restricted sandbox. Every
+                step — model call, repro execution, patch attempt — is captured
+                in a signed witness with provenance pinned to specific tool and
+                model versions. Reproducible, auditable, attributable.
               </p>
             </div>
           </div>
@@ -509,112 +615,86 @@
                     font-family: var(--mono);
                     font-size: 10.5px;
                     display: grid;
-                    gap: 6px;
+                    gap: 9px;
                     align-content: center;
                   "
                 >
                   <div
                     style="
                       display: grid;
-                      grid-template-columns: 1fr auto;
-                      align-items: center;
-                      gap: 10px;
+                      grid-template-columns: 130px 1fr;
+                      gap: 12px;
+                      align-items: baseline;
                     "
                   >
-                    <div style="color: var(--fg)">library intrinsic</div>
-                    <div
-                      style="
-                        color: var(--accent);
-                        font-variant-numeric: tabular-nums;
-                      "
-                    >
-                      reproduced
+                    <div style="color: var(--accent); letter-spacing: 0.02em">
+                      Reproduced
                     </div>
-                  </div>
-                  <div
-                    style="
-                      height: 4px;
-                      background: var(--bg-3);
-                      border: 1px solid var(--line);
-                    "
-                  >
-                    <div
-                      style="
-                        width: 91%;
-                        height: 100%;
-                        background: var(--accent);
-                      "
-                    ></div>
+                    <div style="color: var(--fg-1)">
+                      exploit runs under default config · oracle proven
+                    </div>
                   </div>
                   <div
                     style="
                       display: grid;
-                      grid-template-columns: 1fr auto;
-                      align-items: center;
-                      gap: 10px;
-                      margin-top: 6px;
+                      grid-template-columns: 130px 1fr;
+                      gap: 12px;
+                      align-items: baseline;
                     "
                   >
-                    <div style="color: var(--fg-1)">config dependent</div>
-                    <div
-                      style="
-                        color: var(--fg);
-                        font-variant-numeric: tabular-nums;
-                      "
-                    >
-                      opt-in risk
+                    <div style="color: var(--fg); letter-spacing: 0.02em">
+                      Config-dependent
                     </div>
-                  </div>
-                  <div
-                    style="
-                      height: 4px;
-                      background: var(--bg-3);
-                      border: 1px solid var(--line);
-                    "
-                  >
-                    <div
-                      style="width: 68%; height: 100%; background: var(--fg-2)"
-                    ></div>
+                    <div style="color: var(--fg-1)">
+                      opt-in risk · trigger captured in bundle
+                    </div>
                   </div>
                   <div
                     style="
                       display: grid;
-                      grid-template-columns: 1fr auto;
-                      align-items: center;
-                      gap: 10px;
-                      margin-top: 6px;
+                      grid-template-columns: 130px 1fr;
+                      gap: 12px;
+                      align-items: baseline;
                     "
                   >
-                    <div style="color: var(--fg-2)">semantic only</div>
-                    <div
-                      style="
-                        color: var(--fg-2);
-                        font-variant-numeric: tabular-nums;
-                      "
-                    >
-                      needs review
+                    <div style="color: var(--fg-1); letter-spacing: 0.02em">
+                      Counterexample
+                    </div>
+                    <div style="color: var(--fg-1)">
+                      refutation with concrete witness
                     </div>
                   </div>
                   <div
                     style="
-                      height: 4px;
-                      background: var(--bg-3);
-                      border: 1px solid var(--line);
+                      display: grid;
+                      grid-template-columns: 130px 1fr;
+                      gap: 12px;
+                      align-items: baseline;
                     "
                   >
-                    <div
-                      style="width: 44%; height: 100%; background: var(--fg-3)"
-                    ></div>
+                    <div style="color: var(--fg-2); letter-spacing: 0.02em">
+                      Semantic-only
+                    </div>
+                    <div style="color: var(--fg-1)">
+                      no runnable oracle · routed to analyst review
+                    </div>
                   </div>
-                  <div style="color: var(--fg-3); margin-top: 8px">
-                    default-unsafe vs opt-in risk vs semantic evidence
+                  <div
+                    style="
+                      margin-top: 4px;
+                      padding-top: 10px;
+                      border-top: 1px solid var(--line);
+                      color: var(--fg-3);
+                    "
+                  >
+                    decisions are loss-aware · costs versioned, not heuristic
                   </div>
                 </div>
               </div>
               <p>
-                Ward is adding product-level distinctions between bugs that are
-                unsafe by default, risks that require an opt-in configuration,
-                and findings that still need analyst judgment.
+                Each finding carries an explicit grade. The block / warn / allow
+                decision is driven by a versioned loss function, not a static
+                threshold — auditable and policy-controlled.
               </p>
             </div>
           </div>
@@ -660,10 +740,35 @@
             <summary>Is Ward just another SAST tool?</summary>
             <p>
               No. Static analysis is the entry point, not the whole story. Ward
-              is being built as evidence-backed security review infrastructure:
-              scanner findings, evidence bundles, provenance, and reviewable
-              investigation state. The scanner is farther along than the
-              investigation layer today.
+              is verifiable security review infrastructure: deterministic
+              scanner output, signed evidence chains, hermetic replay capsules,
+              calibrated probabilities, and a sandboxed investigation layer on
+              top. The scanner is farther along than the investigation layer
+              today.
+            </p>
+          </details>
+
+          <details>
+            <summary>Does Ward send my code to external APIs?</summary>
+            <p>
+              The static pipeline runs entirely in your environment with no
+              external calls. The investigation layer can use pinned model
+              providers; a fully self-hosted variant for air-gapped deployments
+              is on the near roadmap. In every mode, code only enters declared,
+              sandboxed surfaces, and every model interaction is captured in the
+              signed witness chain.
+            </p>
+          </details>
+
+          <details>
+            <summary>How do I verify a finding without trusting Ward?</summary>
+            <p>
+              Each run produces a hermetic replay capsule and a signed evidence
+              chain anchored to an external transparency log. A third party can
+              re-derive the same findings from the capsule and verify the
+              attestations independently — no Ward cooperation required. Anchor
+              staleness and verification failures explicitly downgrade the
+              run&rsquo;s trust state.
             </p>
           </details>
 
@@ -673,8 +778,8 @@
               The current comparison includes Semgrep. CodeQL is being rerun
               under a stricter full-corpus setup, but those runs currently take
               more than 24 hours and have not completed cleanly enough for us to
-              publish a reproducible headline number. We&rsquo;ll publish the exact
-              versions, configurations, and harness details alongside the
+              publish a reproducible headline number. We&rsquo;ll publish the
+              exact versions, configurations, and harness details alongside the
               benchmark methodology.
             </p>
           </details>
@@ -701,7 +806,7 @@
     </section>
 
     <!-- CONTACT -->
-    <section style="display: none" class="section" id="contact">
+    <section class="section" id="contact" style="display: none">
       <div class="section-inner" style="max-width: 720px">
         <div class="sec-head">
           <div class="tag">
@@ -760,8 +865,8 @@
             class="mono"
             style="color: var(--fg-2); font-size: 12px; max-width: 44ch"
           >
-            Evidence-backed security review infrastructure for real
-            vulnerabilities in real codebases. Pre-release.
+            Verifiable security review infrastructure. Deterministic, replayable
+            findings with signed evidence chains.
           </p>
         </div>
       </div>
