@@ -297,7 +297,8 @@
           the vulnerable commit, localized to the code the patch fixed, and
           absent on the fix commit. CodeQL precision is extremely high (98.8%,
           only 3 false positives after paired reclassification) but recall is
-          14.5% &mdash; missing 85.5% of CVEs.
+          14.5% &mdash; missing 85.5% of CVEs. These figures are consistent with
+          independent published benchmarks; see methodology for citations.
           <a
             href="#methodology"
             style="color: var(--fg-1); border-bottom: 1px dashed var(--line-3)"
@@ -770,6 +771,27 @@
               equivalent language query suites. We&rsquo;ll publish the exact
               versions, configurations, and harness details alongside the
               benchmark methodology.
+            </p>
+            <p>
+              The recall figures we observe for CodeQL (~14%) and Semgrep (~25%)
+              are consistent with the published academic literature. Independent
+              evaluations report CodeQL at 20–22.5% recall on Java-only CVE
+              corpora (Bennett et al., EASE 2024; IRIS / CWE-Bench-Java, ICLR
+              2025), and lower still on Go and Rust where query coverage is
+              thinner. Semgrep off-the-shelf is reported at 17–24% on real Python
+              and JavaScript CVE datasets (RealVuln, arXiv:2604.13764; DeepSource
+              OSS CVE benchmark). Our paired methodology &mdash; which requires a
+              finding to be localized to the patched code and absent on the fix
+              commit &mdash; is stricter than most published evaluations, so our
+              numbers sit at or slightly below the published midpoints.
+            </p>
+            <p>
+              The gap is structural: the same EASE 2024 study attributes 76.9% of
+              all SAST false negatives to missing or insufficient rules, not
+              engine limitations. The tools miss what they miss because no one has
+              written the query or sink specification for that vulnerability
+              pattern yet &mdash; not because taint analysis fundamentally
+              can&rsquo;t reach it.
             </p>
           </details>
 
