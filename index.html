@@ -223,9 +223,18 @@
           <h2>Real-CVE evaluation is the floor.</h2>
           <p>
             We ran Ward and the tools teams most commonly rely on over the same
-            corpus of 3,408 entries grounded in historical CVEs across five
-            ecosystems. A finding only counts when it flags the vulnerable code
-            targeted by the patch <em>and</em> disappears on the fix commit.
+            corpus of 3,464 paired CVE-harness entries
+            <!-- FIXME: reconcile to private tests/cve-registry/manifest.toml.
+                 Public-site previously cited 3,408 in this paragraph and
+                 3,464 in the cmp/FAQ blocks below; we picked 3,464 as the
+                 canonical figure because it matches the 2026-05-01 silent-
+                 gating-bug-fix baseline (3,464 scannable / 3,715 manifest
+                 entries per the private project memory). The 3,408 figure
+                 appears to be an older April baseline. Confirm before
+                 publishing externally. -->
+            grounded in historical CVEs across five ecosystems. A finding only
+            counts when it flags the vulnerable code targeted by the patch
+            <em>and</em> disappears on the fix commit.
           </p>
         </div>
 
@@ -247,8 +256,8 @@
             <div class="bench-stat-k">precision</div>
           </div>
           <div class="bench-stat bench-stat--note">
-            <div class="bench-stat-v bench-stat-v--small">3,408</div>
-            <div class="bench-stat-k">corpus entries · 5 ecosystems</div>
+            <div class="bench-stat-v bench-stat-v--small">3,464</div>
+            <div class="bench-stat-k">paired CVE-harness entries · 5 ecosystems</div>
           </div>
         </div>
 
