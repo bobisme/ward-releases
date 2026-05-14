@@ -1,0 +1,856 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Unsafe-Rust head-to-head benchmark — methodology — Ward</title>
+    <meta name="description" content="Locked methodology specification for the unsafe-Rust head-to-head benchmark: scoring rules, statistical contract, ruleset selection." />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
+  <body>
+    <header class="nav">
+      <div class="nav-inner">
+        <div class="brand">
+          <a href="../index.html" aria-label="Ward home">
+            <img src="../ward-with-word.svg" alt="Ward" />
+          </a>
+          <span class="nav-ver">pre-release</span>
+        </div>
+        <nav class="nav-links">
+          <a href="../index.html#benchmark">Results</a>
+          <a href="../index.html#how">Evidence model</a>
+          <a href="../index.html#methodology">Methodology</a>
+          <a href="../examples.html">Examples</a>
+          <a href="index.html">Notes</a>
+        </nav>
+      </div>
+    </header>
+
+    <section class="page-title">
+      <div class="page-title-inner">
+        <div class="page-title-eyebrow">Notes · 2026-05-13</div>
+        <h1 class="page-title-h">Unsafe-Rust head-to-head benchmark — methodology</h1>
+        <p class="page-title-sub">Locked methodology spec for the 80-pair unsafe-Rust head-to-head benchmark. Pre-registered scoring + statistical contract.</p>
+        <p class="note-gh-link"><span class="mono">View source on GitHub:</span> <a href="https://github.com/bobisme/ward-releases/blob/main/benchmark/methodology.md"><code>benchmark/methodology.md</code></a></p>
+      </div>
+    </section>
+
+    <main class="note-main">
+      <div class="note-main-inner">
+        
+        <article class="note-body">
+<h2 id="executive-summary">Executive summary</h2>
+<p>This document specifies a public, reproducible benchmark whose claim under
+test is: <strong>Ward is best-in-class on detection of Rust unsafe-class
+vulnerabilities (memory-safety, use-after-free, type-confusion,
+undefined-behavior, data-race, soundness) on real CVE-paired code, against
+all publicly available comparable scanners as of mid-2026.</strong> The benchmark
+measures paired precision, paired recall, MCC, F1, and per-class breakdown
+on N≥80 vuln/fix-paired RUSTSEC entries; it pins tool versions, isolates
+runtime budgets, blocks the network during scan, and reports bootstrap
+confidence intervals so the headline cannot be over-claimed. Ward's
+internal Miri-witness machinery is reported as a separate Ward-only axis
+(positive-witness rate) that other tools cannot match — it informs but
+does not enter the head-to-head MCC. The methodology is locked before
+corpus collection so the benchmark cannot be selectively populated with
+shapes Ward already detects.</p>
+<h2 id="section-index">Section index</h2>
+<ol>
+<li><a href="#motivation-and-claim-under-test">Motivation and claim under test</a></li>
+<li><a href="#corpus-selection-criteria">Corpus selection criteria</a></li>
+<li><a href="#tool-selection-and-version-pinning">Tool selection and version pinning</a></li>
+<li><a href="#fairness-controls">Fairness controls</a></li>
+<li><a href="#scoring-rules">Scoring rules</a></li>
+<li><a href="#witness-rate-as-ward-only-axis">Witness rate as Ward-only axis</a></li>
+<li><a href="#statistical-reporting">Statistical reporting</a></li>
+<li><a href="#latency-and-resource-axis">Latency and resource axis</a></li>
+<li><a href="#reproduction-requirements">Reproduction requirements</a></li>
+<li><a href="#out-of-scope">Out of scope</a></li>
+<li><a href="#threats-to-validity">Threats to validity</a></li>
+<li><a href="#open-questions">Open questions</a></li>
+</ol>
+<h2 id="motivation-and-claim-under-test">Motivation and claim under test</h2>
+<p>Ward's Rust Unsafe Obligation Engine (UOE) shipped through Phase 5 with
+strong internal metrics: paired precision 72.9%, paired recall 83.7%,
+MCC +0.534 on the full 3562-entry corpus (post-Phase-2 baseline,
+2026-05-02; see <code>notes/post-phase-2-eval-2026-05-02.md</code>). The Phase 5
+Miri-witness gate currently scores 24/24 = 100% positive witness rate on
+the runnable subset of phase5-eligible entries, and per-shape paired recall
+on the unsafe-class shapes (panic-sequence 100%, layout-cast 100%,
+ffi-boundary-contract 100%, slice-from-raw-parts 100%, safe-encap 84%,
+int-overflow 83%) clears the ≥80% mark for most shapes.</p>
+<p>These numbers support the <strong>internal</strong> claim that Ward is best-in-class on
+Rust unsafe scanning. <strong>They do not yet form a public, reproducible
+proof.</strong> The historical eval-competitor work
+(<code>notes/eval-competitor-2026-03-22.md</code>) covered all five Ward languages
+with a small (364-entry) harness; the more recent full-corpus runs have
+been Ward-only. Sibling tracks (best-in-class Rust scanner bn-25hzk,
+rust-autofix bn-35b00) won't close this gap by themselves — both rest on
+detection quality whose external validity is what this benchmark
+establishes.</p>
+<p>The benchmark must therefore: (a) be public and reproducible by a
+third party from a fresh clone, (b) include the most credible
+publicly-available competitors, (c) score with Ward's existing
+diff-aware paired methodology so headline numbers reconcile to internal
+runs, (d) be locked-in as a methodology before corpus collection so
+authors cannot bias the corpus toward their own tool's shapes, and (e)
+disclose its own threats to validity in enough detail that a sophisticated
+reader can reproduce, audit, or attack the result.</p>
+<h2 id="corpus-selection-criteria">Corpus selection criteria</h2>
+<h3 id="target-size">Target size</h3>
+<p><strong>N ≥ 80 paired entries</strong> (40 vuln + 40 fix commits at minimum). Each
+entry has a vulnerable commit and a fixing commit on the same upstream
+repository. Larger N is preferred up to a point; beyond ~250 paired
+entries the marginal information per entry drops sharply (CodeQL recall
+plateaus, Semgrep's Rust ruleset is narrow enough that incremental
+entries mostly add no information). <strong>Cap target: 200 paired entries.</strong></p>
+<h3 id="inclusion-rustsec-ghsa-rust-criteria">Inclusion: RUSTSEC + GHSA-rust criteria</h3>
+<p>A candidate entry is included iff <strong>all</strong> of the following hold:</p>
+<ol>
+<li><strong>Source advisory</strong>: listed in RUSTSEC (<code>rustsec/advisory-db</code>) or
+   GHSA with ecosystem <code>cargo</code>. Both feeds are public and dated.</li>
+<li><strong>In-scope vuln class</strong>: <code>vuln_class ∈ {memory_safety,
+   use_after_free, type_confusion, undefined_behavior, data_race,
+   soundness}</code>. Concretely, a CWE in {CWE-119, CWE-120, CWE-125,
+   CWE-129, CWE-190, CWE-415, CWE-416, CWE-457, CWE-787, CWE-824,
+   CWE-843, CWE-908} is the deciding signal. Borrow-alias, Send/Sync
+   unsoundness, panic-sequence drop-ordering, and provenance-loss bugs
+   count as soundness even when the proximate CWE is broader.</li>
+<li><strong>Public fix commit</strong>: a single, identifiable fix commit (or a small
+   ≤3-commit fix series) on the upstream public repository. The fix
+   must be merged to a release branch — not a draft PR, not a private
+   patch.</li>
+<li><strong>Vulnerable commit identifiable</strong>: the parent of the fix commit (or
+   the advisory's <code>unaffected_commit_range</code> lower bound) is the
+   vulnerable commit. If the advisory pre-dates the fix by more than 30
+   days, prefer the parent of the fix commit as the vulnerable commit so
+   the diff is minimal.</li>
+<li><strong>Repository is public, alive, and clonable</strong> at scan time. Archived
+   or yanked-only crates are excluded if the upstream repo is gone.</li>
+<li><strong>License permits redistribution of the corpus manifest</strong>. The
+   manifest stores SHAs and metadata, not source — but transitive
+   inclusion of the source via cached repos requires that the repo
+   license permits redistribution. Target: MIT / Apache-2.0 /
+   MIT-OR-Apache-2.0 / BSD-3-Clause / MPL-2.0 / CC0. Excluded: GPL-3.0
+   only crates (we do not redistribute source under copyleft to avoid
+   downstream license-incompatibility concerns), proprietary repos.</li>
+</ol>
+<h3 id="exclusion-rules">Exclusion rules</h3>
+<p>A candidate is excluded if <strong>any</strong> apply:</p>
+<ul>
+<li><strong>Fix-only entries</strong> (advisories with no public vulnerable commit,
+  e.g. private security report → public fix). These cannot be paired-
+  scored.</li>
+<li><strong>No public PoC</strong> AND <strong>vulnerable code is not visible from the
+  advisory</strong>. We need to verify the rule's TP claim against actual
+  code, not against an advisory description alone.</li>
+<li><strong>Duplicate of an already-included CVE</strong> (same upstream bug under
+  multiple advisory IDs). Keep the canonical RUSTSEC ID.</li>
+<li><strong>proc-macro-only vulnerabilities</strong> (CWE involves expansion of
+  macro-defined code at compile time). Reason: all candidate tools
+  including Ward struggle here; including these would give a noisy
+  comparison without informational value. Listed under <a href="#out-of-scope">out of
+  scope</a>.</li>
+<li><strong>Vulnerability requires running tests / build scripts</strong> that fetch
+  external resources at build time. We require the corpus to be
+  scannable offline; fetching during scan is forbidden.</li>
+<li><strong>Fix commit refactors &gt;50% of the affected file</strong>. Paired scoring
+  requires that the fix is targeted; a wholesale rewrite makes
+  diff-aware FP reclassification meaningless because almost everything
+  changes.</li>
+<li><strong>Vulnerability is in <code>unsafe</code>-free crate code</strong> but the actual UB is
+  in a transitive C dependency (e.g., <code>libc</code> calls). The bug is real
+  but Rust-tool detection requires Rust source signals; this is a
+  cargo-audit-class issue.</li>
+</ul>
+<h3 id="inheriting-from-wards-existing-manifest">Inheriting from Ward's existing manifest</h3>
+<p>Ward's CVE manifest (<code>tests/cve-registry/manifest.toml</code>) contains 188
+entries with <code>vuln_class ∈ {memory_safety, use_after_free,
+type_confusion}</code> and 64 marked <code>phase5_eligible = true</code> (32 paired vuln/fix
+pairs imported from RustXec MSR'26 plus extras; see <code>notes/rustxec-import-2026-05-01.md</code>).
+<strong>Decision: subset, do not inherit verbatim, and do not rebuild from scratch.</strong></p>
+<p>Rationale:</p>
+<ul>
+<li><em>Verbatim inherit</em>: rejected — these entries were curated against
+  Ward's coverage. Pure inheritance would import authoring bias into the
+  benchmark.</li>
+<li><em>Rebuild from scratch</em>: rejected — it duplicates ~120 hours of
+  curation work already done, and the existing entries are
+  well-validated (each has an <code>expected_finding</code> tied to a specific
+  affected file).</li>
+<li><em>Subset + augment</em> (chosen): take the subset of <code>manifest.toml</code>
+  entries that <em>also</em> satisfy a third-party gating filter — namely,
+  appearing in (a) a published academic memory-safety dataset such as
+  RustXec MSR'26 or RustSan or (b) RUSTSEC's manually-curated
+  memory-safety category — then <strong>augment</strong> with newly-collected
+  RUSTSEC entries from 2024–2026 (post the manifest's last refresh)
+  that no Ward author has previously used to tune a rule. The augment
+  must reach ≥40% of the final corpus to materially dilute author
+  bias. Track the provenance of each entry in the published corpus
+  metadata (<code>source: rustxec_msr_2026 | rustsec_2024_2026 | manual_curation</code>).</li>
+</ul>
+<p>This subset+augment policy is the load-bearing fairness control on the
+corpus side — see <a href="#threats-to-validity">threats to validity</a>.</p>
+<h3 id="per-entry-metadata-schema-locked">Per-entry metadata schema (locked)</h3>
+<p>Each corpus entry (TOML format, mirroring <code>tests/cve-registry/manifest.toml</code>):</p>
+<pre><code class="language-toml">id = &quot;rs-bench-rustsec-XXXX-YYYY&quot;           # benchmark-namespaced ID
+expected_result = &quot;tp&quot; | &quot;tn&quot;
+language = &quot;rust&quot;
+repo_url = &quot;https://github.com/.../...git&quot;
+vulnerable_commit = &quot;&lt;sha&gt;&quot;
+fixing_commit = &quot;&lt;sha&gt;&quot;                     # equal to vulnerable_commit for &quot;tn&quot; rows
+cve = &quot;RUSTSEC-YYYY-NNNN&quot;
+cve_id = &quot;CVE-YYYY-NNNNN&quot;                   # if assigned
+cwe = &quot;CWE-NNN&quot;
+vuln_class = &quot;memory_safety&quot; | &quot;use_after_free&quot; | &quot;type_confusion&quot; |
+             &quot;undefined_behavior&quot; | &quot;data_race&quot; | &quot;soundness&quot;
+bug_shape = &quot;&lt;shape-id&gt;&quot;                    # e.g. &quot;safe-encap&quot;, &quot;slice-from-raw-parts&quot;,
+                                            # &quot;int-overflow&quot;, &quot;layout-cast&quot;, &quot;transmute-validity&quot;
+expected_severity = &quot;low&quot; | &quot;medium&quot; | &quot;high&quot; | &quot;critical&quot;
+affected_file = &quot;path/to/file.rs&quot;           # required for &quot;tp&quot;
+expected_finding = &quot;&lt;one-line description&gt;&quot;
+fix_kind = &quot;&lt;kind&gt;&quot;                         # e.g. &quot;bounds-check&quot;, &quot;lifetime&quot;, &quot;transmute-removal&quot;
+license = &quot;MIT&quot; | &quot;Apache-2.0&quot; | ...
+source = &quot;rustxec_msr_2026&quot; | &quot;rustsec_2024_2026&quot; | &quot;manual_curation&quot;
+phase5_eligible = true | false              # opt-in for Miri witness gate (Ward-only axis)
+</code></pre>
+<p>The <code>bug_shape</code> field maps onto Ward's UOE shape catalog (Tier 1 + Tier
+2 + Tier 3 / Phase 4 / 5), and is reported in the per-shape breakdown.
+Per-shape numbers are descriptive; the headline metric is paired across
+the full corpus, not per-shape.</p>
+<h2 id="tool-selection-and-version-pinning">Tool selection and version pinning</h2>
+<h3 id="in-scope">In scope</h3>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Version pin</th>
+<th>Why included</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Ward</strong></td>
+<td>latest released (target: v0.X tagged at benchmark publication)</td>
+<td>Subject of the claim.</td>
+<td>Run with default <code>local-interactive</code> profile, <code>--scan-all</code>. Phase 5 witness gate machinery enabled but reported separately.</td>
+</tr>
+<tr>
+<td><strong>CodeQL CLI</strong></td>
+<td><code>codeql-cli ≥ 2.18</code> with <code>codeql/rust-queries</code> ruleset pinned to a tagged release (track repo: <code>github/codeql</code>).</td>
+<td>The most credible publicly-available Rust security analyzer. Microsoft-backed, used in GitHub Advanced Security.</td>
+<td>Use <strong>CLI</strong>, not the hosted action — see fairness rationale. Use <code>rust-security-extended.qls</code> suite.</td>
+</tr>
+<tr>
+<td><strong>Semgrep</strong></td>
+<td><code>semgrep ≥ 1.95</code> (community + <code>r/rust-security</code> ruleset, snapshot pinned by digest).</td>
+<td>Widely deployed; the OSS community baseline. Rust support is younger but growing.</td>
+<td>Run with <code>--config=p/rust-security</code> plus the <code>r/rust-security</code> community pack.</td>
+</tr>
+<tr>
+<td><strong>Rudra</strong></td>
+<td>latest tag (HEAD as of 2024-09; project is dormant). Document toolchain pin (<code>rust-toolchain</code> file).</td>
+<td>The only academic Rust-specific unsoundness scanner. <strong>Best-effort inclusion</strong> — if Rudra fails to build with a toolchain it accepts, document the failure modes per repo and treat as N/A for that entry.</td>
+<td>Likely runnable on ~30–60% of corpus; report coverage.</td>
+</tr>
+<tr>
+<td><strong>cargo-geiger</strong></td>
+<td>latest released.</td>
+<td><strong>NOT a security tool</strong> — included as an <em>unsafe-density baseline</em> so reviewers can sanity-check whether high-detection-rate tools are simply firing on every <code>unsafe</code> block.</td>
+<td>Not a competitor; reported as a context column, not a head-to-head row.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="out-of-scope-with-rationale">Out of scope (with rationale)</h3>
+<ul>
+<li><strong>CodeQL hosted (GitHub Advanced Security)</strong>: requires Internet, results
+  vary by entitlements, not reproducible offline. CLI is functionally
+  equivalent for the queries we run.</li>
+<li><strong>Proprietary scanners</strong> (Veracode, Snyk Code, Sonatype, Coverity,
+  CodeSonar, etc.): not publicly auditable; we cannot pin versions or
+  share the corpus with them under permissive license.</li>
+<li><strong>cargo-audit</strong>: detects <em>known advisories by package version</em>, not
+  <em>vulnerable code by shape</em>. Different lane. A trivial corpus where
+  every entry's <code>Cargo.lock</code> references the affected version would give
+  cargo-audit ~100% recall and tell us nothing about code-level
+  detection. Excluded.</li>
+<li><strong>Cargo-deny / cargo-vet</strong>: same lane as cargo-audit. Excluded.</li>
+<li><strong>Clippy</strong>: non-security lints. Use cargo-geiger as the unsafe-density
+  baseline instead — clippy's <code>correctness</code> group has too many false
+  positives at scan time to be a fair baseline.</li>
+<li><strong>rust-analyzer / cargo-check / miri-by-itself</strong>: not security
+  scanners. (Miri appears only in Ward's witness gate.)</li>
+<li><strong>LLM-only scanners</strong> (Claude/GPT prompted with a CVE-detection
+  template): non-deterministic, expensive, version-drifting, and
+  Ward already integrates an LLM tier internally — including a
+  bare-LLM lane would be benchmarking our own infrastructure twice.
+  Excluded.</li>
+</ul>
+<h3 id="pin-enforcement">Pin enforcement</h3>
+<p>All tool binaries are reproducible-built or pinned by SHA in a single
+Dockerfile (target: <code>Dockerfile.bench</code>) committed to the benchmark repo.
+The Dockerfile produces a single image that contains every tool at the
+locked version; the harness invokes them via <code>docker run --network=none</code>
+to enforce the offline scan invariant (see <a href="#fairness-controls">fairness
+controls</a>). A nix flake is acceptable as an
+alternative to Docker; pick one and ship it.</p>
+<p>Tool ruleset SHAs are locked in <code>bench/tool-versions.toml</code> and verified
+at harness startup against the deployed image.</p>
+<h2 id="fairness-controls">Fairness controls</h2>
+<h3 id="time-budget">Time budget</h3>
+<p><strong>10 minutes hard cap per repo per tool.</strong> Implemented via
+<code>systemd-run --uid=N --slice=bench.slice --property=RuntimeMaxSec=600</code>
+(or an equivalent per-OS isolation primitive). On timeout, the tool's
+findings for that repo are recorded as <code>null</code> and the entry is reported
+as <strong>timeout</strong> rather than counted as TP/FP/TN/FN. Timeouts are
+reported separately in the latency table; they do not silently
+contribute zero findings to the headline.</p>
+<p>Rationale: 10 minutes is generous for typical Rust crates (median size
+~5K LOC), but covers the long tail (e.g., <code>wasmtime</code>, ~150K LOC, where
+CodeQL database build alone can take 4–5 min). Anything above 10 min on
+a single tool indicates a real performance issue worth surfacing on the
+latency axis rather than burying in headline aggregation.</p>
+<h3 id="compute-budget">Compute budget</h3>
+<ul>
+<li><strong>CPU</strong>: 4 dedicated cores per tool (<code>taskset -c 0-3</code>). All tools get
+  identical core count.</li>
+<li><strong>Memory</strong>: 16 GiB hard cap per scan invocation
+  (<code>systemd-run --property=MemoryMax=16G</code>). On OOM, behave as for
+  timeout: record <code>null</code>, report separately, do not count.</li>
+<li><strong>Disk</strong>: each tool runs in its own scratch directory; the directory
+  is cleared between repos. Tool caches (e.g., CodeQL database cache)
+  persist within a single benchmark run but are wiped between runs.</li>
+</ul>
+<p>The 16 GiB ceiling is a deliberate forcing function: real-world CI
+reviewers cannot allocate 64 GiB to a security scanner. If a tool
+cannot fit in 16 GiB on a 50K-LOC crate, that's a defect worth
+reporting.</p>
+<h3 id="network-isolation">Network isolation</h3>
+<p><code>--network=none</code> (Docker) or a <code>systemd-run</code> slice with
+<code>PrivateNetwork=yes</code>. No tool may make any DNS or TCP request during a
+scan. Tool databases (CodeQL <code>codeql/rust-queries</code>) and rulesets
+(Semgrep <code>p/rust-security</code>) are pre-fetched into the image at build
+time; the running container has no Internet.</p>
+<p>This rules out any "cloud assist" feature and standardizes the
+information available to each tool. It also rules out CodeQL's
+optional GitHub-hosted query suite; we use the offline CLI ruleset
+exclusively.</p>
+<h3 id="cache-state">Cache state</h3>
+<p>Repository sources are pre-cloned to a benchmark cache
+(<code>bench/cache/repos/&lt;repo&gt;/.git</code>). Each scan starts from a fresh
+<code>git archive</code> extraction (no <code>.git</code> directory inside the scan root).
+Ward's per-repo target/ directory is wiped before each scan; CodeQL's
+database directory is wiped between repos; Semgrep is stateless.</p>
+<p>Identical, pre-warmed tool indices are loaded <em>into the image</em> at build
+time so first-scan vs. nth-scan latency does not skew per-tool numbers.</p>
+<h3 id="determinism">Determinism</h3>
+<p>Each tool is invoked with a fixed RNG seed where supported
+(Semgrep: <code>--max-target-bytes</code> and rule order; CodeQL: deterministic by
+construction; Ward: deterministic by construction; Rudra:
+deterministic by construction). Three independent runs on the same
+input must produce byte-identical SARIF output. We verify this at
+harness startup on a 5-entry smoke set; if a tool fails determinism we
+file a bug and record the run as best-of-three.</p>
+<h2 id="scoring-rules">Scoring rules</h2>
+<p>The benchmark uses Ward's existing <strong>paired</strong> scoring methodology, the
+same one used in <code>crates/ward-eval/src/repo_eval.rs</code> for the headline
+internal numbers. This ensures the public benchmark numbers reconcile
+to internal runs and that competitors are not evaluated under a more
+favourable scoring lens than Ward itself.</p>
+<h3 id="paired-vs-unpaired-classification-the-headline-distinction">Paired vs unpaired classification (the headline distinction)</h3>
+<ul>
+<li>
+<p><strong>Paired (headline)</strong>: each CVE contributes a <code>(vuln_commit,
+  fix_commit)</code> pair. A finding on the vuln commit at the affected file
+  that does <strong>not</strong> persist on the fix commit at that file is a TP.
+  A finding that persists across both is reclassified from FP to TN
+  (it's a pre-existing finding unrelated to the CVE; see
+  <code>crates/ward-eval/src/finding_identity.rs</code>). A finding on the fix
+  commit but not the vuln commit is reclassified from FP to <strong>noise</strong>
+  and excluded from the headline (it's a regression introduced by the
+  fix, not relevant to the CVE under test).</p>
+</li>
+<li>
+<p><strong>Unpaired (raw classifications)</strong>: report alongside the paired
+  numbers for transparency. These are stricter against all tools;
+  paired scoring is the <em>fair</em> metric because it excludes pre-existing
+  noise from being held against any tool.</p>
+</li>
+</ul>
+<p>We report both. The headline claim is paired; unpaired numbers are in
+the appendix. This mirrors the internal eval format
+(<code>notes/silent-gating-bug-fix-2026-05-01-eval-baseline.md</code>).</p>
+<h3 id="diff-aware-fp-reclassification">Diff-aware FP reclassification</h3>
+<p>A finding <code>F</code> on the vuln commit at file <code>f</code> line <code>L</code> is reclassified
+from FP to TN iff: (a) <code>F</code> also appears on the fix commit at the same
+file <code>f</code> (line ±2) and (b) the diff between vuln and fix does not
+modify the relevant lines. The ±2 line tolerance is taken from
+<code>finding_identity.rs</code>'s persistence matcher and is identical for all
+tools.</p>
+<h3 id="line-level-vs-file-level-matching">Line-level vs file-level matching</h3>
+<p><strong>File-level for TP/FP attribution; line-level for persistence
+matching.</strong> Rationale:</p>
+<ul>
+<li>Tools differ in their line-precision: Semgrep reports the precise
+  source line of the regex match; CodeQL reports the line of the sink
+  call; Ward reports the line of the obligation residual. Comparing
+  <em>exact lines</em> across tools is unfair.</li>
+<li><em>File-level</em> matching against <code>affected_file</code> says "this tool flagged
+  the right file as suspicious", which is what a reviewer cares about.</li>
+<li><em>Line-level</em> matching is used only for persistence (does this finding
+  re-appear at the same place after the fix?), where the comparison is
+  intra-tool and the line precision is consistent.</li>
+</ul>
+<p>This compromise gives all tools a fair shake at TP attribution while
+keeping persistence reclassification rigorous.</p>
+<h3 id="what-counts-as-a-finding-per-tool">What counts as a "finding" per tool</h3>
+<p>To prevent severity-noise from inflating any tool's FP count:</p>
+<ul>
+<li><strong>Ward</strong>: <code>confidence ≥ Medium</code>. Lower-confidence findings are not
+  user-facing in <code>ward review</code>'s default profile and shouldn't enter
+  the benchmark headline.</li>
+<li><strong>CodeQL</strong>: <code>severity ≥ warning</code> (excludes <code>note</code>). The
+  <code>rust-security-extended.qls</code> suite already filters to security-
+  relevant rules; this is consistent with what GitHub Advanced
+  Security surfaces.</li>
+<li><strong>Semgrep</strong>: <code>severity ≥ WARNING</code>. Excludes <code>INFO</code> and <code>INVENTORY</code>
+  findings.</li>
+<li><strong>Rudra</strong>: all findings count (Rudra has no severity tier).</li>
+<li><strong>cargo-geiger</strong>: not scored (context column only).</li>
+</ul>
+<p>This is a normalization step; we document it and justify each filter
+threshold by reference to what the tool's default user-facing UX
+surfaces.</p>
+<h3 id="vuln-class-rule-id-mapping">Vuln-class → rule-id mapping</h3>
+<p>Ward's eval already does this via <code>vuln_class_matches_rule</code> in
+<code>crates/ward-eval/src/repo_eval.rs</code> (lines 73 onward, with the
+unsafe-class arm at line 747). The mapping is publicly visible and we
+use it for <strong>all</strong> tools, not just Ward — i.e., a Semgrep finding's
+<code>rule_id</code> is matched against the same keyword list (<code>rust-unsafe</code>,
+<code>from-raw-parts</code>, <code>transmute</code>, <code>int-overflow</code>, etc.) before counting
+as a TP.</p>
+<p>For competitor tools that don't emit Ward-shaped rule IDs, we extend
+the keyword list per-tool. Concretely:</p>
+<ul>
+<li>CodeQL Rust unsafe queries emit IDs like <code>rust/uninitialized-memory</code>,
+  <code>rust/unsafe-deref</code>, <code>rust/incorrect-pointer-arith</code>. Add these
+  keywords to the vuln-class arm.</li>
+<li>Semgrep <code>r/rust-security</code> rules emit IDs like
+  <code>rust.lang.security.unsafe-block</code>,
+  <code>rust.lang.correctness.transmute-pod-to-non-pod</code>. Add these
+  keywords.</li>
+<li>Rudra emits <code>RUDRA-{LIFETIME,PANIC-SAFETY,SEND-SYNC}</code> IDs. Add as
+  arms of the existing <code>send_sync</code> / <code>panic_sequence</code> / <code>trait_law</code>
+  classes.</li>
+</ul>
+<p>The full extended mapping is committed as <code>bench/rule-id-mapping.toml</code>
+alongside the corpus.</p>
+<h2 id="witness-rate-as-ward-only-axis">Witness rate as Ward-only axis</h2>
+<h3 id="what-miri-witnesses-are">What Miri witnesses are</h3>
+<p>Phase 5 of the UOE adds a Miri-witness loop: when Ward emits a
+high-or-medium-confidence Rust unsafe finding on a <code>phase5_eligible</code>
+entry, the eval rig launches Miri (<code>cargo +nightly miri run</code> against
+the entry's witness fixture) to attempt to <strong>reproduce the UB</strong>. The
+witness is a small executable that calls into the affected code path
+with adversarial inputs.</p>
+<p>Three outcomes per witness invocation:</p>
+<ul>
+<li><strong>Positive</strong> — Miri detected UB matching the predicted shape.
+  Confidence is promoted (medium → high). This is <em>runtime-grounded
+  evidence</em> that the static finding is real.</li>
+<li><strong>Negative</strong> — Miri ran the witness to completion with no UB. The
+  finding is demoted (high → medium → low → suppressed depending on
+  policy). The static analyzer was wrong, or the witness didn't
+  exercise the right path.</li>
+<li><strong>Skip</strong> — witness fixture failed to build, or Miri crashed, or the
+  entry isn't <code>phase5_eligible</code>. No confidence movement.</li>
+</ul>
+<p>Implementation: <code>crates/ward-eval/src/phase5_witness_gate.rs</code>. The
+gate currently passes 24/24 = 100% positive-witness rate on the
+runnable subset (24 of the 32 RustXec entries currently have a
+runnable witness fixture; the remaining 8 are skips for build
+reasons that bn-3ipwh and bn-1495l are working through).</p>
+<h3 id="why-we-report-it-separately">Why we report it separately</h3>
+<p>No competitor has equivalent machinery. CodeQL, Semgrep, Rudra all
+operate purely statically. Including witness rate in the head-to-head
+MCC would penalize them on an axis they don't compete on.</p>
+<h3 id="how-we-report-it">How we report it</h3>
+<p>A separate <strong>Ward-additional-evidence</strong> section of the writeup:</p>
+<ul>
+<li>Phase-5-eligible entries scanned: N</li>
+<li>Phase-5-eligible entries with at least one Ward finding: M</li>
+<li>Of those M, runnable Miri fixtures: M' (M' ≤ M)</li>
+<li>Positive witness rate: positive / M'</li>
+<li>Negative witness rate: negative / M'</li>
+<li>Skip rate: (M − M') / M</li>
+</ul>
+<p>We explicitly state: <em>witness rate is Ward-only; do not interpret it as
+a head-to-head metric. It is an integrity signal — Ward is making
+predictions Miri can verify at runtime.</em></p>
+<h3 id="why-witness-rate-is-interesting-at-all">Why witness rate is interesting at all</h3>
+<p>A high positive-witness rate means Ward's static obligation residuals
+correspond to <em>actual UB at runtime</em>, not just to suspicious
+syntactic shapes. This is the cleanest possible answer to "is the
+static analyzer crying wolf?" — Miri runs the code, observes UB,
+agrees with Ward. If a competitor tool ever ships a Miri-witness loop,
+this axis becomes head-to-head and we'll add it.</p>
+<h2 id="statistical-reporting">Statistical reporting</h2>
+<h3 id="headline-numbers-with-confidence-intervals">Headline numbers with confidence intervals</h3>
+<p>Every paired metric (precision, recall, F1, MCC) is reported with a
+<strong>bootstrap 95% CI</strong> computed from 1000 resamples over the corpus
+(stratified by <code>vuln_class</code>). We use the percentile method.</p>
+<p>Concretely: for each tool, we resample the corpus with replacement
+1000 times, recompute precision / recall / F1 / MCC on each resample,
+and report the 2.5th and 97.5th percentiles as the CI bounds.</p>
+<p>Headline format example (Ward vs CodeQL on a hypothetical N=80 corpus):</p>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Precision (95% CI)</th>
+<th>Recall (95% CI)</th>
+<th>F1 (95% CI)</th>
+<th>MCC (95% CI)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ward</td>
+<td>0.78 [0.71, 0.84]</td>
+<td>0.81 [0.74, 0.87]</td>
+<td>0.80 [0.75, 0.84]</td>
+<td>+0.51 [+0.41, +0.60]</td>
+</tr>
+<tr>
+<td>CodeQL</td>
+<td>0.85 [0.72, 0.95]</td>
+<td>0.20 [0.13, 0.28]</td>
+<td>0.32 [0.22, 0.42]</td>
+<td>+0.20 [+0.10, +0.31]</td>
+</tr>
+</tbody>
+</table>
+<p>CIs are required so readers can see when a precision number is high
+but driven by a tiny TP count (CodeQL's 98.8% precision in
+<code>notes/silent-gating-bug-fix-2026-05-01-eval-baseline.md</code> rests on
+just 251 TPs out of 1726 paired scorable cases — its CI on a smaller
+benchmark corpus will be very wide).</p>
+<h3 id="pairwise-tool-comparisons">Pairwise tool comparisons</h3>
+<p>For headline claims of the form "Ward beats X" we run <strong>McNemar's
+test</strong> for paired classification differences across the per-entry
+binary outcomes (correct / incorrect on each entry). McNemar's exact
+form (binomial, not chi-squared approximation) is appropriate when N
+is small and the off-diagonal counts can be sparse.</p>
+<p>We do <strong>not</strong> claim "Ward beats X" if either: (a) the McNemar p-value
+is &gt; 0.01, OR (b) the 95% CIs on F1 or MCC overlap.</p>
+<p>If both tests fail (p &gt; 0.01 AND CIs overlap), we report the numerical
+delta but explicitly state the comparison is not statistically
+distinguishable on this corpus.</p>
+<h3 id="per-class-subgroup-analysis">Per-class subgroup analysis</h3>
+<p>Per-vuln-class breakdown (memory_safety, use_after_free,
+type_confusion, undefined_behavior, data_race, soundness) is reported
+<strong>without</strong> statistical tests because per-class N is small (~10–25
+entries). We mark per-class numbers as <strong>descriptive only</strong> — they
+inform reviewers about where each tool is strong, but per-class
+claims must be backed by at least 30 entries before we apply
+significance testing.</p>
+<p>Per-shape breakdown (safe-encap, slice-from-raw-parts, transmute-
+validity, int-overflow, layout-cast, panic-sequence, ffi-boundary-
+contract, etc.) gets the same descriptive-only treatment.</p>
+<h2 id="latency-and-resource-axis">Latency and resource axis</h2>
+<p>For each tool × repo combination we report:</p>
+<ul>
+<li><strong>Wall time</strong> (seconds, p50 / p95 / p99 across the corpus).</li>
+<li><strong>CPU time</strong> (seconds; user + system).</li>
+<li><strong>RAM peak</strong> (MiB, via <code>/usr/bin/time -v</code>).</li>
+<li><strong>Disk write peak</strong> (MiB, via <code>iotop</code> or <code>cgroup</code> accounting).</li>
+<li><strong>Timeouts</strong> (count, list of repos).</li>
+<li><strong>OOMs</strong> (count, list of repos).</li>
+</ul>
+<p>Reported per-tool aggregate <strong>and</strong> per-language-class — but since the
+benchmark is Rust-only, the per-language axis collapses; we report
+per-vuln-class instead, since some classes (e.g., wasmtime / cranelift
+for type_confusion) skew large.</p>
+<p>Why latency matters for a security benchmark: a tool with 99% recall
+that takes 2 hours per repo is unusable in CI. We do not score on
+latency in the headline MCC, but we report it prominently so a
+reviewer can make their own latency / accuracy tradeoff.</p>
+<h2 id="reproduction-requirements">Reproduction requirements</h2>
+<h3 id="one-command-repro">One-command repro</h3>
+<p>From a fresh clone:</p>
+<pre><code class="language-bash">git clone https://github.com/ward/unsafe-rust-bench.git
+cd unsafe-rust-bench
+./bench/run.sh
+</code></pre>
+<p><code>run.sh</code> must:</p>
+<ol>
+<li>Build the pinned Docker image (or nix flake) from
+   <code>Dockerfile.bench</code>.</li>
+<li>Pre-fetch the corpus repos to <code>bench/cache/repos/</code>. Each clone is
+   pinned to the exact <code>vulnerable_commit</code> or <code>fixing_commit</code> SHA;
+   missing SHAs are fetched once with <code>git fetch &lt;sha&gt;</code>. After this
+   step, network access is no longer needed.</li>
+<li>Run all tools across all corpus entries with the locked time /
+   memory / network controls.</li>
+<li>Compute paired scores, bootstrap CIs, McNemar tests.</li>
+<li>Emit <code>results/headline.json</code>, <code>results/per-tool.json</code>,
+   <code>results/per-class.json</code>, <code>results/latency.json</code>, and a single
+   <code>results/report.md</code>.</li>
+</ol>
+<p>End-to-end target: completes in <strong>&lt; 6 hours on a 16-core / 64 GiB
+host</strong> (parallelism: 4 tools × 4 cores each = 16 cores; corpus chunks
+process in serial within each tool to honour the per-scan core
+budget).</p>
+<h3 id="checksums">Checksums</h3>
+<p>The benchmark publishes:</p>
+<ul>
+<li><code>bench/corpus.toml</code> — manifest with all corpus entries (SHA-pinned).</li>
+<li><code>bench/corpus.toml.sha256</code> — checksum of the manifest.</li>
+<li><code>bench/tool-versions.toml</code> — tool name + version + ruleset SHA.</li>
+<li><code>bench/tool-versions.toml.sha256</code> — checksum of tool versions.</li>
+<li><code>bench/Dockerfile.bench</code> — image definition.</li>
+<li><code>bench/Dockerfile.bench.sha256</code> — image content checksum (post-build,
+  via <code>docker save | sha256sum</code>).</li>
+</ul>
+<p>A reviewer who reproduces the benchmark should land within ±2pp of the
+published headline (per-class numbers may vary more due to small N).
+We commit the published image to a public registry
+(<code>ghcr.io/ward/unsafe-rust-bench</code>) so reviewers don't have to rebuild.</p>
+<h3 id="license">License</h3>
+<ul>
+<li><strong>Corpus manifest</strong> (TOML, metadata only): CC-BY-4.0.</li>
+<li><strong>Harness code</strong> (<code>bench/run.sh</code>, scoring scripts): Apache-2.0.</li>
+<li><strong>Source repos</strong> (transitive, fetched into cache): each repo retains
+  its own license. The benchmark documentation includes a per-repo
+  license table.</li>
+</ul>
+<p>A user redistributing the corpus must redistribute the manifest; the
+source repos themselves are fetched at runtime from upstream and not
+redistributed by us. This pattern matches RUSTSEC's own redistribution
+posture.</p>
+<h3 id="reviewer-expectations">Reviewer expectations</h3>
+<p>A third-party reviewer should be able to:</p>
+<ol>
+<li>Reproduce headline numbers ±2pp from a fresh clone.</li>
+<li>Inspect every entry's classification and trace it to a specific
+   tool finding (or absence thereof) in the SARIF dump.</li>
+<li>Modify <code>corpus.toml</code> to add new entries and re-run, observing how
+   each tool's numbers move.</li>
+<li>Swap out a tool version (e.g., upgrade CodeQL ruleset) and observe
+   the delta — version drift is auditable.</li>
+</ol>
+<h2 id="out-of-scope">Out of scope</h2>
+<p>Explicitly out of scope:</p>
+<ul>
+<li><strong>Non-Rust corpus</strong>. This benchmark is Rust-only. Ward's other
+  language scanners are in scope of separate benchmarks.</li>
+<li><strong>Supply-chain advisory matching</strong> (cargo-audit's lane). The
+  benchmark scores code-level shape detection, not version-list
+  matching.</li>
+<li><strong>Proprietary tools</strong> (Veracode, Snyk, Coverity, etc.). We cannot
+  ship a reproducible benchmark that requires a paid license or a
+  vendor key.</li>
+<li><strong>proc-macro-only vulnerabilities</strong>. All tools struggle here; the
+  comparison would be noisy without information value. Listed to
+  acknowledge the limitation.</li>
+<li><strong>Cloud-API tools</strong> (CodeQL hosted). Use the CLI for offline
+  reproducibility; results are functionally equivalent for our query
+  set.</li>
+<li><strong>LLM-only scanners</strong> prompted with a CVE-detection template. Ward
+  has its own LLM tier; we don't benchmark our own infra twice.</li>
+<li><strong>Build-time / link-time vulnerabilities</strong> that require running
+  build scripts that fetch external resources. Excluded by the
+  network-isolation invariant.</li>
+<li><strong>Detection of vulnerabilities introduced <em>after</em> the benchmark
+  publication</strong>. The benchmark is a frozen snapshot; future advisories
+  prompt a v2 release.</li>
+<li><strong>Auto-fix quality</strong>. Sibling track bn-35b00 covers rust-autofix; this
+  benchmark scores detection only.</li>
+</ul>
+<h2 id="threats-to-validity">Threats to validity</h2>
+<h3 id="corpus-selection-bias">Corpus selection bias</h3>
+<p><strong>Largest threat.</strong> Ward's UOE was developed iteratively against a
+corpus that overlaps with RUSTSEC. Authors (us) have read many of the
+RUSTSEC advisories, written rules to catch them, and shipped them.
+Even with the 40% augment-with-novel-entries policy, residual bias
+remains.</p>
+<p><strong>Mitigations</strong>:</p>
+<ul>
+<li>Corpus subset+augment policy (≥40% novel entries from 2024–2026
+  RUSTSEC entries unseen by Ward authors during rule development).</li>
+<li>Per-entry <code>source</code> provenance metadata so a reviewer can replay the
+  benchmark on the novel-only subset and check that Ward's lead
+  persists.</li>
+<li>A separate <strong>held-out validation</strong> corpus of 20+ entries collected
+  <em>after</em> methodology lock that no Ward author touches until the
+  benchmark publishes. The held-out numbers are reported alongside the
+  headline; if they're materially worse than the main corpus, that's
+  the bias signal.</li>
+</ul>
+<p><strong>Disclosure</strong>: we explicitly document this in the writeup. "Ward was
+developed against a partially overlapping corpus" is a stronger
+honest claim than pretending it wasn't.</p>
+<h3 id="tool-version-drift">Tool version drift</h3>
+<p>Tools update their rulesets weekly. A benchmark frozen in May 2026
+will be stale by August. Mitigation: lock tool versions by SHA in
+<code>bench/tool-versions.toml</code>, document the lock date in the writeup,
+and re-run quarterly. Reviewers may run a "latest" variant and
+compare against the locked variant; the delta is itself useful data.</p>
+<h3 id="miri-verdict-reproducibility">Miri verdict reproducibility</h3>
+<p>Miri runs are mostly deterministic but some are flaky on:</p>
+<ul>
+<li>TLS / RNG-dependent code paths.</li>
+<li>Concurrency primitives where the scheduler interleaving matters.</li>
+<li>FFI calls (Miri has limited FFI shimming).</li>
+</ul>
+<p><strong>Mitigation</strong>: every Miri verdict in the witness gate is run 3 times;
+the verdict is the modal outcome (positive if 2/3+ agree on positive,
+negative if 2/3+ agree on negative, otherwise skip). Witness fixtures
+that flake more than 1/3 of the time across 9 runs are removed from the
+witness-eligible set and reported separately.</p>
+<h3 id="survivor-bias">Survivor bias</h3>
+<p>We can only benchmark vulns that were <em>publicly disclosed</em>. Closed-
+source vulns and silently-patched bugs are invisible. Mitigation:
+none — this is a fundamental limit of public CVE benchmarks. Disclose
+prominently.</p>
+<h3 id="per-class-n-is-small">Per-class N is small</h3>
+<p>Per-vuln-class breakdowns at N≈10–25 are descriptive, not inferential.
+Mitigation: report numbers but mark them descriptive-only; do not
+make per-class statistical claims unless N≥30.</p>
+<h3 id="tool-cache-warmth-asymmetry">Tool-cache warmth asymmetry</h3>
+<p>CodeQL benefits enormously from a warm database cache (database
+build is 60–80% of total time). If we wipe caches between repos, we
+penalize CodeQL's CI-realistic posture. <strong>Decision</strong>: pre-warm caches
+at image build time for tools that support it (CodeQL Rust extractor
+is pre-installed), but wipe per-repo intermediate state. This
+matches what GitHub Advanced Security does in practice: extractor is
+installed once, database is built per-repo.</p>
+<h3 id="definition-of-best-in-class">Definition of "best-in-class"</h3>
+<p>We define it as: <strong>highest paired F1, with non-overlapping 95% CIs
+against all other tools, on the unsafe-class subset of the corpus,
+with offline reproducibility</strong>. This is a specific operational
+definition; alternative definitions ("best on memory-safety only",
+"highest precision regardless of recall", "fastest scanner with
+recall ≥ X%") would produce different rankings. We commit to the F1
+definition because it's the standard composite score and it weights
+both axes equally.</p>
+<h3 id="adversarial-corpus-construction">Adversarial corpus construction</h3>
+<p>A skeptical reader may suspect we cherry-picked entries that favor
+Ward. Mitigations: (a) corpus inclusion rules in this document are
+locked <em>before</em> corpus collection begins, (b) the augment subset is
+collected by an agent following the inclusion rules without seeing
+Ward's per-entry classification, (c) we publish the full inclusion-
+rule application log so a reviewer can audit which candidates were
+rejected and why.</p>
+<h2 id="open-questions">Open questions</h2>
+<p>These are flagged for the parent goal (bn-1ti5m) to resolve before
+publication; methodology can proceed to corpus collection
+(downstream bone) without them, but the writeup must answer each.</p>
+<ol>
+<li><strong>Final corpus size</strong>: target N = 80 minimum, cap 200. Decision
+   depends on RUSTSEC unsafe-class advisory yield 2024–2026 (need to
+   audit how many novel entries are even available).</li>
+<li><strong>Ward version pin</strong>: tag Ward at the benchmark publication date.
+   What we publish ships a release tag; we do not benchmark a moving
+   <code>main</code>.</li>
+<li><strong>Rudra inclusion</strong>: best-effort (Rudra is dormant). If Rudra
+   cannot be made to build on ≥30% of the corpus with reasonable
+   toolchain pinning, drop it from the head-to-head and report only
+   "Rudra: dormant, did not run" in the comparison.</li>
+<li><strong>Held-out corpus size</strong>: target 20 entries. Decision pending
+   feasibility of agent-driven novel collection.</li>
+<li><strong>Held-out collection process</strong>: who collects the held-out set,
+   and how do they avoid leakage? Recommendation: a single agent run,
+   under a fresh memory snapshot, that has not seen the main corpus
+   or Ward's rule sources. The held-out manifest is sealed until
+   benchmark publication day.</li>
+<li><strong>Publication venue</strong>: blog post + benchmark repo, vs. arXiv
+   submission. Blog + repo is faster and acceptable; arXiv adds
+   citability. Decision deferred to bn-1ti5m owner.</li>
+<li><strong>CI wiring</strong>: do we re-run the benchmark on every Ward release?
+   Recommendation: yes, but only on quarterly releases, not every
+   PR — the benchmark takes 4–6 hours and corpus drift means we'd
+   want to publish quarterly anyway.</li>
+</ol>
+<h2 id="references">References</h2>
+<ul>
+<li><code>notes/silent-gating-bug-fix-2026-05-01-eval-baseline.md</code> —
+  canonical Phase 0 walkaway-gate baseline (paired headline numbers).</li>
+<li><code>notes/post-phase-2-eval-2026-05-02.md</code> — most recent post-phase
+  eval with per-rule and per-shape breakdown.</li>
+<li><code>notes/eval-competitor-2026-03-22.md</code> — historical multi-language
+  competitor eval (precedent for the head-to-head format).</li>
+<li><code>notes/codeql-baseline-runner-2026-05-01.md</code> — CodeQL Rust runner
+  details; informs the partition methodology.</li>
+<li><code>notes/clippy-baseline-runner-2026-05-01.md</code> — Clippy runner
+  details (Clippy is excluded from this benchmark; see
+  out-of-scope).</li>
+<li><code>notes/rustxec-import-2026-05-01.md</code> — RustXec MSR'26 corpus
+  import provenance; informs the inherit-vs-rebuild decision.</li>
+<li><code>crates/ward-eval/src/repo_eval.rs</code> — paired scoring logic and
+  <code>vuln_class_matches_rule</code>; the fairness primitive other tools must
+  match.</li>
+<li><code>crates/ward-eval/src/finding_identity.rs</code> — persistence-matching
+  logic for diff-aware FP reclassification.</li>
+<li><code>crates/ward-eval/src/phase5_witness_gate.rs</code> — Miri-witness gate
+  implementation; informs the witness-rate axis description.</li>
+<li><code>tests/cve-registry/manifest.toml</code> — Ward's existing CVE manifest;
+  source for the inherited subset of the benchmark corpus.</li>
+</ul>
+<h2 id="methodology-lock">Methodology lock</h2>
+<p>This document is the locked specification for downstream bones:</p>
+<ul>
+<li><strong>Corpus collection</strong> (downstream bone): operates from
+  <a href="#corpus-selection-criteria">corpus selection criteria</a>. Cannot
+  unilaterally change inclusion / exclusion rules.</li>
+<li><strong>Per-tool runners</strong> (downstream bone): implements
+  <a href="#tool-selection-and-version-pinning">tool selection and version pinning</a>
+  and <a href="#fairness-controls">fairness controls</a>. Cannot adjust time /
+  memory / network controls without amending this document.</li>
+<li><strong>Head-to-head measurement</strong> (downstream bone): implements
+  <a href="#scoring-rules">scoring rules</a> and
+  <a href="#statistical-reporting">statistical reporting</a>. Cannot change
+  scoring methodology without amending this document.</li>
+<li><strong>Public writeup</strong> (downstream bone): consumes results and renders
+  the human-readable report; must include all sections of
+  <a href="#threats-to-validity">threats to validity</a> and the open-questions
+  resolution log.</li>
+</ul>
+<p>Amendments to this document require an issue against bn-1ti5m
+documenting the change rationale and updated downstream impact.</p>
+        </article>
+      </div>
+    </main>
+
+    <footer class="foot">
+      <div class="foot-inner" style="grid-template-columns: 1fr">
+        <div>
+          <div class="brand" style="margin-bottom: 14px">
+            <img src="../ward-with-word.svg" alt="Ward" />
+          </div>
+          <p class="mono" style="color: var(--fg-2); font-size: 12px; max-width: 60ch">
+            Verifiable security review infrastructure. Deterministic, replayable
+            findings with signed evidence chains. Implementation references such
+            as <code>crates/ward-eval/...</code> point at the private Ward repo
+            and will become public when Ward releases.
+          </p>
+        </div>
+      </div>
+      <div class="foot-meta">
+        <span>Pre-release · details subject to change</span>
+        <span>© 2026</span>
+      </div>
+    </footer>
+
+    <script src="../app.js"></script>
+  </body>
+</html>

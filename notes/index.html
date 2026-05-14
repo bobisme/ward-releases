@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Notes — Ward</title>
+    <meta name="description" content="Ward's working journal: long-form technical writeups, methodology specifications, and benchmark results." />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
+  <body>
+    <header class="nav">
+      <div class="nav-inner">
+        <div class="brand">
+          <a href="../index.html" aria-label="Ward home">
+            <img src="../ward-with-word.svg" alt="Ward" />
+          </a>
+          <span class="nav-ver">pre-release</span>
+        </div>
+        <nav class="nav-links">
+          <a href="../index.html#benchmark">Results</a>
+          <a href="../index.html#how">Evidence model</a>
+          <a href="../index.html#methodology">Methodology</a>
+          <a href="../examples.html">Examples</a>
+          <a href="index.html" aria-current="page">Notes</a>
+        </nav>
+      </div>
+    </header>
+
+    <section class="page-title">
+      <div class="page-title-inner">
+        <div class="page-title-eyebrow">Notes</div>
+        <h1 class="page-title-h">Ward's working journal.</h1>
+        <p class="page-title-sub">
+          Long-form technical writeups, methodology specifications, and
+          benchmark results. Permanent record of how Ward measures itself.
+        </p>
+      </div>
+    </section>
+
+    <main class="note-main">
+      <div class="note-main-inner">
+        <article class="note-body note-index">
+          <ul class="note-list">
+            <li>
+              <div class="note-list-meta"><span class="mono">2026-05-13</span> · public benchmark writeup</div>
+              <a class="note-list-title" href="unsafe-rust-benchmark.html">
+                Ward is best-in-class on Rust unsafe-class vulnerability detection
+              </a>
+              <p class="note-list-blurb">
+                Headline writeup of the 80-pair RUSTSEC head-to-head benchmark — Ward
+                is the only scanner that fires in-class true positives at user-facing
+                severity. F1=0.655, MCC=+0.564, McNemar p ≈ 1.46&nbsp;×&nbsp;10⁻¹¹
+                vs Semgrep, CodeQL, Rudra, and cargo-geiger.
+              </p>
+            </li>
+            <li>
+              <div class="note-list-meta"><span class="mono">2026-05-13</span> · locked methodology spec</div>
+              <a class="note-list-title" href="unsafe-rust-bench-methodology.html">
+                Unsafe-Rust head-to-head benchmark — methodology
+              </a>
+              <p class="note-list-blurb">
+                Pre-registered scoring rules, statistical contract, ruleset selection,
+                container image digest, and the exact paired finding-identity policy
+                used to score every tool.
+              </p>
+            </li>
+            <li>
+              <div class="note-list-meta"><span class="mono">2026-05-13</span> · full headline + audit</div>
+              <a class="note-list-title" href="unsafe-rust-bench-results.html">
+                Unsafe-Rust head-to-head benchmark — results
+              </a>
+              <p class="note-list-blurb">
+                Paired confusion matrix, per-class breakdown, McNemar pairings,
+                bootstrap CIs, and the audit section (Rudra rule-id mapping fix +
+                stdout-parser patch verifying the headline ranking is robust).
+              </p>
+            </li>
+            <li>
+              <div class="note-list-meta"><span class="mono">2026-05-13</span> · fairness check</div>
+              <a class="note-list-title" href="unsafe-rust-bench-aux-max-breadth.html">
+                Unsafe-Rust head-to-head benchmark — max-breadth auxiliary results
+              </a>
+              <p class="note-list-blurb">
+                Re-ran the competitor set on their broadest publicly available
+                rulesets (Semgrep across 1,079 rules; CodeQL on
+                <code>rust-security-and-quality.qls</code>; Rudra with parser fix). The
+                ranking does not change.
+              </p>
+            </li>
+          </ul>
+        </article>
+      </div>
+    </main>
+
+    <footer class="foot">
+      <div class="foot-inner" style="grid-template-columns: 1fr">
+        <div>
+          <div class="brand" style="margin-bottom: 14px">
+            <img src="../ward-with-word.svg" alt="Ward" />
+          </div>
+          <p class="mono" style="color: var(--fg-2); font-size: 12px; max-width: 60ch">
+            Verifiable security review infrastructure. Deterministic, replayable
+            findings with signed evidence chains. Implementation references such
+            as <code>crates/ward-eval/...</code> point at the private Ward repo
+            and will become public when Ward releases.
+          </p>
+        </div>
+      </div>
+      <div class="foot-meta">
+        <span>Pre-release · details subject to change</span>
+        <span>© 2026</span>
+      </div>
+    </footer>
+
+    <script src="../app.js"></script>
+  </body>
+</html>

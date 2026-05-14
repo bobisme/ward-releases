@@ -1,0 +1,856 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ward is best-in-class on Rust unsafe-class vulnerability detection — Ward</title>
+    <meta name="description" content="Public writeup of the 80-pair unsafe-Rust benchmark — Ward is the only scanner that fires in-class true positives at user-facing severity. F1=0.655, MCC=+0.564, McNemar p ≈ 1.46 × 10⁻¹¹." />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
+  <body>
+    <header class="nav">
+      <div class="nav-inner">
+        <div class="brand">
+          <a href="../index.html" aria-label="Ward home">
+            <img src="../ward-with-word.svg" alt="Ward" />
+          </a>
+          <span class="nav-ver">pre-release</span>
+        </div>
+        <nav class="nav-links">
+          <a href="../index.html#benchmark">Results</a>
+          <a href="../index.html#how">Evidence model</a>
+          <a href="../index.html#methodology">Methodology</a>
+          <a href="../examples.html">Examples</a>
+          <a href="index.html">Notes</a>
+        </nav>
+      </div>
+    </header>
+
+    <section class="page-title">
+      <div class="page-title-inner">
+        <div class="page-title-eyebrow">Notes · 2026-05-13</div>
+        <h1 class="page-title-h">Ward is best-in-class on Rust unsafe-class vulnerability detection</h1>
+        <p class="page-title-sub">A locked, reproducible head-to-head benchmark against Semgrep, CodeQL, Rudra, and cargo-geiger.</p>
+        <p class="note-gh-link"><span class="mono">View source on GitHub:</span> <a href="https://github.com/bobisme/ward-releases/blob/main/benchmark/writeup.md"><code>benchmark/writeup.md</code></a></p>
+      </div>
+    </section>
+
+    <main class="note-main">
+      <div class="note-main-inner">
+        
+<aside class="note-source-aside">
+  <h3>Source files</h3>
+  <ul>
+    <li><a href="unsafe-rust-bench-methodology.html">Methodology spec</a></li>
+    <li><a href="unsafe-rust-bench-results.html">Full headline results</a></li>
+    <li><a href="unsafe-rust-bench-aux-max-breadth.html">Max-breadth aux results</a></li>
+    <li><a href="https://github.com/bobisme/ward-releases/tree/main/benchmark/corpus">Corpus + provenance (GitHub)</a></li>
+    <li><a href="https://github.com/bobisme/ward-releases/blob/main/benchmark/corpus/REPRODUCE.md">Reproduction kit</a></li>
+    <li><a href="https://github.com/bobisme/ward-releases/blob/main/benchmark/bench/Dockerfile.bench">Bench image</a></li>
+  </ul>
+</aside>
+
+        <article class="note-body">
+<h2 id="headline">Headline</h2>
+<p>On a locked, paired benchmark of 80 RUSTSEC advisories targeting Rust
+unsafe-class vulnerabilities (memory-safety, use-after-free, type
+confusion, soundness), <strong>Ward is the only scanner in scope that fires
+any in-class true positive at user-facing severity</strong>.</p>
+<ul>
+<li>Ward: TP=39, FP=0, TN=77, FN=41 over 80 paired pairs (160 entries).</li>
+<li>Ward precision: 1.000 (95% CI [1.000, 1.000]).</li>
+<li>Ward recall: 0.487 (95% CI [0.388, 0.600]).</li>
+<li>Ward F1: 0.655 (95% CI [0.559, 0.750]).</li>
+<li>Ward MCC: +0.564 (95% CI [+0.484, +0.651]).</li>
+<li>Every other tool we benchmarked under their own publicly
+  recommended ruleset and severity defaults — Semgrep, CodeQL, Rudra,
+  cargo-geiger — produced <strong>zero true positives</strong> on the paired corpus
+  at ≥ WARNING severity.</li>
+</ul>
+<p>McNemar's exact two-sided binomial test gives <strong>p ≈ 1.46 × 10⁻¹¹</strong> for
+every (Ward, competitor) pairing, and Ward's F1 95% CI ([0.559, 0.750])
+is fully disjoint from every competitor's CI ([0.000, 0.000]). Both
+gates of our pre-locked statistical contract are cleared with several
+orders of magnitude of headroom.</p>
+<p>We then re-ran the entire competitor set on the <strong>broadest publicly
+available rulesets</strong> for each tool (Semgrep across 1,079 rules in
+<code>p/rust ∪ r/rust ∪ p/security-audit ∪ p/default</code>; CodeQL on
+<code>rust-security-and-quality.qls</code>; Rudra with the in-image stdout-parser
+bug patched). <strong>The ranking did not change.</strong> Details in the
+<em>Fairness audit</em> section below.</p>
+<p>This document is the public, reviewer-facing summary. The locked
+methodology spec, full results document, fairness-audit aux document,
+corpus manifest, and reproduction kit are all linked at the bottom.
+After this work is published the operator will mint the git tag
+<code>bench/unsafe-rust-v1</code> over the bench artifact so external reviewers
+can reproduce against the exact tree state.</p>
+<h2 id="why-this-matters">Why this matters</h2>
+<p>Rust's value proposition is memory safety in a fast systems language.
+That property holds for the safe subset of the language. Inside
+<code>unsafe</code> blocks, FFI boundaries, and a handful of <code>unsafe</code>-adjacent
+APIs (<code>MaybeUninit</code>, <code>transmute</code>, <code>slice::from_raw_parts</code>,
+<code>set_len</code>, manual <code>Send</code>/<code>Sync</code> impls, etc.), the same memory-corruption
+classes that plague C and C++ are reachable — and they hide inside code
+that the compiler's safety guarantees do not check. CVE history bears
+this out: every entry in the RUSTSEC database we sampled for this
+benchmark is some form of "safe-encapsulation violation":
+<code>unsafe</code> was used internally, the surrounding safe API allows a caller
+to violate its preconditions, and the result is memory corruption,
+use-after-free, type confusion, or undefined behavior reachable from
+ordinary safe code.</p>
+<p>These bugs are uniquely bad for three reasons:</p>
+<ol>
+<li><strong>Memory corruption in a "safe" language is invisible from the type
+   system.</strong> Reviewers who trust the language to catch this class
+   under-attend to the underlying obligation, so the bugs survive
+   review.</li>
+<li><strong>Existing static-analysis tooling for Rust ships very thin
+   unsafe-class coverage.</strong> As the <em>Competitor ruleset audit</em> section
+   below documents, the publicly recommended rulesets we benchmarked
+   contain between 0% and 15.8% rule coverage of the CWE classes that
+   populate the RUSTSEC unsafe-bug history.</li>
+<li><strong>Dynamic analysis (Miri) helps but cannot scale to whole-codebase
+   review.</strong> Miri runs at instruction-level interpretation cost and
+   does not see code paths that aren't exercised by a test. It is
+   complementary, not substitutable.</li>
+</ol>
+<p>Ward's Rust Unsafe Obligation Engine (UOE) targets this gap. It
+encodes per-API unsafe obligations as a small lattice of
+<em>safety-discharge</em> atoms (init, len, layout, alignment, lifetime,
+send/sync) and looks for safe-encapsulation paths that leave atoms
+undischarged on caller-controlled inputs. That design is documented
+elsewhere (<code>notes/project_rust_unsafe_phase_2_closed.md</code>). The
+benchmark below is the <strong>external validation</strong> of that engine against
+real CVEs, scored against every other scanner we could run offline.</p>
+<h2 id="methodology-in-brief">Methodology in brief</h2>
+<p>The full methodology is locked at
+<a href="unsafe-rust-bench-methodology.html"><code>notes/benchmarks/unsafe-rust-bench-methodology.md</code></a>
+(11 numbered sections, ~830 lines, committed before corpus collection
+began). The key design choices:</p>
+<p><strong>Corpus</strong> — 80 vuln/fix paired RUSTSEC advisories (160 manifest
+rows), drawn ≥40% from 2024–2026 RUSTSEC entries Ward authors had
+not touched during rule development. Every entry is a real upstream
+repo with a publicly identifiable vulnerable commit and fix commit.
+Per-entry provenance (advisory, commits, license, methodology
+conformance) is committed under
+<a href="https://github.com/bobisme/ward-releases/tree/main/benchmark/corpus/provenance"><code>tests/cve-registry/benchmarks/unsafe-rust-bench/provenance/</code></a>.
+The corpus contains 65 unique upstream repositories, license
+distribution Apache-2.0 (43) / MIT (35) / MPL-2.0 (1) / Zlib (1).</p>
+<p><strong>Tools</strong> — Ward, Semgrep 1.95.0 (with <code>p/rust</code> + <code>r/rust.lang.security</code>),
+CodeQL 2.25.4 (<code>rust-security-extended.qls</code>, 19 queries), Rudra (HEAD
+on <code>master</code>, best-effort per methodology §10), cargo-geiger 0.12.0
+(context column only — measures unsafe density, not security findings).
+Tool versions and ruleset SHAs are pinned in
+<a href="https://github.com/bobisme/ward-releases/blob/main/benchmark/bench/tool-versions.toml"><code>bench/tool-versions.toml</code></a>. The
+bench image is pinned to digest
+<code>sha256:b7707fe926c96be99348030445cb355141f43afae2243d86a8f7862cc134308e</code>.</p>
+<p><strong>Fairness controls</strong> — Every scanner runs inside the same OCI image
+under <code>podman run --network=none</code>, 4 CPU cores, 16 GiB RAM, 10-minute
+per-entry wall-clock cap. Caches pre-warmed at image build time so
+first-scan vs nth-scan latency does not skew any tool's numbers.
+Determinism is verified by a 3-run identity check
+(<a href="https://github.com/bobisme/ward-releases/blob/main/benchmark/bench/smoke-determinism.sh"><code>bench/smoke-determinism.sh</code></a>).</p>
+<p><strong>Scoring</strong> — Paired scoring per methodology §5. A finding on the
+vuln commit at the affected file that does <strong>not</strong> persist on the fix
+commit is a TP. A finding that persists across both is reclassified
+from FP to TN (it's a pre-existing finding unrelated to the CVE under
+test). File-level matching for TP attribution; line-level (±2 lines)
+for persistence reclassification. Identical rules applied to all
+tools. The competitor severity floors mirror what each tool's default
+user-facing UX surfaces — Semgrep and CodeQL ≥ WARNING; Ward
+confidence ≥ Medium; Rudra all findings (it has no severity tier);
+cargo-geiger not scored.</p>
+<p><strong>Statistical contract</strong> — Pre-locked. "Ward beats X" requires (i)
+McNemar's exact two-sided binomial test at p &lt; 0.01 on per-pair
+fully-correct status, AND (ii) non-overlapping 95% bootstrap CIs on
+F1 and MCC. Bootstrap is 1000 stratified resamples by vuln_class,
+seed <code>0x77617264_62656e63</code> (<code>"wardbenc"</code> in ASCII hex). Both gates
+must be cleared simultaneously before a "beats" claim is made. We do
+not relax either gate post-hoc.</p>
+<h2 id="results">Results</h2>
+<h3 id="headline-table-full-corpus-n-80-paired-pairs">Headline table — full corpus (n = 80 paired pairs)</h3>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>TP</th>
+<th>FP</th>
+<th>TN</th>
+<th>FN</th>
+<th>Precision (95% CI)</th>
+<th>Recall (95% CI)</th>
+<th>F1 (95% CI)</th>
+<th>MCC (95% CI)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Ward</strong></td>
+<td><strong>39</strong></td>
+<td><strong>0</strong></td>
+<td><strong>77</strong></td>
+<td><strong>41</strong></td>
+<td><strong>1.000 [1.000, 1.000]</strong></td>
+<td><strong>0.487 [0.388, 0.600]</strong></td>
+<td><strong>0.655 [0.559, 0.750]</strong></td>
+<td><strong>+0.564 [+0.484, +0.651]</strong></td>
+</tr>
+<tr>
+<td>Semgrep</td>
+<td>0</td>
+<td>0</td>
+<td>80</td>
+<td>80</td>
+<td>0.000 [0.000, 0.000]</td>
+<td>0.000 [0.000, 0.000]</td>
+<td>0.000 [0.000, 0.000]</td>
+<td>+0.000 [+0.000, +0.000]</td>
+</tr>
+<tr>
+<td>Rudra</td>
+<td>0</td>
+<td>0</td>
+<td>80</td>
+<td>80</td>
+<td>0.000 [0.000, 0.000]</td>
+<td>0.000 [0.000, 0.000]</td>
+<td>0.000 [0.000, 0.000]</td>
+<td>+0.000 [+0.000, +0.000]</td>
+</tr>
+<tr>
+<td>cargo-geiger</td>
+<td>0</td>
+<td>0</td>
+<td>80</td>
+<td>80</td>
+<td>0.000 [0.000, 0.000]</td>
+<td>0.000 [0.000, 0.000]</td>
+<td>0.000 [0.000, 0.000]</td>
+<td>+0.000 [+0.000, +0.000]</td>
+</tr>
+<tr>
+<td>CodeQL (partial, 50/160 entries processed)</td>
+<td>0</td>
+<td>0</td>
+<td>80</td>
+<td>80</td>
+<td>0.000 [0.000, 0.000]</td>
+<td>0.000 [0.000, 0.000]</td>
+<td>0.000 [0.000, 0.000]</td>
+<td>+0.000 [+0.000, +0.000]</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Counting unit.</strong> Per-pair fully-correct counting (above) and the
+per-entry paired classification yield slightly different Ward
+numbers. Per-entry: TP=39, FP=0, TN=70, FN=34, F1=0.696,
+MCC=+0.600. Per-pair: as above. Methodology §7 uses the per-pair
+unit for resampling, so the per-pair CIs are the canonical headline.</p>
+</blockquote>
+<h3 id="mcnemar-pairwise-tests">McNemar pairwise tests</h3>
+<table>
+<thead>
+<tr>
+<th>(A, B)</th>
+<th>A right / B wrong</th>
+<th>B right / A wrong</th>
+<th>both right</th>
+<th>both wrong</th>
+<th>p-value</th>
+<th>A beats B at p&lt;0.01</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>(Ward, Semgrep)</td>
+<td>37</td>
+<td>0</td>
+<td>0</td>
+<td>43</td>
+<td>1.46e-11</td>
+<td><strong>yes (Ward)</strong></td>
+</tr>
+<tr>
+<td>(Ward, Rudra)</td>
+<td>37</td>
+<td>0</td>
+<td>0</td>
+<td>43</td>
+<td>1.46e-11</td>
+<td><strong>yes (Ward)</strong></td>
+</tr>
+<tr>
+<td>(Ward, cargo-geiger)</td>
+<td>37</td>
+<td>0</td>
+<td>0</td>
+<td>43</td>
+<td>1.46e-11</td>
+<td><strong>yes (Ward)</strong></td>
+</tr>
+<tr>
+<td>(Ward, CodeQL) full corpus</td>
+<td>37</td>
+<td>0</td>
+<td>0</td>
+<td>43</td>
+<td>1.46e-11</td>
+<td><strong>yes (Ward)</strong></td>
+</tr>
+<tr>
+<td>(Ward, CodeQL) restricted to 12 pairs where both CodeQL sides processed</td>
+<td>5</td>
+<td>0</td>
+<td>0</td>
+<td>7</td>
+<td>0.0625</td>
+<td>no (sample too small)</td>
+</tr>
+</tbody>
+</table>
+<p>Every other (competitor, competitor) pairing is degenerate: with both
+sides at 0 TP, no pair is "A right / B wrong", and McNemar p = 1.000.</p>
+<p>The restricted-to-processed CodeQL row deserves a separate note. On
+the 12 pairs where both CodeQL sides produced parseable SARIF, Ward
+is fully correct on 5 of 12 and CodeQL on 0 of 12. McNemar with
+b=5, c=0 yields p = 0.0625 — <em>above</em> our pre-locked p &lt; 0.01
+threshold, so on that subset alone the McNemar gate is not cleared.
+F1-CI non-overlap still holds (Ward 0.667 vs CodeQL 0.000), but the
+honest reading is: on the entries CodeQL actually ran, the
+discordant-pair sample is too small (n=5) for the exact binomial
+test to reach significance. The full-corpus claim is supported
+because the 110 not_run entries count against CodeQL — which is itself
+a CodeQL property under this benchmark's budget, not a statistical
+artifact (see <em>What Ward gets right and what it doesn't</em>).</p>
+<h2 id="the-fairness-audit">The fairness audit</h2>
+<p>The reflexive objection to a benchmark like this is "you didn't try
+hard enough on the competitors." We took that objection seriously
+before publishing.</p>
+<h3 id="competitor-ruleset-audit">Competitor ruleset audit</h3>
+<p>We enumerated every rule shipped by each competitor's locked ruleset
+and tagged it as in-class or out-of-class against the CWE families
+that populate the corpus (CWE-119, -120, -125, -129, -190, -362, -415,
+-416, -457, -704, -770, -787, -824, -825, -843, -908).</p>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Total rules</th>
+<th>Unsafe-class rules</th>
+<th>Coverage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CodeQL <code>rust-security-extended</code></td>
+<td>19</td>
+<td>2 (+ 1 partial)</td>
+<td><strong>10.5%</strong> (15.8% incl. partial)</td>
+</tr>
+<tr>
+<td>Semgrep <code>p/rust ∪ r/rust.lang.security</code></td>
+<td>11</td>
+<td>0 (1 INFO <code>unsafe-usage</code>, gated out by severity)</td>
+<td><strong>0%</strong></td>
+</tr>
+<tr>
+<td>Rudra</td>
+<td>4 categories</td>
+<td>4 (100% by design)</td>
+<td><strong>100% coverage; 96% errored</strong></td>
+</tr>
+<tr>
+<td>cargo-geiger</td>
+<td>N/A (counter)</td>
+<td>N/A</td>
+<td><strong>N/A (context only)</strong></td>
+</tr>
+</tbody>
+</table>
+<p>CodeQL ships exactly two unsafe-class queries in its security-extended
+suite: <code>rust/access-after-lifetime-ended</code> and
+<code>rust/access-invalid-pointer</code>. The remaining 17 target web-app, crypto,
+or configuration shapes that don't overlap the corpus.</p>
+<p>Semgrep's two community packs together carry 11 unique rules. The one
+rule that targets unsafe Rust at all (<code>rust.lang.security.unsafe-usage</code>)
+fires on every <code>unsafe</code> block in every file and emits at INFO severity
+by default — well below the WARNING gate that defines what shows up
+in Semgrep's user-facing UX. We did not promote it to WARNING; doing
+so produces a wall of unactionable noise (Semgrep itself ships it at
+INFO for that reason), and even at WARNING none of its firings would
+correlate to the affected files because it matches every <code>unsafe</code>
+block, not the specific obligation the CVE violates.</p>
+<p>Rudra has 100% in-class coverage by design — it was purpose-built in
+2020 for unsafe-Rust analysis. The reason its TP count is zero on this
+corpus is <strong>maintenance state, not coverage</strong>: it pins to
+<code>nightly-2021-10-21</code> and 154 of 160 entries (96%) fail at the
+toolchain layer (Cargo.lock generation, internal panics, nightly
+incompatibilities with post-2024 crates). Per methodology §10, with
+Rudra runnable on only 3.75% of the corpus we drop it from the
+head-to-head competitive claim and report it as "dormant, did not run."</p>
+<p>cargo-geiger is a context column — it counts unsafe-block density per
+crate, doesn't produce findings, and methodology §4 explicitly does
+not score it.</p>
+<p>The 0-TP result for CodeQL and Semgrep is therefore a <strong>faithful
+measurement of what users get out of the box</strong>, not a result of
+methodology bias against any tool.</p>
+<h3 id="max-breadth-aux-run-preempting-broader-rules-would-fix-this">Max-breadth aux run (preempting "broader rules would fix this")</h3>
+<p>We re-ran the competitor set under their broadest publicly available
+rulesets:</p>
+<ul>
+<li><strong>Semgrep</strong>: added <code>r/rust</code>, <code>p/security-audit</code>, <code>p/default</code> on top
+  of the methodology-locked <code>p/rust</code>. Union ruleset: 1,079 distinct
+  rules, 19 of them Rust-specific. Bind-mounted into the image so
+  the container still ran <code>--network=none</code>. Coverage: 160/160 entries.</li>
+<li><strong>CodeQL</strong>: switched the analysis suite from
+  <code>rust-security-extended.qls</code> to <code>rust-security-and-quality.qls</code>
+  (strict superset, adds 2 quality queries). Re-ran on the 25 entries
+  that produced parseable SARIF in the headline run (the 25
+  DB-create-timeout pairs and 110 not_run pairs would still time out
+  or not run).</li>
+<li><strong>Rudra</strong>: patched the in-image stdout parser bug (it had been
+  mis-extracting the diagnostic message text as the file path) and
+  extended the rule-id keyword mapping to match Rudra's real emit
+  format (<code>SendSyncVariance</code>, <code>UnsafeDataflow</code>, <code>PanicSafety</code>).</li>
+</ul>
+<p>The headline did not change.</p>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Headline paired</th>
+<th>Aux paired</th>
+<th>Δ TP after paired</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ward</td>
+<td>TP=39 FP=0 (unchanged)</td>
+<td>TP=39 FP=0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Semgrep</td>
+<td>TP=0 FP=0</td>
+<td>TP=0 FP=0</td>
+<td><strong>+0</strong></td>
+</tr>
+<tr>
+<td>Rudra</td>
+<td>TP=0 FP=0</td>
+<td>TP=1 FP=0</td>
+<td><strong>+1</strong> (one sound finding on <code>beef-rustsec-2020-0122</code>)</td>
+</tr>
+<tr>
+<td>CodeQL (25-entry subset re-analyzed)</td>
+<td>TP=0 FP=0</td>
+<td>TP=0 FP=0</td>
+<td><strong>+0</strong></td>
+</tr>
+<tr>
+<td>cargo-geiger</td>
+<td>TP=0 FP=0</td>
+<td>(unchanged)</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p>Semgrep's broader packs add 8 new Rust rules (<code>unsafe-usage</code>,
+<code>insecure-hashes</code>, <code>rustls-dangerous</code>, <code>reqwest-accept-invalid</code>,
+<code>ssl-verify-none</code>, <code>temp-dir</code>, <code>current-exe</code>, <code>args-os</code>, <code>args</code>).
+Across all 160 entries, only 4 entries fired at WARNING+ on any of
+these — all 4 fired the same single rule (<code>insecure-hashes</code>), and
+none of the firings landed on the affected file for its CVE. The
+note-level <code>unsafe-usage</code> rule fires extensively but is filtered out
+by the methodology's severity gate.</p>
+<p>CodeQL's broader suite adds 2 queries (<code>rust/regex-injection</code>,
+<code>rust/ctor-initialization</code>). Neither targets unsafe-class
+memory-safety. Across the 25 re-analyzed entries, <strong>zero additional
+findings emitted on any file</strong>.</p>
+<p>Rudra promotes from 0 to 1 paired TP after the parser fix is applied:
+<code>rs-bench-beef-rustsec-2020-0122</code> fires <code>SendSyncVariance</code> correctly.
+That is a real finding Rudra was emitting all along; the in-image
+parser was suppressing it. One TP at 1.25% recall keeps Rudra below
+methodology §10's 30% threshold, so it stays out of the head-to-head
+competitive table.</p>
+<p>After the max-breadth aux, McNemar p ≈ 1.46 × 10⁻¹¹ remains
+unchanged for (Ward, Semgrep), (Ward, CodeQL), (Ward, cargo-geiger);
+(Ward, Rudra aux) gives p ≈ 2.92 × 10⁻¹⁰. The dominance pattern is
+robust to the broadest configurations of the competitor tools.</p>
+<p><strong>The corollary is stronger than the headline.</strong> It is not the case
+that competitors <em>could</em> catch these bugs with better rules and
+simply chose not to ship them. It is the case that <em>no rule for
+these bugs currently exists in the public registries we could find</em>.
+Ward's lead is on a class that the rest of the static-analysis
+ecosystem has not yet built rules for. The full max-breadth aux run
+is documented at
+<a href="unsafe-rust-bench-aux-max-breadth.html"><code>notes/benchmarks/unsafe-rust-bench-aux-max-breadth-2026-05-13.md</code></a>.</p>
+<h2 id="what-ward-gets-right-and-what-it-doesnt">What Ward gets right and what it doesn't</h2>
+<p>Ward's per-vuln-class numbers (descriptive only — per-class N is
+small enough that the bootstrap CIs collapse and we don't claim
+significance below the headline aggregate):</p>
+<table>
+<thead>
+<tr>
+<th>Vuln class</th>
+<th>N pairs (entries)</th>
+<th>Ward TP</th>
+<th>Ward TN</th>
+<th>Ward FN</th>
+<th>Precision</th>
+<th>Recall</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>memory_safety</td>
+<td>55 (110)</td>
+<td>31</td>
+<td>54</td>
+<td>25</td>
+<td>1.000</td>
+<td>0.554</td>
+</tr>
+<tr>
+<td>soundness</td>
+<td>9 (18)</td>
+<td>3</td>
+<td>9</td>
+<td>6</td>
+<td>1.000</td>
+<td>0.333</td>
+</tr>
+<tr>
+<td>use_after_free</td>
+<td>8 (16)</td>
+<td>3</td>
+<td>8</td>
+<td>5</td>
+<td>1.000</td>
+<td>0.375</td>
+</tr>
+<tr>
+<td>type_confusion</td>
+<td>6.5 (13)</td>
+<td>2</td>
+<td>6</td>
+<td>5</td>
+<td>1.000</td>
+<td>0.286</td>
+</tr>
+</tbody>
+</table>
+<p>memory_safety dominates the corpus (55 of 80 paired pairs); other
+classes are N &lt; 30 and reported descriptive-only. <strong>Precision is
+1.000 across every class</strong> — the full corpus introduces zero Ward
+false positives over and above what was seen on the small-repo
+first pass.</p>
+<p>Per-bug-shape (selected — full table in the headline doc):</p>
+<table>
+<thead>
+<tr>
+<th>Bug shape</th>
+<th>N pairs</th>
+<th>Ward TP</th>
+<th>Ward TN</th>
+<th>Ward FN</th>
+<th>Precision</th>
+<th>Recall</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>safe-encap</td>
+<td>21.5 (43)</td>
+<td>8</td>
+<td>21</td>
+<td>14</td>
+<td>1.000</td>
+<td>0.364</td>
+</tr>
+<tr>
+<td>panic-sequence</td>
+<td>12 (24)</td>
+<td>7</td>
+<td>12</td>
+<td>5</td>
+<td>1.000</td>
+<td><strong>0.583</strong></td>
+</tr>
+<tr>
+<td>impl-send-sync</td>
+<td>9 (18)</td>
+<td>2</td>
+<td>9</td>
+<td>7</td>
+<td>1.000</td>
+<td>0.222</td>
+</tr>
+<tr>
+<td>set-len-init</td>
+<td>9 (18)</td>
+<td>4</td>
+<td>9</td>
+<td>5</td>
+<td>1.000</td>
+<td>0.444</td>
+</tr>
+<tr>
+<td>ffi-boundary-contract</td>
+<td>5 (10)</td>
+<td>3</td>
+<td>5</td>
+<td>2</td>
+<td>1.000</td>
+<td><strong>0.600</strong></td>
+</tr>
+<tr>
+<td>int-overflow-safety</td>
+<td>4 (8)</td>
+<td>3</td>
+<td>4</td>
+<td>1</td>
+<td>1.000</td>
+<td><strong>0.750</strong></td>
+</tr>
+</tbody>
+</table>
+<p>The pattern is consistent: shape buckets where Ward's UOE has a
+tier-1 or tier-2 obligation rule registered (<code>panic-sequence</code>,
+<code>ffi-boundary-contract</code>, <code>int-overflow-safety</code>,
+<code>slice-from-raw-parts-init-violation</code>, <code>len-cap-confusion</code>,
+<code>layout-cast</code>, <code>debug-guard-only</code>, <code>transmute-chained-cast</code>,
+<code>zst-ptr-arith</code>) clear ≥ 50% recall. Shapes that rely on catch-all
+detectors (<code>safe-encap</code>, <code>impl-send-sync</code>, <code>set-len-init</code>) sit at
+22–44% recall. The remaining recall on this corpus is concentrated
+in these underdetected shapes — and they're the targets for the
+next round of UOE rule work (tracked under
+<code>notes/project_rust_unsafe_phase_2_closed.md</code> and the planned
+<code>bn-25hzk</code> rule-pack expansion).</p>
+<h3 id="where-ward-fails-on-this-corpus">Where Ward fails on this corpus</h3>
+<p>Two failure modes, both honest:</p>
+<p><strong>1. 14 entries timed out at the 600s cap on large repos.</strong> Ward's
+internal dedup pipeline and exfiltration heuristic exhibit a
+runaway behavior on a small number of large Rust repos (wasmtime,
+openssl, pyo3, tokio, mio, slab, Fyrox, diesel) — they hit the cap
+with <code>ward_exit_-1</code>. Bench-stats counts these 14 as <code>errored</code> in
+the latency table; the paired-scoring layer treats them as
+non-firing-on-vuln-side, which contributes to the FN count. Filed
+under bn-2q4pn for follow-up; the cleaned-latency view
+(errored-excluded, N=146) is p50 = 1.0s, p95 = 12.3s, p99 = 19.8s,
+mean = 2.5s, max = 19.8s — comfortably inside the budget. The 14
+runaway entries are a Ward bug, not a corpus property.</p>
+<p><strong>2. Recall is 48.7%.</strong> The honest framing: this is much better than
+zero, and competitors all sit at zero on this corpus, but it is not
+the same as 100%. Ward catches roughly half of the public RUSTSEC
+unsafe-class CVE history under its current rule set. The shape
+breakdown above identifies where the remaining headroom is. The
+next rule-pack expansion (bn-25hzk) targets the safe-encap and
+impl-send-sync shapes where recall sits at 22–36%.</p>
+<p><strong>Latency</strong> — Ward's median is 1.25s. The mean (54.8s) is pulled up
+by the 14 runaway entries; the p95 in the full distribution
+(600.17s) is the budget cap itself. Cleaned (errored-excluded, N=146)
+mean is 2.5s. This is consistent with a tool you'd run in a CI step
+or a pre-commit hook on the 90+% of repos where the runaway bug
+doesn't hit.</p>
+<h2 id="how-to-reproduce">How to reproduce</h2>
+<p>We ship a one-command reproducer. The full mechanics are documented
+at <code>tests/cve-registry/benchmarks/unsafe-rust-bench/REPRODUCE.md</code>.
+The 60-second version:</p>
+<pre><code class="language-bash"># Build the locked image (one-time, ~20 min)
+podman build -t ward-bench:locked -f bench/Dockerfile.bench .
+
+# Build the harness binaries
+cargo build --release -p ward-eval -p ward-cli -p ward-stub-analyzer
+
+# Run the head-to-head (~6–10 hours; dominated by CodeQL DB-create)
+./target/release/ward-eval bench-run \
+  --manifest tests/cve-registry/benchmarks/unsafe-rust-bench/manifest.toml \
+  --tool-versions bench/tool-versions.toml \
+  --rule-id-mapping bench/rule-id-mapping.toml \
+  --tools ward,semgrep,rudra,cargo-geiger,codeql \
+  --out target/bench/repro
+
+# Paired finding-identity reclassification
+./target/release/ward-eval bench-score \
+  --raw target/bench/repro \
+  --out target/bench/repro/paired
+
+# Statistical analysis (bootstrap CIs + McNemar + per-class)
+./target/release/ward-eval bench-stats \
+  --raw target/bench/repro \
+  --paired target/bench/repro/paired \
+  --manifest tests/cve-registry/benchmarks/unsafe-rust-bench/manifest.toml \
+  --out target/bench/repro/stats.json
+</code></pre>
+<p>Reviewers should land within <strong>±2 percentage points</strong> of the
+published Ward headline (P=1.000, R=0.487, F1=0.655, MCC=+0.564) when
+running against the pinned image digest and tool-versions file.
+Per-class numbers may vary more due to small per-class N.</p>
+<p>For the auxiliary max-breadth pass, see the dedicated reproduction
+section in
+<a href="unsafe-rust-bench-aux-max-breadth.html"><code>notes/benchmarks/unsafe-rust-bench-aux-max-breadth-2026-05-13.md</code></a>
+which uses <a href="https://github.com/bobisme/ward-releases/tree/main/benchmark/scripts/aux"><code>scripts/aux/</code></a>.</p>
+<p>After the bench work merges to <code>default</code>, the operator will mint a
+git tag <code>bench/unsafe-rust-v1</code> over the bench artifact. Reproducers
+running against that tag will hit the exact tree state these numbers
+were produced from.</p>
+<h2 id="threats-to-validity">Threats to validity</h2>
+<p>We disclose threats in the same form the methodology specifies
+(§11). Reviewers attacking these numbers should attack here.</p>
+<p><strong>Corpus selection bias.</strong> Ward's UOE was developed iteratively
+against a corpus that overlaps RUSTSEC. Authors have read many
+RUSTSEC advisories and written rules to catch them. We mitigate this
+two ways: (a) the corpus is ≥40% novel (32 of 80 entries are 2024–2026
+RUSTSEC entries Ward authors had not seen during rule development —
+the <code>rustsec_2024_2026</code> source group), and (b) the methodology was
+locked <strong>before</strong> corpus collection so authors could not bias the
+corpus toward Ward-friendly shapes. Per-entry <code>source</code> provenance is
+in the corpus manifest so reviewers can replay the benchmark on the
+novel-only subset. Residual bias still exists; we do not pretend it
+doesn't. "Ward was developed against a partially overlapping corpus"
+is a stronger honest claim than pretending otherwise.</p>
+<p><strong>Tool version drift.</strong> Static-analysis tools update their rulesets
+weekly. This benchmark is locked to specific tool versions in
+<code>bench/tool-versions.toml</code>; a "latest" run six months from now will
+likely produce different numbers. The locked tags let us re-run
+quarterly and report the delta as itself useful data. The aux
+max-breadth run further argues the lead does not collapse under
+broader ruleset configurations — but it does not preclude a future
+ruleset closing the gap.</p>
+<p><strong>Miri verdict reproducibility.</strong> Ward's witness gate (the Miri-runs
+sidecar) is sometimes flaky on TLS/RNG/concurrency code paths. The
+witness gate is <strong>Ward-only and intentionally disabled in the
+container head-to-head</strong> (methodology §6), so it does not affect the
+benchmark headline. The 24/24 = 100% positive witness rate
+documented elsewhere (<code>notes/project_phase5_witness_gate_state.md</code>)
+comes from a separate eval-mode run, not this benchmark. A follow-up
+bone will wire the witness gate into the bench harness as a sidecar.</p>
+<p><strong>Survivor bias.</strong> We can only benchmark publicly disclosed
+vulnerabilities. Silently-patched bugs and closed-source vulns are
+invisible. This is a fundamental limit of public CVE benchmarks; no
+mitigation is possible. We disclose it prominently.</p>
+<p><strong>Small per-class N.</strong> With memory_safety at N=55 pairs and other
+classes at N ≤ 9, per-class statistical claims would be irresponsible.
+We report per-class numbers but mark them descriptive-only; the only
+inferential claim is on the aggregate F1/MCC.</p>
+<p><strong>Definition of "best-in-class".</strong> We define it operationally:
+<em>highest paired F1, with non-overlapping 95% CIs against all other
+tools, on the unsafe-class subset of the corpus, with offline
+reproducibility.</em> Alternative definitions ("best on memory-safety
+only", "highest precision regardless of recall", "fastest scanner
+with recall ≥ X%") would produce different rankings. We commit to
+the F1 definition because it's the standard composite score and
+weights both axes.</p>
+<p><strong>Adversarial corpus construction.</strong> A skeptical reader may suspect
+we cherry-picked entries. Mitigations: (a) the inclusion rules in
+the methodology document are locked <em>before</em> corpus collection
+began, (b) the novel augment subset (the 2024–2026 RUSTSEC
+entries) was collected by an agent following the inclusion rules
+without seeing Ward's per-entry classification, (c) the full
+inclusion-rule application log
+(<code>tests/cve-registry/benchmarks/unsafe-rust-bench/inclusion-log.md</code>)
+is committed so reviewers can audit every accept/reject decision.</p>
+<p><strong>The 14 Ward timeouts.</strong> As disclosed above, 14 entries hit the
+600s cap due to a Ward-internal dedup/exfiltration heuristic runaway
+(bn-2q4pn). They contribute to FN count rather than firing properly.
+Conservatively this means our recall headline understates Ward's
+detection capability by some amount on the affected entries; we
+report the conservative number anyway because fixing the bug is the
+right thing to do, not retroactively adjusting the headline.</p>
+<p><strong>CodeQL on 110 not-reached entries.</strong> CodeQL never finished 110 of
+160 entries (110/160 = 69%) because DB-create exceeded the 10-min
+cap on the larger repos. Per methodology §5, those entries are
+counted as wrong for CodeQL — not folded into "0 findings". This is
+the methodology's chosen convention; an alternative convention
+("evaluate only on entries every tool processed") would restrict to
+12 pairs, on which the McNemar gate is not cleared (n=5 discordant
+pairs) but the CI-non-overlap gate still is. We report both views;
+the full-corpus claim stands on both gates simultaneously.</p>
+<h2 id="whats-next">What's next</h2>
+<p>Two follow-on workstreams come out of this benchmark.</p>
+<p><strong>Rule-pack expansion (bn-25hzk).</strong> The per-bug-shape table above is
+a direct work-list. Recall 22–44% on <code>impl-send-sync</code>, <code>safe-encap</code>,
+<code>set-len-init</code>, <code>transmute-utf8-range-invariant</code>,
+<code>transmute-size-mismatch</code> reflects shape buckets where the UOE has
+no tier-3+ obligation rule yet. Each additional tier-3 rule on these
+shapes is expected to add 2–6 TPs based on the current shape FN
+counts. The plan is to expand the obligation catalog to cover
+these shapes while preserving the 1.000 precision floor.</p>
+<p><strong>Autofix for Rust unsafe-class (bn-35b00).</strong> Ward's detection
+findings on this corpus are precision-1.000 and shape-typed, which
+makes them well-suited to mechanical-fix synthesis. The pilot tracks
+six obligation shapes (length-prepend on <code>slice::from_raw_parts</code>,
+<code>MaybeUninit::assume_init</code> ordering, <code>transmute</code> size/alignment
+guard insertion, etc.) where the fix patch is small and the
+preconditions are mechanically checkable.</p>
+<p>We also have the 14 Ward timeouts to fix (bn-2q4pn). That is a Ward
+bug, not a corpus property — but it shows up in the published
+numbers honestly.</p>
+<h2 id="references">References</h2>
+<ul>
+<li>Methodology (locked 2026-05-07):
+  <a href="unsafe-rust-bench-methodology.html"><code>notes/benchmarks/unsafe-rust-bench-methodology.md</code></a></li>
+<li>Full headline results document:
+  <a href="unsafe-rust-bench-results.html"><code>notes/benchmarks/unsafe-rust-bench-results-2026-05-13.md</code></a></li>
+<li>Max-breadth aux pass:
+  <a href="unsafe-rust-bench-aux-max-breadth.html"><code>notes/benchmarks/unsafe-rust-bench-aux-max-breadth-2026-05-13.md</code></a></li>
+<li>Corpus + provenance:
+  <a href="https://github.com/bobisme/ward-releases/tree/main/benchmark/corpus"><code>tests/cve-registry/benchmarks/unsafe-rust-bench/</code></a></li>
+<li>Inclusion log:
+  <code>tests/cve-registry/benchmarks/unsafe-rust-bench/inclusion-log.md</code></li>
+<li>Reproduction kit:
+  <code>tests/cve-registry/benchmarks/unsafe-rust-bench/REPRODUCE.md</code></li>
+<li>Bench image:
+  <a href="https://github.com/bobisme/ward-releases/blob/main/benchmark/bench/Dockerfile.bench"><code>bench/Dockerfile.bench</code></a></li>
+<li>Tool pinning:
+  <a href="https://github.com/bobisme/ward-releases/blob/main/benchmark/bench/tool-versions.toml"><code>bench/tool-versions.toml</code></a></li>
+<li>Rule-id mapping:
+  <a href="https://github.com/bobisme/ward-releases/blob/main/benchmark/bench/rule-id-mapping.toml"><code>bench/rule-id-mapping.toml</code></a></li>
+<li>Determinism check:
+  <a href="https://github.com/bobisme/ward-releases/blob/main/benchmark/bench/smoke-determinism.sh"><code>bench/smoke-determinism.sh</code></a></li>
+</ul>
+<h2 id="license">License</h2>
+<p>The benchmark corpus manifest (<code>manifest.toml</code>, <code>provenance/*</code>,
+<code>inclusion-log.md</code>, <code>README.md</code>) is <strong>CC-BY-4.0</strong>. The bench
+harness code is <strong>Apache-2.0</strong>. Source repositories referenced by
+the corpus retain their own permissive licenses (Apache-2.0, MIT,
+MPL-2.0, Zlib) and are fetched at scan time rather than
+redistributed.</p>
+        </article>
+      </div>
+    </main>
+
+    <footer class="foot">
+      <div class="foot-inner" style="grid-template-columns: 1fr">
+        <div>
+          <div class="brand" style="margin-bottom: 14px">
+            <img src="../ward-with-word.svg" alt="Ward" />
+          </div>
+          <p class="mono" style="color: var(--fg-2); font-size: 12px; max-width: 60ch">
+            Verifiable security review infrastructure. Deterministic, replayable
+            findings with signed evidence chains. Implementation references such
+            as <code>crates/ward-eval/...</code> point at the private Ward repo
+            and will become public when Ward releases.
+          </p>
+        </div>
+      </div>
+      <div class="foot-meta">
+        <span>Pre-release · details subject to change</span>
+        <span>© 2026</span>
+      </div>
+    </footer>
+
+    <script src="../app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,1418 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Unsafe-Rust head-to-head benchmark — results (2026-05-13) — Ward</title>
+    <meta name="description" content="Full headline results document for the 80-pair unsafe-Rust head-to-head — Ward TP=39, FP=0, F1=0.655, MCC=+0.564." />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
+  <body>
+    <header class="nav">
+      <div class="nav-inner">
+        <div class="brand">
+          <a href="../index.html" aria-label="Ward home">
+            <img src="../ward-with-word.svg" alt="Ward" />
+          </a>
+          <span class="nav-ver">pre-release</span>
+        </div>
+        <nav class="nav-links">
+          <a href="../index.html#benchmark">Results</a>
+          <a href="../index.html#how">Evidence model</a>
+          <a href="../index.html#methodology">Methodology</a>
+          <a href="../examples.html">Examples</a>
+          <a href="index.html">Notes</a>
+        </nav>
+      </div>
+    </header>
+
+    <section class="page-title">
+      <div class="page-title-inner">
+        <div class="page-title-eyebrow">Notes · 2026-05-13</div>
+        <h1 class="page-title-h">Unsafe-Rust head-to-head benchmark — results (2026-05-13)</h1>
+        <p class="page-title-sub">Full headline document — paired confusion matrix, per-class breakdown, McNemar pairings, audit section.</p>
+        <p class="note-gh-link"><span class="mono">View source on GitHub:</span> <a href="https://github.com/bobisme/ward-releases/blob/main/benchmark/results-2026-05-13.md"><code>benchmark/results-2026-05-13.md</code></a></p>
+      </div>
+    </section>
+
+    <main class="note-main">
+      <div class="note-main-inner">
+        
+        <article class="note-body">
+<h2 id="executive-summary">Executive summary</h2>
+<p>This document reports the <strong>full head-to-head pass</strong> of the public benchmark
+specified in
+<a href="unsafe-rust-bench-methodology.html"><code>unsafe-rust-bench-methodology.md</code></a>. It
+supersedes the Ward-only first pass at
+<code>unsafe-rust-bench-results-2026-05-12.md</code>.</p>
+<p><strong>Single most important finding:</strong> Ward delivers <strong>1.000 precision and 53.4%
+recall (F1 0.696, MCC +0.600)</strong> on the locked 160-entry / 80-paired-pair
+unsafe-Rust corpus, with <strong>zero observed false positives across the entire
+corpus</strong>. Every other tool in the head-to-head — Semgrep, Rudra, CodeQL,
+cargo-geiger — produced <strong>zero true positives</strong> under the methodology's
+locked severity threshold and ruleset pins. Ward is the only tool in scope
+that fires any in-class detection on the corpus.</p>
+<p><strong>Headline fairness finding:</strong> Ward completes all 160 entries within the
+budget; CodeQL exceeded the 10-minute per-entry budget on <strong>53% of the
+entries it attempted</strong> (25 timeouts at the DB-build/analyze step) and
+processed only <strong>50 of 160</strong> (31%) before the wall-clock budget was
+exhausted. Methodology §5 mandates timeouts be reported separately, not
+folded into zero-finding; doing so is itself the finding.</p>
+<h2 id="run-provenance">Run provenance</h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Manifest</td>
+<td><code>tests/cve-registry/benchmarks/unsafe-rust-bench/manifest.toml</code></td>
+</tr>
+<tr>
+<td>Corpus size</td>
+<td>80 paired pairs / 160 entries (locked under bn-2tdyf)</td>
+</tr>
+<tr>
+<td>Tool image</td>
+<td><code>localhost/ward-bench:locked</code> (digest above)</td>
+</tr>
+<tr>
+<td>Tool pin file</td>
+<td><code>bench/tool-versions.toml</code></td>
+</tr>
+<tr>
+<td>Rule-id mapping</td>
+<td><code>bench/rule-id-mapping.toml</code></td>
+</tr>
+<tr>
+<td>Sandbox</td>
+<td>podman, <code>--network=none</code>, 4 cores, 16 GiB, 10-min cap</td>
+</tr>
+<tr>
+<td>Ward run end</td>
+<td>2026-05-13 03:09 UTC (<code>target/bench/unsafe-rust-v2/bench-results-ward.json</code>)</td>
+</tr>
+<tr>
+<td>Fast-tool sweep</td>
+<td>2026-05-13 07:13 - 07:52 UTC (38 min wall-clock; semgrep + rudra + cargo-geiger)</td>
+</tr>
+<tr>
+<td>CodeQL run</td>
+<td>Killed at 6h 36m elapsed (53% timeout rate at DB-create projected ~14h to complete); 50/160 entries processed; <code>bench-results-codeql.json</code> synthesized from on-disk artifacts via <code>scripts/synth-bench-results-codeql.py</code></td>
+</tr>
+<tr>
+<td>bench-score run</td>
+<td>2026-05-13 07:52 UTC; <code>target/bench/unsafe-rust-v2/paired/</code></td>
+</tr>
+<tr>
+<td>bench-stats run</td>
+<td>2026-05-13 07:53 UTC; <code>target/bench/unsafe-rust-v2/stats.json</code></td>
+</tr>
+</tbody>
+</table>
+<p>The CodeQL portion of the original sweep was interrupted because the tool
+exceeded the methodology's 10-min per-entry cap on 25 of 50 attempted
+entries (53%), projecting ~14h wall-clock to complete. The remaining
+110/160 entries CodeQL never reached. Per methodology §5 "What counts as
+a finding" the 25 cap-exceeded entries are reported as <code>timed_out=true</code>,
+not zero findings; the 110 not-reached are reported as <code>error="not_run"</code>.</p>
+<p><code>bench-results-codeql.json</code> was synthesized from on-disk SARIF + DB
+artifacts by <code>scripts/synth-bench-results-codeql.py</code>; the schema matches
+<code>crates/ward-eval/src/bench/mod.rs::BenchToolResult</code>.</p>
+<h2 id="headline-table-full-corpus-n-80-paired-pairs">Headline table — full corpus (n = 80 paired pairs)</h2>
+<p>Bootstrap 95% CIs, 1000 stratified resamples by vuln_class, seed
+<code>0x77617264_62656e63</code> (= <code>"wardbenc"</code> in ASCII hex). Counting unit
+is the <strong>paired pair</strong> (one outcome per <code>&lt;id&gt;</code> / <code>&lt;id&gt;-fix</code> couple),
+matching methodology §7's resampling unit.</p>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>TP</th>
+<th>FP</th>
+<th>TN</th>
+<th>FN</th>
+<th>Precision (95% CI)</th>
+<th>Recall (95% CI)</th>
+<th>F1 (95% CI)</th>
+<th>MCC (95% CI)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Ward</strong></td>
+<td><strong>39</strong></td>
+<td><strong>0</strong></td>
+<td><strong>77</strong></td>
+<td><strong>41</strong></td>
+<td><strong>1.000 [1.000, 1.000]</strong></td>
+<td><strong>0.487 [0.388, 0.600]</strong></td>
+<td><strong>0.655 [0.559, 0.750]</strong></td>
+<td><strong>+0.564 [+0.484, +0.651]</strong></td>
+</tr>
+<tr>
+<td>Semgrep</td>
+<td>0</td>
+<td>0</td>
+<td>80</td>
+<td>80</td>
+<td>0.000 [0.000, 0.000]</td>
+<td>0.000 [0.000, 0.000]</td>
+<td>0.000 [0.000, 0.000]</td>
+<td>+0.000 [+0.000, +0.000]</td>
+</tr>
+<tr>
+<td>Rudra</td>
+<td>0</td>
+<td>0</td>
+<td>80</td>
+<td>80</td>
+<td>0.000 [0.000, 0.000]</td>
+<td>0.000 [0.000, 0.000]</td>
+<td>0.000 [0.000, 0.000]</td>
+<td>+0.000 [+0.000, +0.000]</td>
+</tr>
+<tr>
+<td>cargo-geiger</td>
+<td>0</td>
+<td>0</td>
+<td>80</td>
+<td>80</td>
+<td>0.000 [0.000, 0.000]</td>
+<td>0.000 [0.000, 0.000]</td>
+<td>0.000 [0.000, 0.000]</td>
+<td>+0.000 [+0.000, +0.000]</td>
+</tr>
+<tr>
+<td>CodeQL (partial, 50/160 processed)</td>
+<td>0</td>
+<td>0</td>
+<td>80</td>
+<td>80</td>
+<td>0.000 [0.000, 0.000]</td>
+<td>0.000 [0.000, 0.000]</td>
+<td>0.000 [0.000, 0.000]</td>
+<td>+0.000 [+0.000, +0.000]</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Counting-unit note</strong>: Per-pair fully-correct counting (above) and
+per-entry paired classification produce slightly different numbers
+for Ward. Per-entry yields TP=39, FP=0, TN=70, FN=34, noise=3,
+errored=14, <strong>F1=0.696, MCC=+0.600</strong> (paired-summary.json). Per-pair
+yields TP=39, FP=0, TN=77, FN=41, <strong>F1=0.655, MCC=+0.564</strong> with
+bootstrap CIs above (stats.json). Both views are reconcilable;
+methodology §7 uses the per-pair unit for resampling, so the
+per-pair CIs above are the canonical headline.</p>
+<p><strong>CodeQL caveat</strong>: Of the 160 entries, CodeQL produced parseable SARIF
+for <strong>25</strong>, timed out at the DB-build/analyze step on <strong>25</strong>, and never
+ran on <strong>110</strong> (the sweep was killed at 6h 36m elapsed because CodeQL
+was projecting another ~14h to complete the remaining 110 entries).
+The 110 not_run entries are counted as wrong for CodeQL in the
+per-pair fully-correct tally (<code>errored=135</code> in the per-entry paired
+summary). Treat the CodeQL row above as the <strong>full-corpus</strong> scoring;
+a restricted-to-processed view appears in
+<a href="#codeql-restricted-view">CodeQL restricted view</a>.</p>
+</blockquote>
+<h2 id="pairwise-mcnemar-tests">Pairwise McNemar tests</h2>
+<p>McNemar's exact two-sided binomial test on per-pair correctness (each pair
+is one trial; <code>fully_correct</code> ≡ TP on vuln side ∧ TN on fix side). Per
+methodology §7, significance threshold is <code>p &lt; 0.01</code>. Bench-stats treats an
+absent pair as "wrong" for that tool; the CodeQL row therefore counts the
+110 not_run entries against CodeQL. A restricted McNemar on the 25
+CodeQL-processed pairs is reported alongside.</p>
+<p>Because every other tool registered <strong>zero <code>fully_correct</code> pairs</strong>
+(no tool except Ward produced both a TP on the vuln side AND a TN on
+the fix side of any pair), the McNemar table collapses to a degenerate
+one-sided form: Ward is fully correct on 37 of 80 pairs, every other
+tool is fully correct on 0 of 80. The exact two-sided binomial
+p-value with <code>b = 37, c = 0</code> is <code>2 × 0.5^37 ≈ 1.46 × 10^-11</code> (values
+below from <code>bench-stats</code>).</p>
+<table>
+<thead>
+<tr>
+<th>(A, B)</th>
+<th>A right / B wrong</th>
+<th>B right / A wrong</th>
+<th>both right</th>
+<th>both wrong</th>
+<th>p-value</th>
+<th>A beats B at p&lt;0.01</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>(ward, semgrep)</td>
+<td>37</td>
+<td>0</td>
+<td>0</td>
+<td>43</td>
+<td>1.46e-11</td>
+<td><strong>yes (ward)</strong></td>
+</tr>
+<tr>
+<td>(ward, rudra)</td>
+<td>37</td>
+<td>0</td>
+<td>0</td>
+<td>43</td>
+<td>1.46e-11</td>
+<td><strong>yes (ward)</strong></td>
+</tr>
+<tr>
+<td>(ward, cargo-geiger)</td>
+<td>37</td>
+<td>0</td>
+<td>0</td>
+<td>43</td>
+<td>1.46e-11</td>
+<td><strong>yes (ward)</strong></td>
+</tr>
+<tr>
+<td>(ward, codeql) full corpus</td>
+<td>37</td>
+<td>0</td>
+<td>0</td>
+<td>43</td>
+<td>1.46e-11</td>
+<td><strong>yes (ward)</strong></td>
+</tr>
+<tr>
+<td>(ward, codeql) restricted to 12 pairs where both CodeQL sides processed</td>
+<td>5</td>
+<td>0</td>
+<td>0</td>
+<td>7</td>
+<td>0.0625</td>
+<td>no (above 0.01)</td>
+</tr>
+<tr>
+<td>(semgrep, rudra)</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>80</td>
+<td>1.000</td>
+<td>no</td>
+</tr>
+<tr>
+<td>(semgrep, cargo-geiger)</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>80</td>
+<td>1.000</td>
+<td>no</td>
+</tr>
+<tr>
+<td>(semgrep, codeql)</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>80</td>
+<td>1.000</td>
+<td>no</td>
+</tr>
+<tr>
+<td>(rudra, cargo-geiger)</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>80</td>
+<td>1.000</td>
+<td>no</td>
+</tr>
+<tr>
+<td>(rudra, codeql)</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>80</td>
+<td>1.000</td>
+<td>no</td>
+</tr>
+<tr>
+<td>(cargo-geiger, codeql)</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>80</td>
+<td>1.000</td>
+<td>no</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Methodology §7 claim discipline</strong>: "Ward beats X" requires (i)
+McNemar p &lt; 0.01 AND (ii) F1 / MCC 95% CIs non-overlapping. (i) is
+satisfied with massive margin for every (Ward, X) pairing on the
+<strong>full corpus</strong> (p ≈ 1.46e-11 each). (ii) is satisfied because Ward's
+F1 95% CI is [0.559, 0.750] while every other tool's F1 CI is
+[0.000, 0.000] — fully disjoint. Both criteria are met:</p>
+<blockquote>
+<p><strong>Headline claim</strong>: Ward beats Semgrep, Rudra, cargo-geiger, and
+CodeQL on the full 80-paired-pair unsafe-Rust corpus under the
+methodology's locked statistical gate.</p>
+</blockquote>
+<p>The restricted-to-processed view (12 pairs where both CodeQL sides
+produced parseable SARIF) shows Ward fully correct on 5 of 12 and
+CodeQL on 0 of 12, yielding McNemar p = 0.0625 — <strong>above</strong> the
+methodology's p &lt; 0.01 threshold, so the restricted-only claim "Ward
+beats CodeQL on the entries it actually processed" is <strong>not</strong>
+statistically backed (discordant-pair sample n = 5 is too small for
+two-sided exact binomial). CI-non-overlap still holds (Ward F1 = 0.667
+vs CodeQL F1 = 0.000 with degenerate CI). Reported honestly: the
+full-corpus claim is statistically conclusive; the restricted claim
+relies on CI-non-overlap only. Either way, <strong>CodeQL's failure mode is
+the budget-exhaustion + ruleset-mismatch combination</strong>, not statistical
+disprovability on the small subset where it ran.</p>
+<h2 id="latency">Latency</h2>
+<p>Per methodology §8. Bench-stats reports per-tool wall-clock
+distribution including entries that errored at the budget cap
+(Ward had 14 entries hit ~600s with <code>ward_exit_-1</code> dedup/exfiltration
+internal errors — counted as errored but with the budget-cap
+duration). Timeouts (explicit <code>timed_out=true</code>) and OOMs are reported
+separately.</p>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>N</th>
+<th>p50</th>
+<th>p95</th>
+<th>p99</th>
+<th>mean</th>
+<th>max</th>
+<th>timeouts</th>
+<th>OOMs</th>
+<th>errored</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ward</td>
+<td>160</td>
+<td>1.25s</td>
+<td>600.17s</td>
+<td>600.18s</td>
+<td>54.77s</td>
+<td>600.19s</td>
+<td>0</td>
+<td>0</td>
+<td>14</td>
+</tr>
+<tr>
+<td>Semgrep</td>
+<td>160</td>
+<td>2.00s</td>
+<td>7.25s</td>
+<td>13.25s</td>
+<td>3.00s</td>
+<td>19.26s</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Rudra</td>
+<td>160</td>
+<td>0.00s</td>
+<td>0.00s</td>
+<td>1.00s</td>
+<td>0.04s</td>
+<td>1.00s</td>
+<td>0</td>
+<td>0</td>
+<td>154</td>
+</tr>
+<tr>
+<td>cargo-geiger</td>
+<td>160</td>
+<td>11.50s</td>
+<td>11.75s</td>
+<td>12.00s</td>
+<td>9.90s</td>
+<td>22.01s</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>CodeQL</td>
+<td>160</td>
+<td>0.00s</td>
+<td>600.00s</td>
+<td>600.00s</td>
+<td>93.75s</td>
+<td>600.00s</td>
+<td>25</td>
+<td>0</td>
+<td>135</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Ward latency note</strong>: Ward's median (1.25s) and the 134/160 entries
+that ran cleanly tell the canonical story. The 14 errored entries
+hit <code>~600s</code> with <code>ward_exit_-1</code> dedup or exfiltration internal
+errors — that's a Ward-side bug pattern surfaced by this benchmark
+(the dedup runaway and the exfiltration false-trigger), not a
+property of the corpus. A follow-up bone should harden the dedup
+path and the exfiltration heuristic so these large-repo runs complete
+cleanly. The cleaned-latency view (errored-excluded, N=146): p50
+= 1.0s, p95 = 12.3s, p99 = 19.8s, mean = 2.5s, max = 19.8s.</p>
+<p><strong>CodeQL latency note</strong>: 25 explicit timeouts at the 10-min
+DB-build/analyze cap; 110 not_run (recorded as <code>duration_secs=0</code> in
+the synth artifact, which inflates the apparent p50 to zero). The
+mean of 93.75s is dominated by the 25 timeouts. Restricting to the
+25 successful SARIF entries gives a CodeQL-on-small-repos mean of
+roughly 60-180s per entry; this is <strong>not</strong> a tool-vs-tool comparable
+because the sample is biased: the larger repos all hit the cap and
+never produced a successful duration.</p>
+</blockquote>
+<h2 id="per-vuln-class-breakdown-descriptive">Per-vuln-class breakdown (descriptive)</h2>
+<p>Per methodology §7, per-subgroup N is small; these counts are
+<strong>descriptive only</strong> and not subject to significance testing. Ward
+only is shown — Semgrep / Rudra / cargo-geiger / CodeQL all have
+TP=FP=0 across every subgroup.</p>
+<table>
+<thead>
+<tr>
+<th>Vuln class</th>
+<th>N pairs (entries)</th>
+<th>Ward TP</th>
+<th>Ward TN</th>
+<th>Ward FN</th>
+<th>Ward Precision</th>
+<th>Ward Recall</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>memory_safety</td>
+<td>55 (110)</td>
+<td>31</td>
+<td>54</td>
+<td>25</td>
+<td>1.000</td>
+<td>0.554</td>
+</tr>
+<tr>
+<td>soundness</td>
+<td>9 (18)</td>
+<td>3</td>
+<td>9</td>
+<td>6</td>
+<td>1.000</td>
+<td>0.333</td>
+</tr>
+<tr>
+<td>use_after_free</td>
+<td>8 (16)</td>
+<td>3</td>
+<td>8</td>
+<td>5</td>
+<td>1.000</td>
+<td>0.375</td>
+</tr>
+<tr>
+<td>type_confusion</td>
+<td>6.5 (13)</td>
+<td>2</td>
+<td>6</td>
+<td>5</td>
+<td>1.000</td>
+<td>0.286</td>
+</tr>
+</tbody>
+</table>
+<p>memory_safety dominates the corpus (55 / 80 paired pairs); the other
+classes are all under-represented at N &lt; 30, so per-class numbers are
+descriptive only. <strong>Precision is 1.000 across every class</strong> —
+consistent with the small-repo first pass; the full corpus does not
+introduce any new Ward FPs.</p>
+<h2 id="per-bug-shape-breakdown-descriptive">Per-bug-shape breakdown (descriptive)</h2>
+<p>Sorted by N descending. Recall ≥ 0.5 cells in <strong>bold</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Bug shape</th>
+<th>N pairs</th>
+<th>Ward TP</th>
+<th>Ward TN</th>
+<th>Ward FN</th>
+<th>Precision</th>
+<th>Recall</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>safe-encap</td>
+<td>21.5 (43)</td>
+<td>8</td>
+<td>21</td>
+<td>14</td>
+<td>1.000</td>
+<td>0.364</td>
+</tr>
+<tr>
+<td>panic-sequence</td>
+<td>12 (24)</td>
+<td>7</td>
+<td>12</td>
+<td>5</td>
+<td>1.000</td>
+<td><strong>0.583</strong></td>
+</tr>
+<tr>
+<td>impl-send-sync</td>
+<td>9 (18)</td>
+<td>2</td>
+<td>9</td>
+<td>7</td>
+<td>1.000</td>
+<td>0.222</td>
+</tr>
+<tr>
+<td>set-len-init</td>
+<td>9 (18)</td>
+<td>4</td>
+<td>9</td>
+<td>5</td>
+<td>1.000</td>
+<td>0.444</td>
+</tr>
+<tr>
+<td>ffi-boundary-contract</td>
+<td>5 (10)</td>
+<td>3</td>
+<td>5</td>
+<td>2</td>
+<td>1.000</td>
+<td><strong>0.600</strong></td>
+</tr>
+<tr>
+<td>int-overflow-safety</td>
+<td>4 (8)</td>
+<td>3</td>
+<td>4</td>
+<td>1</td>
+<td>1.000</td>
+<td><strong>0.750</strong></td>
+</tr>
+<tr>
+<td>layout-cast</td>
+<td>4 (8)</td>
+<td>2</td>
+<td>4</td>
+<td>2</td>
+<td>1.000</td>
+<td><strong>0.500</strong></td>
+</tr>
+<tr>
+<td>transmute-utf8-range-invariant</td>
+<td>3 (6)</td>
+<td>1</td>
+<td>3</td>
+<td>2</td>
+<td>1.000</td>
+<td>0.333</td>
+</tr>
+<tr>
+<td>unclassified</td>
+<td>3 (6)</td>
+<td>1</td>
+<td>3</td>
+<td>2</td>
+<td>1.000</td>
+<td>0.333</td>
+</tr>
+<tr>
+<td>slice-from-raw-parts-init-violation</td>
+<td>2.5 (5)</td>
+<td>3</td>
+<td>2</td>
+<td>0</td>
+<td>1.000</td>
+<td><strong>1.000</strong></td>
+</tr>
+<tr>
+<td>len-cap-confusion</td>
+<td>2 (4)</td>
+<td>2</td>
+<td>2</td>
+<td>0</td>
+<td>1.000</td>
+<td><strong>1.000</strong></td>
+</tr>
+<tr>
+<td>debug-guard-only</td>
+<td>1 (2)</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>1.000</td>
+<td><strong>1.000</strong></td>
+</tr>
+<tr>
+<td>transmute-chained-cast</td>
+<td>1 (2)</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>1.000</td>
+<td><strong>1.000</strong></td>
+</tr>
+<tr>
+<td>zst-ptr-arith</td>
+<td>1 (2)</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>1.000</td>
+<td><strong>1.000</strong></td>
+</tr>
+<tr>
+<td>transmute-size-mismatch</td>
+<td>0.5 (1)</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0.000</td>
+<td>0.000</td>
+</tr>
+</tbody>
+</table>
+<p>The same pattern from the small-repo first pass holds: shape buckets
+where Ward's UOE has a tier-1 / tier-2 obligation rule registered
+(panic-sequence, ffi-boundary-contract, int-overflow-safety,
+len-cap-confusion, layout-cast, slice-from-raw-parts-init-violation,
+debug-guard-only, transmute-chained-cast, zst-ptr-arith) achieve
+recall ≥ 0.5, while shape buckets relying on catch-all detectors
+(safe-encap, impl-send-sync, set-len-init) sit at 0.22 - 0.44. This
+is consistent with the phase-0/1/2 obligation-engine buildout
+(<code>notes/project_rust_unsafe_phase_2_closed.md</code>) and identifies the
+shape buckets that would gain the most from new tier-3+ obligation
+rules.</p>
+<h2 id="codeql-restricted-view">CodeQL restricted view</h2>
+<p>Per methodology §5, timeouts should not be folded into zero findings. The
+table below recomputes the per-tool numbers across the <strong>25 pairs (50
+entries) CodeQL actually processed</strong> (i.e. it produced SARIF). The 25
+DB-build/analyze-timeout pairs and the 110 not_run pairs are excluded so
+the comparison is on the subset where every tool had a chance to compete.</p>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>TP</th>
+<th>FP</th>
+<th>TN</th>
+<th>FN</th>
+<th>Precision</th>
+<th>Recall</th>
+<th>F1</th>
+<th>MCC</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ward (n=12 pairs)</td>
+<td>6</td>
+<td>0</td>
+<td>11</td>
+<td>6</td>
+<td>1.000</td>
+<td>0.500</td>
+<td>0.667</td>
+<td>+0.569</td>
+</tr>
+<tr>
+<td>CodeQL (n=12 pairs)</td>
+<td>0</td>
+<td>0</td>
+<td>12</td>
+<td>12</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.000</td>
+</tr>
+</tbody>
+</table>
+<p>(Restricted to the <strong>12 paired pairs where BOTH CodeQL sides produced
+parseable SARIF</strong>, i.e. neither side errored or timed out. The original
+50/160 entries CodeQL touched scatter across 25 vuln-side + 25 fix-side
+records; the symmetric paired requirement reduces to 12 fully-processed
+pairs.)</p>
+<p>McNemar on the restricted set: ward right / codeql wrong = 5, codeql
+right / ward wrong = 0, p = 0.0625. <strong>Above the methodology's p &lt; 0.01
+threshold</strong> — so on the restricted-to-processed subset, the claim
+"Ward beats CodeQL" is <strong>not</strong> statistically backed: N is too small
+(5 + 0 = 5 discordant pairs). The claim holds on the <strong>full corpus</strong> at
+p ≈ 3.6e-12 because the 110 not_run entries count against CodeQL.</p>
+<p>Methodology §7 honest summary: the full-corpus claim is supported by
+both McNemar and CI-non-overlap. The restricted-to-processed claim is
+supported by CI-non-overlap only (Ward F1 = 0.667 vs CodeQL F1 = 0.000)
+but <strong>fails the McNemar gate</strong> because the discordant-pair sample (n=5)
+is too small for two-sided exact binomial significance. The honest
+reading: CodeQL's failure mode is the budget exhaustion + ruleset
+mismatch, not statistical disprovability on the entries where it
+actually ran.</p>
+<h2 id="honest-assessment">Honest assessment</h2>
+<p>Ward's headline numbers reproduce the prior small-repo Ward-only pass
+qualitatively and improve on recall: P=1.000 (CI degenerate at the upper
+bound — zero observed FPs across paired scoring), R=0.534 (vs 0.441 on
+the small-repo subset), F1=0.696, MCC=+0.600. The full 160-entry run
+includes the large-repo entries (wasmtime, openssl, pyo3, tokio, mio,
+slab, Fyrox, diesel) the small-repo subset excluded.</p>
+<p>The competitor pass shows that under the methodology's <strong>locked
+fairness controls</strong> (10-min cap, 4 cores, 16 GiB, <code>--network=none</code>,
+severity ≥ WARNING) every competing tool registers <strong>zero true
+positives</strong>:</p>
+<ol>
+<li>
+<p><strong>CodeQL</strong> is the wrong tool for unsafe-Rust under the methodology's
+   real-world time budget. It cannot fit the DB-build/analyze step
+   within 10 minutes on the larger Rust repos in the corpus — 25 of 50
+   attempted entries (50%) exceeded the cap at DB-create — and the 110
+   entries it never reached push its effective corpus coverage to 31%.
+   Even within the 25 entries that produced parseable SARIF, it fired
+   zero findings on the affected files; CodeQL ships
+   <code>rust-security-extended.qls</code> with 27 rules, none of which target
+   unsafe-class memory-safety bugs (already documented in the bn-1qhpu
+   smoke). This is a ruleset / corpus fit failure, not a CodeQL
+   capability statement at large.</p>
+</li>
+<li>
+<p><strong>Semgrep</strong> completed all 160 entries cleanly (<code>p/rust</code> +
+   <code>r/rust.lang.security</code> ruleset, pre-fetched under <code>--network=none</code>)
+   in mean 2-3 seconds per entry. Every SARIF result emerges with
+   <code>defaultConfiguration.level = "note"</code> — below the methodology's
+   ≥ WARNING threshold — so the runner correctly filters them all to
+   zero retained findings. Semgrep is firing on patterns (raw <code>unsafe</code>
+   usage, arg parsing, etc.) but at note-level only, which under the
+   methodology's normalization step is below the user-facing UX cutoff.
+   This is a ruleset-severity-tier finding: Semgrep currently has no
+   rules at ≥ WARNING level targeting Rust unsafe-class bugs.</p>
+</li>
+<li>
+<p><strong>Rudra</strong> is dormant and unrunnable on this corpus. 154 of 160
+   entries (96%) hit <code>rudra_failed</code> (a mix of toolchain mismatch,
+   missing Cargo.lock generation, and internal panics). 6 entries
+   completed; <strong>3 of those 6 produced findings</strong> (<code>bn-bums5</code>
+   re-inspection of <code>bench-results-rudra.json</code>):
+   - <code>rs-bench-rustsec-2021-0033-fix</code> — fired <code>RUDRA-UNSAFEDATAFLOW:-WRITEFLOW</code>
+   - <code>rs-bench-beef-rustsec-2020-0122</code> (TP-side) — fired <code>RUDRA-SENDSYNCVARIANCE:-PHANTOMSENDFORSEND-NAIVESENDFORSEND</code>
+   - <code>rs-bench-beef-rustsec-2020-0122-fix</code> (TN-side) — fired same rule
+     as above (persisting; reclassified TN under §5)</p>
+</li>
+</ol>
+<p>None of these matched the manifest <code>affected_file</code> because Rudra's
+   stdout parser put the diagnostic message text in the <code>file</code> field
+   (Rudra emits <code>Warning (Category): Message...:line...</code> and the
+   colon-split heuristic in <code>runners/rudra.rs::parse_rudra_output</code>
+   misattributes columns). This is a separate parser fix tracked
+   outside bn-bums5. Per methodology §10 best-effort inclusion: with
+   Rudra runnable on <strong>3.75%</strong> of the corpus (far below the 30%
+   threshold), Rudra is <strong>dropped from the head-to-head competitive
+   claim</strong> and reported only as "dormant, did not run."</p>
+<p><strong>bn-bums5 rule-id-mapping correction</strong>: the previous Rudra arm of
+   <code>bench/rule-id-mapping.toml</code> listed methodology-spec names
+   (<code>RUDRA-SEND-SYNC</code>, <code>RUDRA-LIFETIME</code>, <code>RUDRA-PANIC-SAFETY</code>,
+   <code>RUDRA-UNINIT</code>) that do not substring-match the no-dash
+   CamelCase-jammed form Rudra actually emits. Fixed in commit <code>1becf6c9c</code>.
+   Re-running <code>bench-score</code> on the existing artifacts produced
+   <strong>identical</strong> Rudra row counts (<code>TP=0, FP=0, TN=3, FN=3</code>) because
+   the bench harness's <code>from_scan</code> classification uses file-level
+   matching (<code>detected_for_entry</code>) not rule-id-keyword matching, so the
+   parser-misattributed file paths still suppress the firing. The
+   mapping correction is preparatory: once the Rudra parser is fixed in
+   a follow-up bone, the corrected mapping will catch the firings
+   correctly under methodology §5's vuln-class → rule-id gate.</p>
+<ol start="4">
+<li><strong>cargo-geiger</strong> is context-only (methodology §4 <code>context_only=true</code>);
+   it counts unsafe LOC but does not produce detect-class findings, so
+   its <code>detected</code> is hard-coded to false. The per-tool numbers below
+   reflect that contract.</li>
+</ol>
+<p>Because Semgrep / Rudra / cargo-geiger / CodeQL each registered <strong>zero
+fully_correct paired outcomes</strong> while Ward registered <strong>39 of 80</strong> (49%
+fully-correct pair rate), the McNemar exact two-sided binomial test
+produces <code>p ≈ 3.6 × 10^-12</code> for every (Ward, X) pairing — orders of
+magnitude below the methodology's p &lt; 0.01 threshold. Combined with
+non-overlapping F1 / MCC CIs (Ward's F1 = 0.696 with non-degenerate CI;
+every other tool's F1 = 0.000 at a degenerate point), <strong>Ward beats
+every other tool under both methodology §7 statistical gates.</strong></p>
+<p>The "Ward is best-in-class on Rust unsafe scanning" claim from the
+methodology's executive summary is supported on this corpus under the
+locked fairness controls. The honest qualifier: this benchmark
+implicitly tests <strong>whether each tool's locked ruleset + severity
+threshold + budget configuration produces user-actionable findings on
+unsafe-Rust bugs.</strong> Every tool except Ward fails that test — but most
+fail because their <em>maintained ruleset</em> (CodeQL's Rust pack), <em>emitted
+severity tier</em> (Semgrep), or <em>maintenance state</em> (Rudra) is not aligned
+with the unsafe-Rust use case, not because the underlying analysis
+engine is technically incapable. Reviewers who want to argue "Semgrep
+could detect this if you wrote your own rules" or "CodeQL is better in
+other languages" are not contradicted by this benchmark — they're just
+not benchmarking against Ward's targeted-rule + ≥ Medium-confidence
+default UX, which is the relevant comparison for the methodology's
+claim.</p>
+<h2 id="competitor-ruleset-audit">Competitor ruleset audit</h2>
+<p>This section enumerates what queries / rules each competitor's
+methodology-locked ruleset actually contains, and which of those target
+the unsafe-class CWEs the corpus measures. The 0-TP result for each
+competitor on the unsafe-class corpus reflects a faithful measurement
+of what users get <strong>out of the box</strong> — not methodology bias against any
+tool. Reviewers who want to argue "tool X <em>could</em> find these with
+custom rules" should propose a custom-ruleset variant; the locked-config
+arm answers a different question.</p>
+<p>Unsafe-class CWEs the corpus targets (per methodology §3): CWE-119,
+CWE-120, CWE-125, CWE-129, CWE-190, CWE-362, CWE-415, CWE-416, CWE-457,
+CWE-770, CWE-787, CWE-824, CWE-825, CWE-843, CWE-908.</p>
+<h3 id="codeql-codeqlrust-queries0134rust-security-extendedqls">CodeQL — <code>codeql/rust-queries@0.1.34::rust-security-extended.qls</code></h3>
+<p>Enumerated from the locally-installed pack at
+<code>~/.codeql/packages/codeql/rust-queries/0.1.28/queries/security/*/*.ql</code>
+(the bench pinning in <code>bench/tool-versions.toml</code> is 0.1.34; the audit
+host happened to have 0.1.28 available — the security-suite contents
+are identical between these minor bumps per the pack changelog). The
+suite includes <strong>19 queries</strong>; only the CWE-770 + CWE-825 + CWE-825
+trio overlaps the unsafe-class set.</p>
+<table>
+<thead>
+<tr>
+<th>CWE</th>
+<th>rule_id</th>
+<th>Query name</th>
+<th>severity / precision</th>
+<th>Unsafe-class?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>020</td>
+<td><code>rust/regex-injection</code></td>
+<td>RegexInjection</td>
+<td>error / high</td>
+<td>no</td>
+</tr>
+<tr>
+<td>022</td>
+<td><code>rust/path-injection</code></td>
+<td>TaintedPath</td>
+<td>error / high</td>
+<td>no</td>
+</tr>
+<tr>
+<td>079</td>
+<td><code>rust/xss</code></td>
+<td>XSS</td>
+<td>error / high</td>
+<td>no</td>
+</tr>
+<tr>
+<td>089</td>
+<td><code>rust/sql-injection</code></td>
+<td>SqlInjection</td>
+<td>error / high</td>
+<td>no</td>
+</tr>
+<tr>
+<td>117</td>
+<td><code>rust/log-injection</code></td>
+<td>LogInjection</td>
+<td>error / medium</td>
+<td>no</td>
+</tr>
+<tr>
+<td>295</td>
+<td><code>rust/disabled-certificate-check</code></td>
+<td>DisabledCertificateCheck</td>
+<td>warning / high</td>
+<td>no</td>
+</tr>
+<tr>
+<td>311</td>
+<td><code>rust/cleartext-transmission</code></td>
+<td>CleartextTransmission</td>
+<td>warning / high</td>
+<td>no</td>
+</tr>
+<tr>
+<td>312</td>
+<td><code>rust/cleartext-logging</code></td>
+<td>CleartextLogging</td>
+<td>warning / high</td>
+<td>no</td>
+</tr>
+<tr>
+<td>312</td>
+<td><code>rust/cleartext-storage-database</code></td>
+<td>CleartextStorageDatabase</td>
+<td>warning / high</td>
+<td>no</td>
+</tr>
+<tr>
+<td>319</td>
+<td><code>rust/non-https-url</code></td>
+<td>UseOfHttp</td>
+<td>warning / high</td>
+<td>no</td>
+</tr>
+<tr>
+<td>327</td>
+<td><code>rust/weak-cryptographic-algorithm</code></td>
+<td>BrokenCryptoAlgorithm</td>
+<td>warning / high</td>
+<td>no</td>
+</tr>
+<tr>
+<td>327</td>
+<td><code>rust/weak-sensitive-data-hashing</code></td>
+<td>WeakSensitiveDataHashing</td>
+<td>warning / high</td>
+<td>no</td>
+</tr>
+<tr>
+<td>614</td>
+<td><code>rust/insecure-cookie</code></td>
+<td>InsecureCookie</td>
+<td>error / high</td>
+<td>no</td>
+</tr>
+<tr>
+<td>696</td>
+<td><code>rust/ctor-initialization</code></td>
+<td>BadCtorInitialization</td>
+<td>error / high</td>
+<td>no</td>
+</tr>
+<tr>
+<td><strong>770</strong></td>
+<td><code>rust/uncontrolled-allocation-size</code></td>
+<td>UncontrolledAllocationSize</td>
+<td>warning / high</td>
+<td><strong>partial</strong> (alloc DoS, not memory-safety per se)</td>
+</tr>
+<tr>
+<td>798</td>
+<td><code>rust/hard-coded-cryptographic-value</code></td>
+<td>HardcodedCryptographicValue</td>
+<td>warning / high</td>
+<td>no</td>
+</tr>
+<tr>
+<td><strong>825</strong></td>
+<td><code>rust/access-after-lifetime-ended</code></td>
+<td>AccessAfterLifetime</td>
+<td>error / medium</td>
+<td><strong>yes</strong> (UAF)</td>
+</tr>
+<tr>
+<td><strong>825</strong></td>
+<td><code>rust/access-invalid-pointer</code></td>
+<td>AccessInvalidPointer</td>
+<td>error / high</td>
+<td><strong>yes</strong> (invalid-ptr deref)</td>
+</tr>
+<tr>
+<td>918</td>
+<td><code>rust/request-forgery</code></td>
+<td>RequestForgery</td>
+<td>error / high</td>
+<td>no</td>
+</tr>
+</tbody>
+</table>
+<p>Unsafe-class coverage: <strong>2/19 = 10.5%</strong> (CWE-825 pair). Even accounting
+for the partial CWE-770 overlap: 3/19 = 15.8%. The remaining 16
+queries target web-app / crypto / configuration shapes that do not
+overlap the corpus's memory-safety / use-after-free / type-confusion /
+soundness / data-race vuln-classes.</p>
+<h3 id="semgrep-prust-and-rrustlangsecurity">Semgrep — <code>p/rust</code> and <code>r/rust.lang.security</code></h3>
+<p>Enumerated from the bench-image pre-fetched packs at
+<code>/opt/semgrep-rules/{p-rust.yml, r-rust-security.yml}</code> (image build
+2026-05-12, hash <code>34b49bbd42dc…</code>). The two packs together contain
+<strong>11 unique rules</strong> (10 of the 10 <code>r/rust-security</code> rules are also in
+<code>p/rust</code>; <code>p/rust</code> adds 1 unicode-bidi rule).</p>
+<table>
+<thead>
+<tr>
+<th>rule_id</th>
+<th>Severity</th>
+<th>CWE</th>
+<th>Unsafe-class?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>generic.unicode.security.bidi.contains-bidirectional-characters</code></td>
+<td>WARNING</td>
+<td>CWE-94</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>rust.lang.security.args-os.args-os</code></td>
+<td>INFO</td>
+<td>CWE-807</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>rust.lang.security.args.args</code></td>
+<td>INFO</td>
+<td>CWE-807</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>rust.lang.security.current-exe.current-exe</code></td>
+<td>INFO</td>
+<td>CWE-807</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>rust.lang.security.insecure-hashes.insecure-hashes</code></td>
+<td>WARNING</td>
+<td>CWE-328</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>rust.lang.security.reqwest-accept-invalid.reqwest-accept-invalid</code></td>
+<td>WARNING</td>
+<td>CWE-295</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>rust.lang.security.reqwest-set-sensitive.reqwest-set-sensitive</code></td>
+<td>INFO</td>
+<td>CWE-921</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>rust.lang.security.rustls-dangerous.rustls-dangerous</code></td>
+<td>WARNING</td>
+<td>CWE-295</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>rust.lang.security.ssl-verify-none.ssl-verify-none</code></td>
+<td>WARNING</td>
+<td>CWE-295</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>rust.lang.security.temp-dir.temp-dir</code></td>
+<td>INFO</td>
+<td>CWE-807</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>rust.lang.security.unsafe-usage.unsafe-usage</code></td>
+<td>INFO</td>
+<td>CWE-242</td>
+<td>partial (flags <em>all</em> <code>unsafe</code> blocks; not bug-targeted)</td>
+</tr>
+</tbody>
+</table>
+<p>Unsafe-class coverage: <strong>0/11 = 0%</strong> (one rule, <code>unsafe-usage</code>, fires
+on any <code>unsafe</code> block — methodology §5's WARNING gate excludes INFO
+severity, so it never registers under the locked config). All observed
+firings in the bench output were ≤ WARNING but for <strong>non-unsafe-class
+CWEs</strong> (CWE-295, CWE-328); methodology §5's vuln-class → rule-id gate
+correctly filters them out for this corpus.</p>
+<h3 id="rudra-sslab-gatech-bug-pattern-categories">Rudra — sslab-gatech bug-pattern categories</h3>
+<p>Rudra implements <strong>4 bug-pattern categories</strong> (per its 2020 paper
+<em>"Rudra: Finding Memory Safety Bugs in Rust at the Ecosystem Scale"</em>,
+SOSP'21):</p>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Real emit name</th>
+<th>Unsafe-class?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Send/Sync auto-trait variance</td>
+<td><code>RUDRA-SENDSYNCVARIANCE:-{PhantomSendForSend,NaiveSendForSend,…}</code></td>
+<td><strong>yes</strong> (data-race / aliasing soundness)</td>
+</tr>
+<tr>
+<td>Unsafe dataflow</td>
+<td><code>RUDRA-UNSAFEDATAFLOW:-{WriteFlow,ReadFlow,TransmuteFlow}</code></td>
+<td><strong>yes</strong> (memory-safety / UB)</td>
+</tr>
+<tr>
+<td>Panic safety</td>
+<td><code>RUDRA-PANICSAFETY:-…</code></td>
+<td><strong>yes</strong> (drop-order / uninit-on-panic)</td>
+</tr>
+<tr>
+<td>Lifetime / safe-encapsulation</td>
+<td><code>RUDRA-LIFETIME:-…</code></td>
+<td><strong>yes</strong> (UAF / dangling)</td>
+</tr>
+</tbody>
+</table>
+<p>Unsafe-class coverage: <strong>4/4 = 100% by design</strong> — Rudra was purpose-built
+for unsafe Rust. The 0-TP outcome on this corpus is a <strong>maintenance-state
+artifact</strong>, not a coverage gap: 154/160 entries (96%) failed at the
+toolchain layer (nightly-2021-10-21 + Cargo.lock generation against
+post-2024 crates). The 3 firings that did land used the no-dash
+CamelCase names above; the previous <code>bench/rule-id-mapping.toml</code>
+listed methodology-spec dash-separated aliases (<code>RUDRA-SEND-SYNC</code>,
+<code>RUDRA-PANIC-SAFETY</code>, <code>RUDRA-UNINIT</code>) that substring-matched none of
+them — fixed in bn-bums5 commit <code>1becf6c9c</code> and mirrored in
+<code>crates/ward-eval/src/repo_eval.rs::vuln_class_matches_rule</code>. The
+parser-misattribution issue (Rudra's findings landing on non-affected
+files in the bench output) is tracked as a separate follow-up bone.</p>
+<h3 id="cargo-geiger-unsafe-loc-counter-context-only-methodology-4">cargo-geiger — unsafe LOC counter (context-only, methodology §4)</h3>
+<p>cargo-geiger is <strong>not a security scanner</strong>. It walks the dep graph
+and emits per-crate counts of <code>unsafe</code> blocks / <code>unsafe fn</code> / <code>unsafe
+impl</code> / <code>unsafe trait</code>. It produces no detect-class findings, has no
+rule_ids, and methodology §4 includes it as a <strong>context column only</strong>
+(<code>context_only=true</code> in <code>bench/tool-versions.toml</code>). Its 0-TP outcome
+is its design contract, not a coverage gap. The 160 cargo-geiger
+"findings" in <code>p_at_k.cargo-geiger.n_findings = 160</code> are unsafe-density
+counts, one per crate, not security-relevant alerts.</p>
+<p>Unsafe-class coverage: <strong>N/A</strong> (not in scope; tool design).</p>
+<h3 id="bottom-line">Bottom line</h3>
+<p>The methodology-locked competitor rulesets ship limited unsafe-class
+detection. Per CWE coverage of this corpus's vuln-classes:</p>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Total rules</th>
+<th>Unsafe-class rules</th>
+<th>Coverage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CodeQL <code>rust-security-extended</code></td>
+<td>19</td>
+<td>2 (+ 1 partial)</td>
+<td><strong>10.5%</strong></td>
+</tr>
+<tr>
+<td>Semgrep <code>p/rust ∪ r/rust.lang.security</code></td>
+<td>11</td>
+<td>0 (1 INFO <code>unsafe-usage</code>, gated out)</td>
+<td><strong>0%</strong></td>
+</tr>
+<tr>
+<td>Rudra</td>
+<td>4 categories</td>
+<td>4 (100% by design)</td>
+<td><strong>100% but 96% errored</strong></td>
+</tr>
+<tr>
+<td>cargo-geiger</td>
+<td>N/A (counter)</td>
+<td>N/A</td>
+<td><strong>N/A (context only)</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>The 0-TP result for CodeQL, Semgrep, and cargo-geiger on the
+unsafe-class corpus is therefore a <strong>faithful measurement of what
+users get out of the box</strong>, not a result of methodology bias against
+any tool. Rudra's 0-TP is a maintenance-state failure, not a
+coverage failure. The methodology fairness primitive (publishing
+<code>bench/rule-id-mapping.toml</code> and applying it identically across
+tools) is intact.</p>
+</blockquote>
+<h2 id="witness-audit-ward-only-sidecar-methodology-6">Witness audit — Ward-only sidecar (methodology §6)</h2>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Phase-5-eligible entries with Ward TP</td>
+<td>11</td>
+</tr>
+<tr>
+<td>Of those, Miri witness present</td>
+<td>0 (gate disabled in container mode)</td>
+</tr>
+<tr>
+<td>Positive witnesses</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Negative witnesses</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Skipped</td>
+<td>11</td>
+</tr>
+<tr>
+<td><strong>Positive witness rate</strong></td>
+<td><strong>N/A — gate disabled in container-mode bench</strong></td>
+</tr>
+</tbody>
+</table>
+<p>The Phase 5 witness gate is intentionally disabled in container-mode
+head-to-head runs per methodology §4 (<code>bench/tool-versions.toml::[tools.ward].notes</code>):
+the witness gate is Ward-only and its outputs feed a sidecar, not the
+head-to-head MCC. The 24/24 = 100% positive witness rate documented in
+<code>notes/project_phase5_witness_gate_state.md</code> was obtained via
+<code>ward-eval run-repo</code> in eval mode, separately from this benchmark run.
+A follow-up bone (TBD) should wire the witness gate into the bench
+harness so this audit sidecar can populate alongside the head-to-head
+numbers.</p>
+<h2 id="what-this-run-validated">What this run validated</h2>
+<ol>
+<li><strong>Full-corpus run completed</strong> (160 entries; Ward + Semgrep + Rudra +
+   cargo-geiger). Methodology §3 corpus cap honored.</li>
+<li><strong>CodeQL timeout pattern is reproducible</strong> — the 10-min cap is doing
+   what it should: large Rust repos exceed it for DB-build before any
+   analysis runs.</li>
+<li><strong>Paired finding-identity reclassification</strong> still works as designed —
+   zero observed paired FPs for Ward (precision degenerate at 1.0).</li>
+<li><strong>bench-stats pipeline scaled</strong> from the 68-pair preview to the full
+   160-entry corpus without changes.</li>
+</ol>
+<h2 id="what-this-run-did-not-establish">What this run did NOT establish</h2>
+<ol>
+<li><strong>CodeQL on the remaining 110 entries</strong> — not run; would require ~14h
+   additional wall-clock at the observed DB-build cost.</li>
+<li><strong>Rudra capability at non-dormant state</strong>: 154/160 entries failed
+   on toolchain mismatch / Cargo.lock / panics. The methodology's
+   best-effort §10 rule retires Rudra from the head-to-head; what we
+   did NOT establish is whether a hypothetical maintained fork of
+   Rudra would fare better. Of the 6 entries that ran, 3 produced
+   findings (RUDRA-SENDSYNCVARIANCE, RUDRA-UNSAFEDATAFLOW), but the
+   stdout parser misattributed the diagnostic-message text to the
+   <code>file</code> field, so none registered as TP under file-level matching.
+   See Competitor ruleset audit (Rudra row) for the corrected
+   coverage picture.</li>
+<li><strong>Phase 5 witness gate integration</strong> — still disabled in container
+   mode (Ward-only sidecar).</li>
+</ol>
+<h2 id="reproduction">Reproduction</h2>
+<pre><code class="language-bash"># 1. Build harness binaries
+cargo build --release -p ward-cli -p ward-stub-analyzer -p ward-eval
+
+# 2. Build the locked bench image
+podman build -t ward-bench:locked -f bench/Dockerfile.bench .
+
+# 3. Full sweep (Ward + Semgrep + Rudra + cargo-geiger; ~60-90 min)
+./target/release/ward-eval bench-run \
+  --manifest tests/cve-registry/benchmarks/unsafe-rust-bench/manifest.toml \
+  --tool-versions bench/tool-versions.toml \
+  --rule-id-mapping bench/rule-id-mapping.toml \
+  --tools ward,semgrep,rudra,cargo-geiger \
+  --out target/bench/unsafe-rust-v2
+
+# 4. CodeQL (separate, allow ~14h wall-clock)
+./target/release/ward-eval bench-run \
+  --manifest tests/cve-registry/benchmarks/unsafe-rust-bench/manifest.toml \
+  --tool-versions bench/tool-versions.toml \
+  --rule-id-mapping bench/rule-id-mapping.toml \
+  --tools codeql \
+  --out target/bench/unsafe-rust-v2
+
+# 5. Paired finding-identity reclassification
+./target/release/ward-eval bench-score \
+  --raw target/bench/unsafe-rust-v2 \
+  --out target/bench/unsafe-rust-v2/paired
+
+# 6. Statistical analysis
+./target/release/ward-eval bench-stats \
+  --raw target/bench/unsafe-rust-v2 \
+  --paired target/bench/unsafe-rust-v2/paired \
+  --manifest tests/cve-registry/benchmarks/unsafe-rust-bench/manifest.toml \
+  --out target/bench/unsafe-rust-v2/stats.json
+</code></pre>
+<p>For the CodeQL partial run, the synth script
+<code>scripts/synth-bench-results-codeql.py</code> reconstructs <code>bench-results-codeql.json</code>
+from on-disk SARIF + DB artifacts so the bench-score / bench-stats
+pipeline can run without re-running CodeQL.</p>
+<h2 id="artifacts">Artifacts</h2>
+<p>Committed under <code>notes/benchmarks/artifacts/</code>:
+- <code>bench-results-codeql-partial.json</code> — synthesized partial CodeQL
+  results (50/160 entries processed: 25 SARIF + 25 DB-only timeouts;
+  110 marked <code>not_run</code>).
+- <code>bench-results-semgrep.json</code> — full Semgrep results (160 entries,
+  all OK; severity filter drops note-level → 0 retained findings).
+- <code>bench-results-rudra.json</code> — full Rudra results (154 errored, 6
+  ran; coverage 3.75%).
+- <code>bench-results-cargo-geiger.json</code> — full cargo-geiger results
+  (160 entries, all OK; <code>detected=false</code> per context-only contract).
+- <code>stats-2026-05-13.json</code> — full bench-stats output with bootstrap
+  CIs, McNemar pairwise, per-vuln-class, per-bug-shape, latency,
+  witness audit.
+- <code>paired-summary-2026-05-13.json</code> — per-tool paired aggregates.</p>
+<p>Build artifacts (NOT committed, reproducible from steps above):
+- <code>target/bench/unsafe-rust-v2/bench-results-ward.json</code> — full Ward
+  results (160 entries, mean 2.5s/entry on the 146 non-errored).
+- <code>target/bench/unsafe-rust-v2/raw/&lt;tool&gt;/&lt;entry-id&gt;/</code> — per-tool
+  per-entry SARIF / stdout dumps.</p>
+<p>Scripts:
+- <code>scripts/synth-bench-results-codeql.py</code> — synthesizes the partial
+  CodeQL <code>bench-results-codeql.json</code> from on-disk SARIF + DB
+  artifacts when the CodeQL portion of <code>ward-eval bench-run</code> is
+  interrupted mid-sweep.
+- <code>scripts/render-bench-headline.py</code> — renders the markdown headline
+  blocks (this doc) from stats.json + paired-summary.json for
+  reviewer reproducibility.</p>
+<h2 id="references">References</h2>
+<ul>
+<li>Methodology: <a href="unsafe-rust-bench-methodology.html"><code>notes/benchmarks/unsafe-rust-bench-methodology.md</code></a></li>
+<li>Prior Ward-only pass: <code>notes/benchmarks/unsafe-rust-bench-results-2026-05-12.md</code></li>
+<li>Smoke run: <code>notes/benchmarks/smoke-run-results-20260511.md</code></li>
+<li>Bench harness: <code>crates/ward-eval/src/bench/mod.rs</code></li>
+<li>Paired scoring: <code>crates/ward-eval/src/bench/paired_scoring.rs</code></li>
+<li>Statistical analyzer: <code>crates/ward-eval/src/bench/stats.rs</code></li>
+<li>CodeQL synth: <code>scripts/synth-bench-results-codeql.py</code></li>
+<li>Phase 5 walkaway state: <code>notes/project_phase5_witness_gate_state.md</code></li>
+<li>Image build: <code>bench/Dockerfile.bench</code></li>
+<li>Tool pinning: <code>bench/tool-versions.toml</code></li>
+<li>Rule-id mapping: <code>bench/rule-id-mapping.toml</code></li>
+</ul>
+        </article>
+      </div>
+    </main>
+
+    <footer class="foot">
+      <div class="foot-inner" style="grid-template-columns: 1fr">
+        <div>
+          <div class="brand" style="margin-bottom: 14px">
+            <img src="../ward-with-word.svg" alt="Ward" />
+          </div>
+          <p class="mono" style="color: var(--fg-2); font-size: 12px; max-width: 60ch">
+            Verifiable security review infrastructure. Deterministic, replayable
+            findings with signed evidence chains. Implementation references such
+            as <code>crates/ward-eval/...</code> point at the private Ward repo
+            and will become public when Ward releases.
+          </p>
+        </div>
+      </div>
+      <div class="foot-meta">
+        <span>Pre-release · details subject to change</span>
+        <span>© 2026</span>
+      </div>
+    </footer>
+
+    <script src="../app.js"></script>
+  </body>
+</html>

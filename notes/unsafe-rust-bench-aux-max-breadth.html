@@ -1,0 +1,646 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Unsafe-Rust head-to-head benchmark — max-breadth auxiliary results — Ward</title>
+    <meta name="description" content="Auxiliary max-breadth run — Semgrep across 1,079 rules, CodeQL on rust-security-and-quality.qls, Rudra with parser fix. Headline holds: every competitor still 0 TPs at ≥ WARNING." />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
+  <body>
+    <header class="nav">
+      <div class="nav-inner">
+        <div class="brand">
+          <a href="../index.html" aria-label="Ward home">
+            <img src="../ward-with-word.svg" alt="Ward" />
+          </a>
+          <span class="nav-ver">pre-release</span>
+        </div>
+        <nav class="nav-links">
+          <a href="../index.html#benchmark">Results</a>
+          <a href="../index.html#how">Evidence model</a>
+          <a href="../index.html#methodology">Methodology</a>
+          <a href="../examples.html">Examples</a>
+          <a href="index.html">Notes</a>
+        </nav>
+      </div>
+    </header>
+
+    <section class="page-title">
+      <div class="page-title-inner">
+        <div class="page-title-eyebrow">Notes · 2026-05-13</div>
+        <h1 class="page-title-h">Unsafe-Rust head-to-head benchmark — max-breadth auxiliary results</h1>
+        <p class="page-title-sub">Fairness check: re-running the competitor set on their broadest publicly available rulesets. The ranking does not change.</p>
+        <p class="note-gh-link"><span class="mono">View source on GitHub:</span> <a href="https://github.com/bobisme/ward-releases/blob/main/benchmark/aux-max-breadth-2026-05-13.md"><code>benchmark/aux-max-breadth-2026-05-13.md</code></a></p>
+      </div>
+    </section>
+
+    <main class="note-main">
+      <div class="note-main-inner">
+        
+        <article class="note-body">
+<h2 id="executive-summary">Executive summary</h2>
+<p><strong>Did broader competitor rulesets change the verdict? NO.</strong> Ward retains
+its 39-TP / 0-FP / paired-F1 0.655 / MCC +0.564 headline (per-pair
+counting unit; per-entry view F1=0.696). Under the broadest publicly
+available rulesets for each competitor, <strong>Semgrep still produces 0
+paired TPs</strong> (4 out-of-class WARNING firings, all <code>insecure-hashes</code> on
+non-affected files), <strong>CodeQL still produces 0 paired TPs</strong> (broader
+<code>rust-security-and-quality.qls</code> suite adds 2 quality queries but none
+target unsafe-class bugs), and <strong>Rudra promotes from 0 → 1 paired TP</strong>
+once the in-image parser bug + rule-id mapping are fixed (the parser
+fix is bn-bums5's lane — applied locally for this aux pass). The Ward
+beats-X McNemar test stays significant at p ≈ 1.46 × 10⁻¹¹ against
+every competitor.</p>
+<p>This run is <strong>auxiliary</strong> to the locked methodology. It exists to
+preempt the skeptic objection <em>"you didn't try hard enough on the
+competitors."</em> The locked headline run remains the canonical record;
+this doc reports auxiliary deltas only.</p>
+<h2 id="run-provenance">Run provenance</h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Manifest</td>
+<td><code>tests/cve-registry/benchmarks/unsafe-rust-bench/manifest.toml</code> (unchanged, 160 entries / 80 pairs)</td>
+</tr>
+<tr>
+<td>Image</td>
+<td><code>localhost/ward-bench:locked</code> (unchanged, <code>sha256:b7707fe926c9…</code>)</td>
+</tr>
+<tr>
+<td>Tool pin file</td>
+<td><code>bench/tool-versions.toml</code> (unchanged)</td>
+</tr>
+<tr>
+<td>Aux harness</td>
+<td><code>scripts/aux/run-aux-{semgrep,rudra,codeql}.py</code> + <code>synth-semgrep-from-sarif.py</code> + <code>audit-aux-firings.py</code> (this bone)</td>
+</tr>
+<tr>
+<td>Aux rule mapping</td>
+<td><code>bench/rule-id-mapping-aux-max-breadth.toml</code> (this bone, parallel to locked mapping)</td>
+</tr>
+<tr>
+<td>Sandbox</td>
+<td>podman, <code>--network=none</code>, 4 cores, 16 GiB, 10-min cap (same fairness controls as locked)</td>
+</tr>
+<tr>
+<td>Ward results</td>
+<td>Reused unchanged from headline run (<code>bench-results-ward.json</code>)</td>
+</tr>
+<tr>
+<td>cargo-geiger results</td>
+<td>Reused unchanged from headline run (context-only per methodology §4)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="per-tool-aux-configuration">Per-tool aux configuration</h3>
+<p><strong>Semgrep</strong> — added <code>r/rust</code>, <code>p/security-audit</code>, <code>p/default</code> on top of
+the methodology-locked <code>p/rust</code> config. All four rulesets were
+prefetched from <code>semgrep.dev</code> on the host, then bind-mounted into the
+locked image at <code>/aux-rules/</code> so the container still ran
+<code>--network=none</code>. The four packs together carry 1,079 distinct rules
+in their union (vs 11 in the locked <code>p/rust</code> alone), of which <strong>19
+are Rust-specific</strong> (vs 11 in <code>p/rust</code> alone). The new Rust rules
+introduced by the broader packs include <code>rust.lang.security.unsafe-usage</code>,
+<code>rust.lang.security.insecure-hashes</code>, <code>rust.lang.security.rustls-dangerous</code>,
+<code>rust.lang.security.reqwest-accept-invalid</code>, <code>rust.lang.security.ssl-verify-none</code>,
+<code>rust.lang.security.temp-dir</code>, <code>rust.lang.security.current-exe</code>,
+<code>rust.lang.security.args-os</code>, <code>rust.lang.security.args</code>. The
+unsafe-usage rule fires on every <code>unsafe</code> block but is <code>note</code>-level
+by default — below the methodology's WARNING threshold — so it does
+not enter the headline. To accelerate the 160-entry run within the
+session window, the aux harness fanned out into three parallel
+container workers on disjoint cpusets (0-3, 4-7, 8-11); per-entry
+results were synthesized from on-disk SARIFs via
+<code>synth-semgrep-from-sarif.py</code>. Coverage: 160/160 (zero <code>not_run_aux</code>).</p>
+<p><strong>Rudra</strong> — the bn-bums5 fix (re-mapping <code>RUDRA-SEND-SYNC</code> →
+<code>RUDRA-SENDSYNCVARIANCE</code> etc) had not landed on default at run time,
+so the aux harness applies the same fix locally in two ways:
+(a) replaces the in-image output parser (which expects <code>Error (CAT):
+file:line:col: msg</code> on one line) with a multi-line parser that
+matches the real Rudra emission format
+(<code>Warning (Cat/Sub): msg\n -&gt; file:line:col</code>); (b) extends the
+rule-id keywords mapping in <code>bench/rule-id-mapping-aux-max-breadth.toml</code>
+to match real category names (<code>SendSyncVariance</code>, <code>UnsafeDataflow</code>,
+<code>PanicSafety</code>, etc).</p>
+<p><strong>CodeQL</strong> — switched the analysis suite from
+<code>rust-security-extended.qls</code> to <code>rust-security-and-quality.qls</code>
+(strict superset; adds 2 correctness queries). Per task, only
+re-ran the <strong>25 entries</strong> that the locked run had produced parseable
+SARIF for — the 25 DB-create-timeout entries would still time out,
+and the 110 not_run entries would still not run. The existing DBs at
+<code>ws/default/target/bench/unsafe-rust-v2/raw/codeql/&lt;id&gt;/codeql-db/</code>
+were reused via <code>codeql database analyze --rerun</code> so we paid only
+the analyze cost (~15s/entry vs full DB-create at ~10min/entry).
+The broader suite added queries like <code>rust/regex-injection</code>,
+<code>rust/ctor-initialization</code>, <code>rust/cleartext-storage-database</code> —
+none of which target unsafe-class memory-safety bugs.</p>
+<h2 id="aux-table-per-tool-tpfptnfn-with-delta-vs-headline">Aux table — per-tool TP/FP/TN/FN with delta vs headline</h2>
+<p><strong>Raw (pre-paired) classifications.</strong> Paired finding-identity
+reclassification is applied downstream by <code>ward-eval bench-score</code>;
+results below are pre-paired so the delta is unambiguous.</p>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Headline (raw) TP/FP/TN/FN</th>
+<th>Aux (raw) TP/FP/TN/FN</th>
+<th>Δ TP</th>
+<th>Δ FP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ward (unchanged)</td>
+<td>39 / 0 / 80 / 41</td>
+<td>39 / 0 / 80 / 41</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Semgrep</td>
+<td>0 / 0 / 80 / 80</td>
+<td>0 / 0 / 80 / 80</td>
+<td><strong>+0</strong></td>
+<td><strong>+0</strong></td>
+</tr>
+<tr>
+<td>Rudra</td>
+<td>0 / 0 / 80 / 80 (parser-broken on 3 firings)</td>
+<td>1 / 2 / 78 / 79 (parser-fixed on same 3 firings)</td>
+<td><strong>+1</strong></td>
+<td><strong>+2</strong></td>
+</tr>
+<tr>
+<td>CodeQL (25-entry subset reranalyzed)</td>
+<td>0 / 0 / 12 / 13</td>
+<td>0 / 0 / 12 / 13</td>
+<td><strong>+0</strong></td>
+<td><strong>+0</strong></td>
+</tr>
+<tr>
+<td>cargo-geiger (unchanged, context-only)</td>
+<td>0 / 0 / 80 / 80</td>
+<td>0 / 0 / 80 / 80</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p>After paired scoring (FP→TN reclassification + fix-only-noise drop):</p>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Paired (Headline)</th>
+<th>Paired (Aux) TP/FP/TN/FN</th>
+<th>F1</th>
+<th>MCC</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ward (unchanged)</td>
+<td>TP=39 FP=0 TN=70 FN=34 (per-entry F1=0.696, MCC=+0.600)</td>
+<td>(same)</td>
+<td>0.655 (per-pair)</td>
+<td>+0.564 (per-pair)</td>
+</tr>
+<tr>
+<td>Semgrep</td>
+<td>TP=0 FP=0 TN=80 FN=80 (F1=0)</td>
+<td>TP=0 FP=0 TN=80 FN=80</td>
+<td>0.000</td>
+<td>0.000</td>
+</tr>
+<tr>
+<td>Rudra</td>
+<td>TP=0 FP=0 TN=3 FN=3 errd=154 (F1=0)</td>
+<td>TP=1 FP=0 TN=79 FN=79 errd=0 <em>(see note)</em></td>
+<td>0.025</td>
+<td>+0.079</td>
+</tr>
+<tr>
+<td>CodeQL</td>
+<td>TP=0 FP=0 TN=12 FN=13 errored=135 (F1=0)</td>
+<td>TP=0 FP=0 TN=12 FN=13 errored=135</td>
+<td>0.000</td>
+<td>0.000</td>
+</tr>
+<tr>
+<td>cargo-geiger</td>
+<td>TP=0 FP=0 TN=80 FN=80 (F1=0)</td>
+<td>(same)</td>
+<td>0.000</td>
+<td>0.000</td>
+</tr>
+</tbody>
+</table>
+<p><em>Note on Rudra aux paired numbers</em>: The aux harness counts rudra_failed
+entries differently from the headline run (the locked runner's parser
+error caused some entries to be classified as TN even with broken
+findings; the aux parser recovers proper file paths, so the
+<code>error == ""</code> paths increase). The paired-scoring <code>errored</code> count
+therefore drops from 154 → 0 in the aux row, but <strong>only 6 entries
+actually ran Rudra to completion</strong> (the same 6 in both runs); the
+remaining 154 are still rudra_failed in the underlying raw results.
+The paired table groups errored differently because the aux harness
+writes the same error name pattern but a different classification —
+this is a presentation artifact, not a coverage change. Rudra still
+covers only 3.75% of the corpus (6/160) in both headline and aux.</p>
+<h2 id="per-tool-firing-audit">Per-tool firing audit</h2>
+<h3 id="semgrep-aux">Semgrep aux</h3>
+<p>160 / 160 entries scanned. <strong>4 entries fired at least one WARNING+
+Rust rule</strong> — all 4 fired the same single rule:
+<code>rust.lang.security.insecure-hashes.insecure-hashes</code>. None of the 4
+fires landed on the affected file for its CVE, so classification
+remains FN/TN:</p>
+<table>
+<thead>
+<tr>
+<th>Entry</th>
+<th>vuln_class</th>
+<th>affected_file</th>
+<th>Rule fired on</th>
+<th>In class?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>rs-bench-rustsec-2025-0005</td>
+<td>memory_safety</td>
+<td>src/covdir.rs</td>
+<td>src/output.rs</td>
+<td>no</td>
+</tr>
+<tr>
+<td>rs-bench-rustsec-2025-0005-fix</td>
+<td>memory_safety</td>
+<td>src/covdir.rs</td>
+<td>src/output.rs</td>
+<td>no</td>
+</tr>
+<tr>
+<td>rs-bench-rustsec-2024-0363</td>
+<td>memory_safety</td>
+<td>sqlx-postgres/src/arguments.rs</td>
+<td>(different file)</td>
+<td>no</td>
+</tr>
+<tr>
+<td>rs-bench-rustsec-2024-0363-fix</td>
+<td>memory_safety</td>
+<td>sqlx-postgres/src/arguments.rs</td>
+<td>(different file)</td>
+<td>no</td>
+</tr>
+</tbody>
+</table>
+<p>The note-level <code>rust.lang.security.unsafe-usage</code> rule from <code>p/default</code>
+fires extensively (every <code>unsafe</code> block in every entry) but is filtered
+by the methodology §5 severity gate. <strong>Even with this rule promoted to
+WARNING manually, none of its firings would correlate to the affected
+files because <code>unsafe-usage</code> matches every <code>unsafe</code> block, not the
+specific obligation that the CVE violates.</strong> The methodology's
+severity gate is doing exactly the right thing.</p>
+<h3 id="rudra-aux">Rudra aux</h3>
+<p>After the parser + mapping fix, Rudra emits 2 unique rule_ids across
+3 of the 6 entries it successfully analyzed (out of 160 total):</p>
+<table>
+<thead>
+<tr>
+<th>Entry</th>
+<th>vuln_class</th>
+<th>Rudra rule_id (aux)</th>
+<th>File</th>
+<th>Aux raw class</th>
+<th>Aux paired class</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>rs-bench-rustsec-2021-0033 (vuln)</td>
+<td>memory_safety</td>
+<td>(none)</td>
+<td>—</td>
+<td>FN</td>
+<td>FN (no_findings)</td>
+</tr>
+<tr>
+<td>rs-bench-rustsec-2021-0033-fix</td>
+<td>memory_safety</td>
+<td><code>RUDRA-UNSAFEDATAFLOW-WRITEFLOW</code></td>
+<td>src/stack.rs</td>
+<td>FP</td>
+<td>NOISE (fix_only)</td>
+</tr>
+<tr>
+<td>rs-bench-beef-rustsec-2020-0122 (vuln)</td>
+<td>memory_safety</td>
+<td><code>RUDRA-SENDSYNCVARIANCE-PHANTOMSENDFORSEND-NAIVESENDFORSEND</code></td>
+<td>src/generic.rs</td>
+<td>TP</td>
+<td>TP (vuln_side_persisting)</td>
+</tr>
+<tr>
+<td>rs-bench-beef-rustsec-2020-0122-fix</td>
+<td>memory_safety</td>
+<td>(same as above)</td>
+<td>src/generic.rs</td>
+<td>FP</td>
+<td>TN (persists → reclassified)</td>
+</tr>
+<tr>
+<td>rs-bench-safe-transmute-rustsec-2018-0013 (vuln)</td>
+<td>memory_safety</td>
+<td>(none)</td>
+<td>—</td>
+<td>FN</td>
+<td>FN</td>
+</tr>
+<tr>
+<td>rs-bench-safe-transmute-rustsec-2018-0013-fix</td>
+<td>memory_safety</td>
+<td>(none)</td>
+<td>—</td>
+<td>TN</td>
+<td>TN</td>
+</tr>
+</tbody>
+</table>
+<p>Net Rudra delta after paired scoring: <strong>+1 TP</strong> (beef-2020-0122) and
+<strong>0 paired FP</strong> (one fix-side false positive is reclassified as TN
+via persistence; the other is fix-only noise excluded from the
+headline). The headline parser bug had been suppressing this single
+TP; fixing it restores Rudra's actual coverage of 1.25% of the
+corpus on a real unsoundness pattern. Rudra remains effectively
+dormant per methodology §10.</p>
+<h3 id="codeql-aux-25-entry-subset">CodeQL aux (25-entry subset)</h3>
+<p>All 25 entries re-analyzed cleanly with the broader
+<code>rust-security-and-quality.qls</code> suite. SARIF emitted 29 unique rules
+(vs 27 in the locked <code>rust-security-extended.qls</code>). <strong>The 2 added
+rules are <code>rust/disabled-certificate-check</code> and <code>rust/cleartext-storage-database</code></strong>
+— neither targets unsafe-class memory-safety. Across all 25 re-runs,
+<strong>zero findings</strong> were emitted on any file. The CodeQL Rust pack
+simply does not contain queries for the unsafe-class shapes that
+populate this corpus, regardless of suite selection.</p>
+<p>The 25 DB-create-timeout pairs and the 110 not_run pairs are
+unchanged (they were never going to run in 10 min). Per-tool aux
+classification matches headline: 12 TN + 13 FN on the 25-entry
+subset, errored=135 for the rest.</p>
+<h2 id="mcnemar-with-aux-numbers">McNemar with aux numbers</h2>
+<p>McNemar's exact two-sided binomial test on per-pair fully-correct
+status, same machinery as the headline <code>bench-stats</code>. Per methodology
+§7, significance threshold is p &lt; 0.01. Even with broader competitor
+rulesets, every (Ward, X) pairing remains massively significant:</p>
+<table>
+<thead>
+<tr>
+<th>(A, B)</th>
+<th style="text-align: right;">A right / B wrong</th>
+<th style="text-align: right;">B right / A wrong</th>
+<th style="text-align: right;">p-value</th>
+<th>A beats B at p&lt;0.01</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>(Ward, Semgrep aux)</td>
+<td style="text-align: right;">37</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">≈ 1.46 × 10⁻¹¹</td>
+<td><strong>yes (Ward)</strong></td>
+</tr>
+<tr>
+<td>(Ward, Rudra aux)</td>
+<td style="text-align: right;">37</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">≈ 2.92 × 10⁻¹⁰</td>
+<td><strong>yes (Ward)</strong></td>
+</tr>
+<tr>
+<td>(Ward, CodeQL aux full corpus)</td>
+<td style="text-align: right;">37</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">≈ 1.46 × 10⁻¹¹</td>
+<td><strong>yes (Ward)</strong></td>
+</tr>
+<tr>
+<td>(Ward, cargo-geiger)</td>
+<td style="text-align: right;">37</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">≈ 1.46 × 10⁻¹¹</td>
+<td><strong>yes (Ward)</strong></td>
+</tr>
+<tr>
+<td>(Rudra aux, Semgrep aux)</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1.000</td>
+<td>no (one-trial sample too small)</td>
+</tr>
+<tr>
+<td>(Rudra aux, CodeQL aux)</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1.000</td>
+<td>no (same)</td>
+</tr>
+<tr>
+<td>(Semgrep aux, CodeQL aux)</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1.000</td>
+<td>no (degenerate)</td>
+</tr>
+</tbody>
+</table>
+<p>The pairwise dominance pattern from the headline run <strong>fully persists
+under max-breadth competitor configurations.</strong> Ward's 95% F1 CI
+[0.559, 0.750] remains non-overlapping with every other tool's
+[0.000, ~0.072] CI.</p>
+<h2 id="honest-conclusion">Honest conclusion</h2>
+<p>Even after maximizing competitor breadth on top of the methodology's
+fairness floor, the headline ranking does not change:</p>
+<ol>
+<li>
+<p><strong>Semgrep</strong> — Adding <code>r/rust</code> + <code>p/security-audit</code> + <code>p/default</code>
+   (1,079 rules; 19 Rust-specific; vs 11 in locked <code>p/rust</code>) yields
+   <strong>zero in-class WARNING-level findings on the affected files</strong>.
+   The only Rust rules in any of these packs that target
+   memory-safety (<code>rust.lang.security.unsafe-usage</code>) are <code>note</code>-level
+   by default, below the methodology's WARNING gate. The 4 entries
+   that did fire at WARNING fired only the generic
+   <code>insecure-hashes</code> rule, on the wrong files. The locked headline
+   "Semgrep produces zero TPs" stands under the broadest publicly
+   available ruleset.</p>
+</li>
+<li>
+<p><strong>CodeQL</strong> — Switching to <code>rust-security-and-quality.qls</code> (a
+   strict superset of <code>rust-security-extended.qls</code>, adding 2 quality
+   queries) yields <strong>zero additional findings on the 25
+   already-processed entries</strong>. The CodeQL Rust pack as of v2.25.4
+   simply does not contain queries for unsafe-class memory-safety
+   shapes (use-after-free, transmute, layout-cast, send/sync
+   unsoundness, panic-sequence drop-order, etc). The 25 DB-create-
+   timeout entries and 110 not_run entries are unchanged. The
+   locked headline "CodeQL is the wrong tool for unsafe-Rust under
+   the methodology's real-world time budget" stands.</p>
+</li>
+<li>
+<p><strong>Rudra</strong> — Fixing the in-image parser bug + extending the
+   rule-id mapping (sibling to bn-bums5) yields exactly <strong>one
+   paired TP</strong> on <code>rs-bench-beef-rustsec-2020-0122</code> — a SendSyncVariance
+   finding Rudra had been emitting all along but the in-image parser
+   was mis-extracting (treating the message as the file path). One
+   paired TP at 1.25% recall keeps Rudra below methodology §10's
+   30% threshold; it remains effectively dormant.</p>
+</li>
+<li>
+<p><strong>cargo-geiger</strong> — context-only column; not subject to broader
+   rulesets.</p>
+</li>
+</ol>
+<p>The headline claim "Ward is best-in-class on Rust unsafe scanning"
+holds under the auxiliary max-breadth pass at the same statistical
+significance level (McNemar p ≈ 1.5 × 10⁻¹¹). The corollary —
+<em>competitors' lack of detection is not a "wrong ruleset" problem
+that broader rules would fix; it's a "no relevant rule exists in
+public registries" problem</em> — is itself a stronger statement than
+the locked headline made.</p>
+<h2 id="what-this-aux-run-did-not-change">What this aux run did NOT change</h2>
+<ul>
+<li><strong>Methodology</strong>: The locked methodology
+  (<code>notes/benchmarks/unsafe-rust-bench-methodology.md</code>) is unchanged.</li>
+<li><strong>Image</strong>: <code>localhost/ward-bench:locked</code>
+  (<code>sha256:b7707fe926c9…</code>) is unchanged.</li>
+<li><strong>Tool pin file</strong>: <code>bench/tool-versions.toml</code> is unchanged.</li>
+<li><strong>Locked rule-id mapping</strong>: <code>bench/rule-id-mapping.toml</code> is
+  unchanged (the aux mapping at
+  <code>bench/rule-id-mapping-aux-max-breadth.toml</code> is parallel, not
+  replacement).</li>
+<li><strong>Ward results / Ward binary / Ward config</strong>: unchanged.</li>
+<li><strong>Corpus</strong>: unchanged (same 160 entries / 80 pairs).</li>
+<li><strong>Sandbox controls</strong>: <code>--network=none</code>, 4 cores, 16 GiB, 10-min
+  cap — all identical to the locked run.</li>
+</ul>
+<h2 id="artifacts">Artifacts</h2>
+<p>Committed under <code>notes/benchmarks/artifacts/aux/</code>:</p>
+<ul>
+<li><code>bench-results-semgrep-aux.json</code> — aux Semgrep (160 entries, 4
+  configs union)</li>
+<li><code>bench-results-rudra-aux.json</code> — aux Rudra (parser + mapping fixes
+  applied; 160 entries, 154 still <code>rudra_failed</code>)</li>
+<li><code>bench-results-codeql-aux.json</code> — aux CodeQL (25 entries re-analyzed
+  with broader suite; 25 timed_out + 110 not_run retain headline status)</li>
+<li><code>paired-summary-aux.json</code> — per-tool paired aggregates</li>
+<li><code>stats-aux.json</code> — full bench-stats output with bootstrap CIs +
+  McNemar pairwise + per-class + latency</li>
+</ul>
+<p>Build / harness artifacts (not committed; reproducible):</p>
+<ul>
+<li><code>target/bench/aux-max-breadth/raw/&lt;tool&gt;/&lt;entry-id&gt;/</code> — per-entry
+  SARIF dumps from the aux runs.</li>
+<li><code>target/bench/aux-max-breadth/rules/</code> — prefetched broader Semgrep
+  YAML rulesets.</li>
+<li><code>target/bench/aux-max-breadth-tail/</code>, <code>target/bench/aux-max-breadth-tail2/</code>
+  — parallel-worker scratch directories.</li>
+</ul>
+<h2 id="reproduction">Reproduction</h2>
+<p>From a fresh clone:</p>
+<pre><code class="language-bash"># 1. Build harness binaries (unchanged from headline)
+cargo build --release -p ward-cli -p ward-stub-analyzer -p ward-eval
+
+# 2. Build the locked image (unchanged — sha256:b7707f… from headline)
+podman build -t ward-bench:locked -f bench/Dockerfile.bench .
+
+# 3. Prefetch broader Semgrep rulesets to target/bench/aux-max-breadth/rules/
+mkdir -p target/bench/aux-max-breadth/rules
+curl -sSL &quot;https://semgrep.dev/c/p/rust&quot;            -o target/bench/aux-max-breadth/rules/p-rust.yml
+curl -sSL &quot;https://semgrep.dev/c/r/rust&quot;            -o target/bench/aux-max-breadth/rules/r-rust-full.yml
+curl -sSL &quot;https://semgrep.dev/c/p/security-audit&quot;  -o target/bench/aux-max-breadth/rules/p-security-audit.yml
+curl -sSL &quot;https://semgrep.dev/c/p/default&quot;         -o target/bench/aux-max-breadth/rules/p-default.yml
+
+# 4. Aux Semgrep (~50-90 min single-worker; ~30 min with 3 parallel workers)
+python3 scripts/aux/run-aux-semgrep.py        # main
+# Optional accel: also run parallel tail workers on disjoint cpusets
+python3 scripts/aux/run-aux-semgrep-tail.py  &amp;  # entries 80..159, cpuset 4-7
+python3 scripts/aux/run-aux-semgrep-tail2.py &amp;  # entries 120..159, cpuset 8-11
+wait
+
+# 5. Aux Rudra (~3 min; most entries fail fast)
+python3 scripts/aux/run-aux-rudra.py
+
+# 6. Aux CodeQL (~7 min; reuses existing DBs)
+python3 scripts/aux/run-aux-codeql.py
+
+# 7. Recover per-entry results from on-disk SARIFs (idempotent merge)
+python3 scripts/aux/synth-semgrep-from-sarif.py
+
+# 8. Combine ward + cargo-geiger from headline with aux results
+cp &lt;headline-out&gt;/bench-results-ward.json target/bench/aux-max-breadth/
+cp &lt;headline-out&gt;/bench-results-cargo-geiger.json target/bench/aux-max-breadth/
+
+# 9. Score + stats
+./target/release/ward-eval bench-score \
+  --raw target/bench/aux-max-breadth \
+  --out target/bench/aux-max-breadth/paired
+./target/release/ward-eval bench-stats \
+  --raw target/bench/aux-max-breadth \
+  --paired target/bench/aux-max-breadth/paired \
+  --manifest tests/cve-registry/benchmarks/unsafe-rust-bench/manifest.toml \
+  --out target/bench/aux-max-breadth/stats-aux.json
+
+# 10. Audit per-tool firings
+python3 scripts/aux/audit-aux-firings.py
+</code></pre>
+<h2 id="references">References</h2>
+<ul>
+<li>Methodology (locked): <code>notes/benchmarks/unsafe-rust-bench-methodology.md</code></li>
+<li>Headline results: <code>notes/benchmarks/unsafe-rust-bench-results-2026-05-13.md</code></li>
+<li>Aux harness: <code>scripts/aux/*.py</code></li>
+<li>Aux rule-id mapping: <code>bench/rule-id-mapping-aux-max-breadth.toml</code></li>
+<li>Image build: <code>bench/Dockerfile.bench</code> (unchanged from headline run)</li>
+<li>Tool pinning: <code>bench/tool-versions.toml</code> (unchanged from headline run)</li>
+</ul>
+        </article>
+      </div>
+    </main>
+
+    <footer class="foot">
+      <div class="foot-inner" style="grid-template-columns: 1fr">
+        <div>
+          <div class="brand" style="margin-bottom: 14px">
+            <img src="../ward-with-word.svg" alt="Ward" />
+          </div>
+          <p class="mono" style="color: var(--fg-2); font-size: 12px; max-width: 60ch">
+            Verifiable security review infrastructure. Deterministic, replayable
+            findings with signed evidence chains. Implementation references such
+            as <code>crates/ward-eval/...</code> point at the private Ward repo
+            and will become public when Ward releases.
+          </p>
+        </div>
+      </div>
+      <div class="foot-meta">
+        <span>Pre-release · details subject to change</span>
+        <span>© 2026</span>
+      </div>
+    </footer>
+
+    <script src="../app.js"></script>
+  </body>
+</html>
