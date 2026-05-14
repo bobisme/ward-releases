@@ -1,5 +1,5 @@
 ---
-title: "Ward is best-in-class on Rust unsafe-class vulnerability detection"
+title: "Ward leads the tested off-the-shelf scanners on Rust unsafe-class vulnerability detection"
 subtitle: "A locked, reproducible head-to-head benchmark against Semgrep, CodeQL, Rudra, and cargo-geiger"
 date: 2026-05-13
 author: Ward team
@@ -532,14 +532,51 @@ classes at N ≤ 9, per-class statistical claims would be irresponsible.
 We report per-class numbers but mark them descriptive-only; the only
 inferential claim is on the aggregate F1/MCC.
 
-**Definition of "best-in-class".** We define it operationally:
-*highest paired F1, with non-overlapping 95% CIs against all other
-tools, on the unsafe-class subset of the corpus, with offline
-reproducibility.* Alternative definitions ("best on memory-safety
-only", "highest precision regardless of recall", "fastest scanner
-with recall ≥ X%") would produce different rankings. We commit to
-the F1 definition because it's the standard composite score and
-weights both axes.
+**Definition of "best-in-class" — scope-bounded.** The honest
+operational definition is: *highest paired F1, with non-overlapping
+95% CIs against all other tested tools, on the unsafe-class subset of
+the corpus, with offline reproducibility, **among the off-the-shelf
+scanner configurations we benchmarked**.* The tested set is Ward +
+Semgrep + CodeQL + Rudra + cargo-geiger (context). Other Rust
+analyzers exist (Kani, MIRAI, lockbud, RAPx, MirChecker, TypePulse —
+see Excluded tools below) and are not in this head-to-head. The
+appropriate headline reading is therefore: **among tested off-the-
+shelf scanner configurations under the locked methodology, Ward is
+the only one that fires in-class true positives at user-facing
+severity**. Alternative definitions ("best on memory-safety only",
+"highest precision regardless of recall", "fastest scanner with
+recall ≥ X%") would produce different rankings. We commit to the F1
+definition because it's the standard composite score and weights
+both axes.
+
+### Excluded tools
+
+The following Rust analysis tools are **not** in the head-to-head
+above. Each is excluded for a specific reason rather than because it
+would not fire; we list them so a reader knows the scope of the
+claim precisely.
+
+- **Kani** (AWS, model checker) — requires hand-written proof
+  harnesses per function, not a drop-in SAST scanner. Out of scope
+  of the "scanner head-to-head" framing because the tool's *input*
+  is not a repo but a set of bounded harnesses written for it. A
+  benchmark including Kani would have to compare ward-without-Miri
+  against Kani-with-harnesses, which is a different question.
+- **MIRAI** (Facebook, abstract interpretation) — narrow corpus
+  support, slow, requires `#[contract]` annotations on the code
+  under analysis. Research-tier rather than production; running it
+  against an unannotated corpus is not its lane.
+- **lockbud, RAPx, MirChecker, TypePulse** — academic research
+  tools, not maintained for production use as of 2026. Including
+  them would be an unfair benchmark of academic releases against
+  production scanners; they are listed here for completeness so
+  reviewers know which Rust unsafe analysis tools exist outside the
+  tested set.
+
+If maintained successors of these tools become broadly usable, a
+future revision of this benchmark will include them. The current
+claim is bounded by the tested set; we do not assert it generalizes
+to "every Rust unsafe analyzer that has ever been published."
 
 **Adversarial corpus construction.** A skeptical reader may suspect
 we cherry-picked entries. Mitigations: (a) the inclusion rules in
