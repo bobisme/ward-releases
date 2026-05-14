@@ -1737,3 +1737,328 @@ button {
     font-size: 17px;
   }
 }
+
+/* =====================================================================
+   Notes — long-form rendered markdown
+   .note-body is the article container for rendered markdown.
+   .note-main is the wrapping <main>; .note-source-aside is the optional
+   sidebar at the top of a note (writeup uses one).
+   ===================================================================== */
+
+.note-main {
+  border-bottom: 1px solid var(--line);
+}
+.note-main-inner {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 28px var(--pad) 64px;
+  display: block;
+}
+
+.note-gh-link {
+  margin: 14px 0 0;
+  font-size: 12px;
+  color: var(--fg-2);
+}
+.note-gh-link code {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--fg-1);
+}
+.note-gh-link a {
+  color: var(--fg-1);
+  border-bottom: 1px dashed var(--line-3);
+  text-decoration: none;
+}
+.note-gh-link a:hover {
+  color: var(--accent);
+  border-bottom-color: var(--accent-line);
+}
+
+.note-source-aside {
+  border: 1px solid var(--line-2);
+  background: var(--bg-1);
+  padding: 18px 22px;
+  margin: 0 0 28px;
+  max-width: 880px;
+  border-left: 3px solid var(--accent);
+}
+.note-source-aside h3 {
+  margin: 0 0 10px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fg-3);
+  font-weight: 500;
+}
+.note-source-aside ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px 18px;
+}
+.note-source-aside li {
+  font-size: 13.5px;
+}
+.note-source-aside a {
+  color: var(--fg-1);
+  text-decoration: none;
+  border-bottom: 1px dashed var(--line-3);
+}
+.note-source-aside a:hover {
+  color: var(--accent);
+  border-bottom-color: var(--accent-line);
+}
+@media (max-width: 700px) {
+  .note-source-aside ul {
+    grid-template-columns: 1fr;
+  }
+}
+
+.note-body {
+  max-width: 70ch;
+  margin: 0;
+  color: var(--fg-1);
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.65;
+}
+.note-body > * + * {
+  margin-top: 1em;
+}
+.note-body p {
+  margin: 0 0 1em;
+}
+.note-body h2,
+.note-body h3,
+.note-body h4,
+.note-body h5,
+.note-body h6 {
+  font-family: var(--sans);
+  color: var(--fg);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  margin: 2.2em 0 0.6em;
+  line-height: 1.25;
+  text-wrap: balance;
+}
+.note-body h2 {
+  font-size: 22px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+  margin-top: 2.4em;
+}
+.note-body h3 {
+  font-size: 18px;
+  color: var(--fg);
+}
+.note-body h4 {
+  font-size: 15.5px;
+  color: var(--fg);
+  font-family: var(--mono);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.note-body h5,
+.note-body h6 {
+  font-size: 14px;
+  color: var(--fg-1);
+}
+.note-body h2:first-child,
+.note-body h3:first-child {
+  margin-top: 0;
+}
+
+.note-body a {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid var(--accent-line);
+}
+.note-body a:hover {
+  border-bottom-color: var(--accent);
+}
+
+.note-body strong {
+  color: var(--fg);
+  font-weight: 600;
+}
+.note-body em {
+  color: var(--fg);
+  font-style: italic;
+}
+
+.note-body ul,
+.note-body ol {
+  margin: 0 0 1em;
+  padding-left: 1.4em;
+}
+.note-body li {
+  margin: 0.25em 0;
+}
+.note-body li > p {
+  margin: 0 0 0.4em;
+}
+.note-body ul ul,
+.note-body ol ol,
+.note-body ul ol,
+.note-body ol ul {
+  margin: 0.3em 0;
+}
+
+.note-body blockquote {
+  margin: 1.4em 0;
+  padding: 0.8em 1.1em;
+  border-left: 3px solid var(--accent);
+  background: var(--accent-soft);
+  color: var(--fg);
+  font-size: 14.5px;
+}
+.note-body blockquote p {
+  margin: 0 0 0.6em;
+}
+.note-body blockquote p:last-child {
+  margin: 0;
+}
+
+.note-body code {
+  font-family: var(--mono);
+  font-size: 0.9em;
+  color: var(--fg);
+  background: var(--bg-2);
+  padding: 0.1em 0.35em;
+  border-radius: 3px;
+  border: 1px solid var(--line);
+}
+.note-body pre {
+  margin: 1.2em 0;
+  padding: 14px 16px;
+  background: var(--bg-2);
+  border: 1px solid var(--line-2);
+  border-radius: 4px;
+  overflow-x: auto;
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--fg-1);
+  max-width: 100%;
+  /* break out of the 70ch column width for readable code listings */
+  width: min(100%, 95ch);
+}
+.note-body pre code {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  font-size: 13px;
+  color: var(--fg-1);
+}
+
+.note-body hr {
+  border: 0;
+  border-top: 1px solid var(--line);
+  margin: 2.4em 0;
+}
+
+/* Tables — load-bearing on headline notes. */
+.note-body table {
+  /* break out of the 70ch column for wide headline tables */
+  width: min(100%, 95ch);
+  border-collapse: collapse;
+  margin: 1.4em 0;
+  font-size: 13.5px;
+  font-family: var(--mono);
+  color: var(--fg-1);
+  display: block;
+  overflow-x: auto;
+}
+.note-body table thead {
+  background: var(--bg-2);
+}
+.note-body table th,
+.note-body table td {
+  padding: 8px 12px;
+  border: 1px solid var(--line-2);
+  text-align: left;
+  vertical-align: top;
+}
+.note-body table th {
+  color: var(--fg);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  font-size: 12.5px;
+}
+.note-body table tr:nth-child(even) td {
+  background: rgba(255, 255, 255, 0.012);
+}
+.note-body table code {
+  font-size: 0.95em;
+}
+
+.note-body img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+  border: 1px solid var(--line);
+}
+
+/* Notes index list */
+.note-index .note-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.note-index .note-list li {
+  margin: 0 0 28px;
+  padding: 18px 22px;
+  border: 1px solid var(--line);
+  background: var(--bg-1);
+  border-left: 3px solid var(--accent);
+}
+.note-list-meta {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg-3);
+  margin-bottom: 8px;
+}
+.note-list-meta .mono {
+  color: var(--fg-2);
+}
+.note-list-title {
+  display: block;
+  font-family: var(--sans);
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--fg);
+  text-decoration: none;
+  border: 0;
+  margin: 0 0 8px;
+  letter-spacing: -0.01em;
+}
+.note-list-title:hover {
+  color: var(--accent);
+  border: 0;
+}
+.note-list-blurb {
+  margin: 0;
+  color: var(--fg-1);
+  font-size: 14px;
+  line-height: 1.55;
+  max-width: 72ch;
+}
+
+@media (max-width: 700px) {
+  .note-main-inner {
+    padding: 22px 18px 48px;
+  }
+  .note-body {
+    font-size: 14.5px;
+  }
+  .note-body h2 {
+    font-size: 20px;
+  }
+}
