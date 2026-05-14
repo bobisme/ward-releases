@@ -67,8 +67,9 @@ by default — below the methodology's WARNING threshold — so it does
 not enter the headline. To accelerate the 160-entry run within the
 session window, the aux harness fanned out into three parallel
 container workers on disjoint cpusets (0-3, 4-7, 8-11); per-entry
-results were synthesized from on-disk SARIFs via
-`synth-semgrep-from-sarif.py`. Coverage: 160/160 (zero `not_run_aux`).
+results were materialized from on-disk SARIFs via
+`synth-semgrep-from-sarif.py` (one-row-per-entry SARIF parse, no
+per-finding heuristics). Coverage: 160/160 (zero `not_run_aux`).
 
 **Rudra** — the bn-bums5 fix (re-mapping `RUDRA-SEND-SYNC` →
 `RUDRA-SENDSYNCVARIANCE` etc) had not landed on default at run time,
@@ -211,7 +212,6 @@ rulesets, every (Ward, X) pairing remains massively significant:
 | (Ward, Semgrep aux) | 37 | 0 | ≈ 1.46 × 10⁻¹¹ | **yes (Ward)** |
 | (Ward, Rudra aux) | 37 | 1 | ≈ 2.92 × 10⁻¹⁰ | **yes (Ward)** |
 | (Ward, CodeQL aux full corpus) | 37 | 0 | ≈ 1.46 × 10⁻¹¹ | **yes (Ward)** |
-| (Ward, cargo-geiger) | 37 | 0 | ≈ 1.46 × 10⁻¹¹ | **yes (Ward)** |
 | (Rudra aux, Semgrep aux) | 1 | 0 | 1.000 | no (one-trial sample too small) |
 | (Rudra aux, CodeQL aux) | 1 | 0 | 1.000 | no (same) |
 | (Semgrep aux, CodeQL aux) | 0 | 0 | 1.000 | no (degenerate) |

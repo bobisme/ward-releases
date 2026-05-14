@@ -129,8 +129,9 @@ by default — below the methodology's WARNING threshold — so it does
 not enter the headline. To accelerate the 160-entry run within the
 session window, the aux harness fanned out into three parallel
 container workers on disjoint cpusets (0-3, 4-7, 8-11); per-entry
-results were synthesized from on-disk SARIFs via
-<code>synth-semgrep-from-sarif.py</code>. Coverage: 160/160 (zero <code>not_run_aux</code>).</p>
+results were materialized from on-disk SARIFs via
+<code>synth-semgrep-from-sarif.py</code> (one-row-per-entry SARIF
+parse; no per-finding heuristics). Coverage: 160/160 (zero <code>not_run_aux</code>).</p>
 <p><strong>Rudra</strong> — the bn-bums5 fix (re-mapping <code>RUDRA-SEND-SYNC</code> →
 <code>RUDRA-SENDSYNCVARIANCE</code> etc) had not landed on default at run time,
 so the aux harness applies the same fix locally in two ways:
@@ -444,13 +445,6 @@ rulesets, every (Ward, X) pairing remains massively significant:</p>
 </tr>
 <tr>
 <td>(Ward, CodeQL aux full corpus)</td>
-<td style="text-align: right;">37</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">≈ 1.46 × 10⁻¹¹</td>
-<td><strong>yes (Ward)</strong></td>
-</tr>
-<tr>
-<td>(Ward, cargo-geiger)</td>
 <td style="text-align: right;">37</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">≈ 1.46 × 10⁻¹¹</td>

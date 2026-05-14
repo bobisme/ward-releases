@@ -1,13 +1,13 @@
 ---
 title: "Ward leads the tested off-the-shelf scanners on Rust unsafe-class vulnerability detection"
-subtitle: "A locked, reproducible head-to-head benchmark against Semgrep, CodeQL, Rudra, and cargo-geiger"
+subtitle: "A public audit-trail benchmark against Semgrep, CodeQL, and Rudra; end-to-end third-party reproduction pending Ward source release"
 date: 2026-05-13
-author: Ward team
-status: public writeup
-methodology: notes/benchmarks/unsafe-rust-bench-methodology.md
-headline_results: notes/benchmarks/unsafe-rust-bench-results-2026-05-13.md
-aux_results: notes/benchmarks/unsafe-rust-bench-aux-max-breadth-2026-05-13.md
-corpus_tag: bench/unsafe-rust-v1
+author: "Ward team"
+status: "public writeup (internal pre-release)"
+methodology: "notes/benchmarks/unsafe-rust-bench-methodology.md"
+headline_results: "notes/benchmarks/unsafe-rust-bench-results-2026-05-13.md"
+aux_results: "notes/benchmarks/unsafe-rust-bench-aux-max-breadth-2026-05-13.md"
+corpus_tag: "bench/unsafe-rust-v1"
 ---
 
 # Ward leads the tested off-the-shelf scanners on Rust unsafe-class vulnerability detection
@@ -43,18 +43,17 @@ available rulesets** for each tool (Semgrep across 1,079 rules in
 bug patched). **The ranking did not change.** Details in the
 *Fairness audit* section below.
 
-> **Pre-release status.** This is an internal pre-release benchmark.
-> The methodology spec, corpus manifest, per-entry provenance,
-> Dockerfile, tool pins, and rule-id mapping are public now at
-> `github.com/bobisme/ward-releases`. The Ward source release that
-> closes the loop on fully external third-party reproduction is
-> pending; until then, reproduction requires the locked container
-> image. Full reproducibility — including building `ward-eval` from
-> source against the pinned tree — unlocks at Ward's source release.
-> The numbers below reflect a real run of a real benchmark and are
-> not under embargo; the "locked, reproducible head-to-head" framing
-> should be read as *locked spec, internal run, public reproduction
-> planned* rather than *fully reproducible by any third party today*.
+> **Pre-release status.** This is a public audit-trail benchmark in an
+> internal pre-release window. The methodology spec, corpus manifest,
+> per-entry provenance, Dockerfile, tool pins, rule-id mapping, raw
+> per-entry SARIF / stdout artifacts, and the CodeQL materialization
+> script are all public now at `github.com/bobisme/ward-releases`.
+> End-to-end third-party re-execution — running the harness binaries
+> against the locked corpus — is pending Ward source release, since
+> `ward-eval` / `ward-cli` live in the private Ward tree while Ward is
+> under heavy development. The numbers below reflect a real run of a
+> real benchmark; every input the run consumed and every artifact it
+> produced is committed and inspectable.
 
 This document is the public, reviewer-facing summary. The locked
 methodology spec, full results document, fairness-audit aux document,
@@ -202,7 +201,6 @@ excluded from the headline scanner table above.
 |--------|-------------------|-------------------|------------|------------|---------|---------------------|
 | (Ward, Semgrep) | 37 | 0 | 0 | 43 | 1.46e-11 | **yes (Ward)** |
 | (Ward, Rudra) | 37 | 0 | 0 | 43 | 1.46e-11 | **yes (Ward)** |
-| (Ward, cargo-geiger) | 37 | 0 | 0 | 43 | 1.46e-11 | **yes (Ward)** |
 | (Ward, CodeQL) full corpus | 37 | 0 | 0 | 43 | 1.46e-11 | **yes (Ward)** |
 | (Ward, CodeQL) restricted to 12 pairs where both CodeQL sides processed | 5 | 0 | 0 | 7 | 0.0625 | no (sample too small) |
 
@@ -350,8 +348,9 @@ methodology §10's 30% threshold, so it stays out of the head-to-head
 competitive table.
 
 After the max-breadth aux, McNemar p ≈ 1.46 × 10⁻¹¹ remains
-unchanged for (Ward, Semgrep), (Ward, CodeQL), (Ward, cargo-geiger);
-(Ward, Rudra aux) gives p ≈ 2.92 × 10⁻¹⁰. The dominance pattern is
+unchanged for (Ward, Semgrep) and (Ward, CodeQL); (Ward, Rudra aux)
+gives p ≈ 2.92 × 10⁻¹⁰. cargo-geiger is context-only and not in the
+McNemar table per methodology §4. The dominance pattern is
 robust to the broadest configurations of the competitor tools.
 
 **The corollary is stronger than the headline.** It is not the case

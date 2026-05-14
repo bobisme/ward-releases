@@ -1,9 +1,9 @@
 ---
-title: Public head-to-head benchmark — Rust unsafe-class vulnerability detection
+title: "Public head-to-head benchmark — Rust unsafe-class vulnerability detection"
 date: 2026-05-07
-bone: bn-3cgmj (parent: bn-1ti5m)
-status: methodology specification (locked before corpus collection)
-audience: external reviewers, downstream corpus/runner/measurement bones
+bone: "bn-3cgmj (parent: bn-1ti5m)"
+status: "methodology specification (locked before corpus collection)"
+audience: "external reviewers, downstream corpus/runner/measurement bones"
 ---
 
 # Unsafe-Rust Head-to-Head Benchmark — Methodology
@@ -15,7 +15,8 @@ audience: external reviewers, downstream corpus/runner/measurement bones
 
 ## Executive summary
 
-This document specifies a public, reproducible benchmark whose claim under
+This document specifies a public audit-trail benchmark (end-to-end
+third-party reproduction pending Ward source release) whose claim under
 test is: **Ward is best among the tested off-the-shelf scanner
 configurations on detection of Rust unsafe-class vulnerabilities
 (memory-safety, use-after-free, type-confusion, undefined-behavior,

@@ -118,7 +118,7 @@ separation explicitly (see the three-view decomposition below).</p>
 </tr>
 <tr>
 <td>CodeQL run</td>
-<td>Killed at 6h 36m elapsed (53% timeout rate at DB-create projected ~14h to complete); 50/160 entries processed; <code>bench-results-codeql.json</code> synthesized from on-disk artifacts via <code>scripts/synth-bench-results-codeql.py</code></td>
+<td>Killed at 6h 36m elapsed (53% timeout rate at DB-create projected ~14h to complete); 50/160 entries processed; <code>bench-results-codeql.json</code> materialized from on-disk artifacts per the pre-locked classification rule via <code>scripts/synth-bench-results-codeql.py</code> (raw tree + script published — see <a href="https://github.com/bobisme/ward-releases/blob/main/benchmark/corpus/REPRODUCE.md">REPRODUCE.md §CodeQL outcome classification rule</a>)</td>
 </tr>
 <tr>
 <td>bench-score run</td>
@@ -136,9 +136,22 @@ entries (53%), projecting ~14h wall-clock to complete. The remaining
 110/160 entries CodeQL never reached. Per methodology §5 "What counts as
 a finding" the 25 cap-exceeded entries are reported as <code>timed_out=true</code>,
 not zero findings; the 110 not-reached are reported as <code>error="not_run"</code>.</p>
-<p><code>bench-results-codeql.json</code> was synthesized from on-disk SARIF + DB
-artifacts by <code>scripts/synth-bench-results-codeql.py</code>; the schema matches
-<code>crates/ward-eval/src/bench/mod.rs::BenchToolResult</code>.</p>
+<p><code>bench-results-codeql.json</code> was materialized from the on-disk
+SARIF + <code>codeql-db/</code> artifact tree by
+<code>scripts/synth-bench-results-codeql.py</code> under a <strong>pre-locked,
+mechanical classification rule</strong>: SARIF present and parses →
+<code>success</code> (TP/FP/TN/FN per <code>(expected, detected)</code>);
+<code>codeql-db/</code> present but no SARIF → <code>timed_out</code>
+(DB-create exceeded the 10-min cap; <code>tp→FN</code>, <code>tn→TN</code>);
+neither present → <code>not_run</code> (sweep killed before this entry
+reached analysis; same <code>tp→FN, tn→TN</code> mapping). Missing
+SARIF after timeout is <strong>never</strong> silently collapsed to a
+confident-negative outcome. The script's module docstring is the
+authoritative implementation; the rule is restated in full at
+<a href="https://github.com/bobisme/ward-releases/blob/main/benchmark/corpus/REPRODUCE.md">REPRODUCE.md §CodeQL outcome classification rule</a>.
+Schema matches <code>crates/ward-eval/src/bench/mod.rs::BenchToolResult</code>;
+raw artifacts are committed under <code>notes/benchmarks/artifacts/raw/codeql/</code>
+so any reader can re-run the script and byte-diff against the committed JSON.</p>
 <h2 id="headline-table-full-corpus-n-80-paired-pairs">Headline table — scanners on the full corpus (n = 80 paired pairs)</h2>
 <p>Bootstrap 95% CIs, 1000 stratified resamples by vuln_class, seed
 <code>0x77617264_62656e63</code> (= <code>"wardbenc"</code> in ASCII hex). Counting unit
@@ -347,15 +360,6 @@ below from <code>bench-stats</code>).</p>
 <td><strong>yes (ward)</strong></td>
 </tr>
 <tr>
-<td>(ward, cargo-geiger)</td>
-<td>37</td>
-<td>0</td>
-<td>0</td>
-<td>43</td>
-<td>1.46e-11</td>
-<td><strong>yes (ward)</strong></td>
-</tr>
-<tr>
 <td>(ward, codeql) full corpus</td>
 <td>37</td>
 <td>0</td>
@@ -383,25 +387,7 @@ below from <code>bench-stats</code>).</p>
 <td>no</td>
 </tr>
 <tr>
-<td>(semgrep, cargo-geiger)</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>80</td>
-<td>1.000</td>
-<td>no</td>
-</tr>
-<tr>
 <td>(semgrep, codeql)</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>80</td>
-<td>1.000</td>
-<td>no</td>
-</tr>
-<tr>
-<td>(rudra, cargo-geiger)</td>
 <td>0</td>
 <td>0</td>
 <td>0</td>
@@ -418,15 +404,6 @@ below from <code>bench-stats</code>).</p>
 <td>1.000</td>
 <td>no</td>
 </tr>
-<tr>
-<td>(cargo-geiger, codeql)</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>80</td>
-<td>1.000</td>
-<td>no</td>
-</tr>
 </tbody>
 </table>
 <p><strong>Methodology §7 claim discipline</strong>: "Ward beats X" requires (i)
@@ -436,9 +413,10 @@ satisfied with massive margin for every (Ward, X) pairing on the
 F1 95% CI is [0.559, 0.750] while every other tool's F1 CI is
 [0.000, 0.000] — fully disjoint. Both criteria are met:</p>
 <blockquote>
-<p><strong>Headline claim</strong>: Ward beats Semgrep, Rudra, cargo-geiger, and
-CodeQL on the full 80-paired-pair unsafe-Rust corpus under the
-methodology's locked statistical gate.</p>
+<p><strong>Headline claim</strong>: Ward beats Semgrep, Rudra, and CodeQL on
+the full 80-paired-pair unsafe-Rust corpus under the methodology's
+locked statistical gate. cargo-geiger is context-only (methodology §4)
+and is not part of the statistical head-to-head.</p>
 </blockquote>
 <p>The restricted-to-processed view (12 pairs where both CodeQL sides
 produced parseable SARIF) shows Ward fully correct on 5 of 12 and
@@ -559,8 +537,9 @@ never produced a successful duration.</p>
 <h2 id="per-vuln-class-breakdown-descriptive">Per-vuln-class breakdown (descriptive)</h2>
 <p>Per methodology §7, per-subgroup N is small; these counts are
 <strong>descriptive only</strong> and not subject to significance testing. Ward
-only is shown — Semgrep / Rudra / cargo-geiger / CodeQL all have
-TP=FP=0 across every subgroup.</p>
+only is shown — Semgrep / Rudra / CodeQL all have TP=FP=0 across
+every subgroup; cargo-geiger is context-only and emits no detect-class
+findings.</p>
 <table>
 <thead>
 <tr>
@@ -926,14 +905,16 @@ positives</strong>:</p>
    its <code>detected</code> is hard-coded to false. The per-tool numbers below
    reflect that contract.</li>
 </ol>
-<p>Because Semgrep / Rudra / cargo-geiger / CodeQL each registered <strong>zero
+<p>Because Semgrep / Rudra / CodeQL each registered <strong>zero
 fully_correct paired outcomes</strong> while Ward registered <strong>39 of 80</strong> (49%
 fully-correct pair rate), the McNemar exact two-sided binomial test
-produces <code>p ≈ 3.6 × 10^-12</code> for every (Ward, X) pairing — orders of
-magnitude below the methodology's p &lt; 0.01 threshold. Combined with
-non-overlapping F1 / MCC CIs (Ward's F1 = 0.696 with non-degenerate CI;
-every other tool's F1 = 0.000 at a degenerate point), <strong>Ward beats
-every other tool under both methodology §7 statistical gates.</strong></p>
+produces <code>p ≈ 3.6 × 10^-12</code> for every (Ward, competitor) pairing —
+orders of magnitude below the methodology's p &lt; 0.01 threshold.
+Combined with non-overlapping F1 / MCC CIs (Ward's F1 = 0.696 with
+non-degenerate CI; every competitor's F1 = 0.000 at a degenerate
+point), <strong>Ward beats every competitor under both methodology §7
+statistical gates.</strong> cargo-geiger is context-only and excluded from
+the statistical comparison per methodology §4.</p>
 <p>The "Ward is best among the tested off-the-shelf scanner
 configurations on Rust unsafe scanning" claim from the methodology's
 executive summary is supported on this corpus under the locked
@@ -1424,15 +1405,17 @@ podman build -t ward-bench:locked -f bench/Dockerfile.bench .
   --manifest tests/cve-registry/benchmarks/unsafe-rust-bench/manifest.toml \
   --out target/bench/unsafe-rust-v2/stats.json
 </code></pre>
-<p>For the CodeQL partial run, the synth script
-<code>scripts/synth-bench-results-codeql.py</code> reconstructs <code>bench-results-codeql.json</code>
-from on-disk SARIF + DB artifacts so the bench-score / bench-stats
-pipeline can run without re-running CodeQL.</p>
+<p>For the CodeQL partial run, <code>scripts/synth-bench-results-codeql.py</code>
+materializes <code>bench-results-codeql.json</code> from the on-disk SARIF + DB
+artifact tree under the pre-locked classification rule (see
+<a href="https://github.com/bobisme/ward-releases/blob/main/benchmark/corpus/REPRODUCE.md">REPRODUCE.md §CodeQL outcome classification rule</a>),
+so bench-score / bench-stats can run without re-running CodeQL.</p>
 <h2 id="artifacts">Artifacts</h2>
 <p>Committed under <code>notes/benchmarks/artifacts/</code>:
-- <code>bench-results-codeql-partial.json</code> — synthesized partial CodeQL
-  results (50/160 entries processed: 25 SARIF + 25 DB-only timeouts;
-  110 marked <code>not_run</code>).
+- <code>bench-results-codeql-partial.json</code> — partial CodeQL results
+  materialized from the on-disk artifact tree per the CodeQL outcome
+  classification rule (50/160 entries processed: 25 SARIF + 25
+  DB-only timeouts; 110 marked <code>not_run</code>).
 - <code>bench-results-semgrep.json</code> — full Semgrep results (160 entries,
   all OK; severity filter drops note-level → 0 retained findings).
 - <code>bench-results-rudra.json</code> — full Rudra results (154 errored, 6
@@ -1449,10 +1432,12 @@ pipeline can run without re-running CodeQL.</p>
 - <code>target/bench/unsafe-rust-v2/raw/&lt;tool&gt;/&lt;entry-id&gt;/</code> — per-tool
   per-entry SARIF / stdout dumps.</p>
 <p>Scripts:
-- <code>scripts/synth-bench-results-codeql.py</code> — synthesizes the partial
-  CodeQL <code>bench-results-codeql.json</code> from on-disk SARIF + DB
-  artifacts when the CodeQL portion of <code>ward-eval bench-run</code> is
-  interrupted mid-sweep.
+- <code>scripts/synth-bench-results-codeql.py</code> — materializes the partial
+  CodeQL <code>bench-results-codeql.json</code> from the on-disk SARIF + DB
+  artifact tree under the pre-locked classification rule (SARIF →
+  <code>success</code>, DB-only → <code>timed_out</code>, neither → <code>not_run</code>) when the
+  CodeQL portion of <code>ward-eval bench-run</code> is killed mid-sweep. Rule
+  re-stated in <a href="https://github.com/bobisme/ward-releases/blob/main/benchmark/corpus/REPRODUCE.md">REPRODUCE.md</a>.
 - <code>scripts/render-bench-headline.py</code> — renders the markdown headline
   blocks (this doc) from stats.json + paired-summary.json for
   reviewer reproducibility.</p>

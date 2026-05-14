@@ -67,10 +67,19 @@ rust_queries_pack  = "0.1.34"
 suite          = "codeql/rust-queries:codeql-suites/rust-security-extended.qls"
 in_scope       = true
 notes          = """
-Methodology §4 mandates the *security-extended* suite. The narrower
-`rust-security-and-quality` and `rust-security` suites are out of scope —
-extended is the strict superset and the suite GHAS uses for elevated
-recall.
+Methodology §4 locks the *security-extended* suite for the headline. Per
+official CodeQL documentation the suite ordering is:
+
+  rust-code-scanning ⊂ rust-security-extended ⊂ rust-security-and-quality
+
+`security-extended` is the superset of the default code-scanning suite
+and adds higher-recall security queries; `security-and-quality` is the
+strict superset of `security-extended` that additionally bundles quality
+and reliability (non-security) queries. The headline locks
+`security-extended` because methodology §4 scopes the head-to-head to
+security queries only. The max-breadth aux run (results §7) lifts to
+`security-and-quality.qls` to confirm the ranking is invariant under the
+broadest publicly-available query set.
 """
 
 # ───────────────────────────────────────────────────────────────────────
@@ -80,17 +89,23 @@ recall.
 display_name   = "Semgrep"
 binary         = "semgrep"
 version        = "1.95.0"
-# Methodology §4: `p/rust-security` + `r/rust-security` community pack.
-# Snapshot the rule set into a tarball under bench/cache/semgrep-rules at
-# image build time so the runtime container is offline.
-configs        = ["p/rust-security", "r/rust"]
+# Locked-bench configs. The canonical CLI invocation is:
+#   semgrep scan --config=p/rust --config=r/rust.lang.security ...
+# These are the registry IDs that resolve at runtime to the
+# preprovisioned image snapshot under bench/cache/semgrep-rules.
+# `p/rust-security` is a legacy alias for the same shipped content as
+# `p/rust` in Semgrep's current registry (bn-tlxo4 amendment); the
+# methodology spec used the legacy name in an early draft.
+configs        = ["p/rust", "r/rust.lang.security"]
+config_aliases = { "p/rust" = ["p/rust-security"] }
 ruleset_snapshot = "bench/cache/semgrep-rules.tar.gz"
 ruleset_snapshot_sha256 = ""  # populated at build time
 in_scope       = true
 notes          = """
-Semgrep's `r/rust` community pack is a strict superset of `r/rust-security`
-when both are installed; the harness consumes the union and tags each
-finding with its source rule pack for per-pack subgroup analysis.
+The harness consumes the union of the two configs and tags each finding
+with its source rule pack for per-pack subgroup analysis. `r/rust` is
+the community ruleset namespace; `r/rust.lang.security` is the security
+subset used at lock time.
 """
 
 # ───────────────────────────────────────────────────────────────────────

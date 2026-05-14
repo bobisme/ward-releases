@@ -261,9 +261,9 @@ the full corpus, not per-shape.</p>
 </tr>
 <tr>
 <td><strong>Semgrep</strong></td>
-<td><code>semgrep ≥ 1.95</code> (community + <code>r/rust-security</code> ruleset, snapshot pinned by digest).</td>
+<td><code>semgrep ≥ 1.95</code> (community ruleset, snapshot pinned by digest).</td>
 <td>Widely deployed; the OSS community baseline. Rust support is younger but growing.</td>
-<td>Run with <code>--config=p/rust-security</code> plus the <code>r/rust-security</code> community pack.</td>
+<td>Canonical CLI invocation: <code>semgrep scan --config=p/rust --config=r/rust.lang.security</code>. The earlier draft used the legacy alias <code>p/rust-security</code> for the same registry content; see Amendment log (bn-tlxo4).</td>
 </tr>
 <tr>
 <td><strong>Rudra</strong></td>
@@ -366,7 +366,7 @@ reporting.</p>
 <p><code>--network=none</code> (Docker) or a <code>systemd-run</code> slice with
 <code>PrivateNetwork=yes</code>. No tool may make any DNS or TCP request during a
 scan. Tool databases (CodeQL <code>codeql/rust-queries</code>) and rulesets
-(Semgrep <code>p/rust-security</code>) are pre-fetched into the image at build
+(Semgrep <code>p/rust ∪ r/rust.lang.security</code>) are pre-fetched into the image at build
 time; the running container has no Internet.</p>
 <p>This rules out any "cloud assist" feature and standardizes the
 information available to each tool. It also rules out CodeQL's
@@ -472,7 +472,7 @@ the keyword list per-tool. Concretely:</p>
 <li>CodeQL Rust unsafe queries emit IDs like <code>rust/uninitialized-memory</code>,
   <code>rust/unsafe-deref</code>, <code>rust/incorrect-pointer-arith</code>. Add these
   keywords to the vuln-class arm.</li>
-<li>Semgrep <code>r/rust-security</code> rules emit IDs like
+<li>Semgrep <code>r/rust.lang.security</code> rules emit IDs like
   <code>rust.lang.security.unsafe-block</code>,
   <code>rust.lang.correctness.transmute-pod-to-non-pod</code>. Add these
   keywords.</li>

@@ -1,8 +1,18 @@
 # Unsafe-Rust head-to-head benchmark — corpus
 
-Public, reproducible benchmark for evaluating Rust unsafe-class vulnerability
-detection. This directory is the **frozen corpus manifest** for the
-head-to-head comparison between Ward and publicly-available competitor tools.
+Auditable corpus snapshot for the Rust unsafe-class vulnerability
+detection head-to-head between Ward and publicly-available competitor
+tools.
+
+**Auditable, not yet fully reproducible.** The manifest, per-entry
+provenance log, inclusion criteria, and methodology lock are committed
+here for external review. The sourcing pipeline that selected the 80
+advisories runs against a private cache under `target/bench-cache/` and
+is not itself committed — the committed truth of the corpus is what
+appears in `manifest.toml` + `provenance/`, not the generator that
+produced them. Independent re-derivation of the same 80 pairs from raw
+RUSTSEC + MSR'26 inputs is pending Ward source release and a snapshot
+of the bench-cache.
 
 > **Methodology lock**: this corpus conforms to the spec in
 > [`notes/benchmarks/unsafe-rust-bench-methodology.md`](../../../../notes/benchmarks/unsafe-rust-bench-methodology.md)

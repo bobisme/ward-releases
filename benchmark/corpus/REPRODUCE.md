@@ -55,69 +55,99 @@ v2.25.4, Semgrep 1.95.0, Rudra (HEAD on `master` at
 `nightly-2021-10-21`), cargo-geiger 0.12.0 and bake them in. None of
 those are runtime dependencies on the host.
 
-## One-command reproduction
+## What you can reproduce now
 
-From a fresh clone of the Ward repository, on the
-`bench/unsafe-rust-v1` tag:
+The public materials in this repository let you independently verify
+the **inputs and the materialization of the published outputs**:
 
 ```bash
-# 1. Build the locked bench image (one-time, ~20 min).
+# 1. Build the locked bench image from the public Dockerfile.bench
+#    (one-time, ~20 min). The image bundles CodeQL 2.25.4 bundle,
+#    Semgrep 1.95.0, Rudra (master @ nightly-2021-10-21), cargo-geiger
+#    0.12.0 and the pinned rule snapshots.
 podman build -t ward-bench:locked -f bench/Dockerfile.bench .
 
 # 2. Verify the image digest matches the published headline.
 #    Expected: sha256:b7707fe926c96be99348030445cb355141f43afae2243d86a8f7862cc134308e
 podman image inspect ward-bench:locked --format '{{.Digest}}'
 
-# When Ward source is released:
-# # 3. Build the harness binaries.
-# cargo build --release -p ward-eval -p ward-cli -p ward-stub-analyzer
-#
-# # 4. Full head-to-head sweep.
-# #    Wall-clock is dominated by CodeQL DB-create on large repos.
-# #    Expect ~6–10 hours total (Ward + Semgrep + Rudra + cargo-geiger
-# #    finish in ~60–90 min; CodeQL alone takes ~14h to complete the
-# #    full 160 entries, of which 53% time out at the 10-min cap — that
-# #    rate is itself a documented headline finding).
-# ./target/release/ward-eval bench-run \
-#   --manifest tests/cve-registry/benchmarks/unsafe-rust-bench/manifest.toml \
-#   --tool-versions bench/tool-versions.toml \
-#   --rule-id-mapping bench/rule-id-mapping.toml \
-#   --tools ward,semgrep,rudra,cargo-geiger,codeql \
-#   --out target/bench/repro
-#
-# # 5. Paired finding-identity reclassification.
-# ./target/release/ward-eval bench-score \
-#   --raw target/bench/repro \
-#   --out target/bench/repro/paired
-#
-# # 6. Bootstrap CIs + McNemar pairwise + per-class breakdown.
-# ./target/release/ward-eval bench-stats \
-#   --raw target/bench/repro \
-#   --paired target/bench/repro/paired \
-#   --manifest tests/cve-registry/benchmarks/unsafe-rust-bench/manifest.toml \
-#   --out target/bench/repro/stats.json
+# 3. Verify the materialized CodeQL JSON against the raw artifact tree
+#    by re-running the classification script on the committed raw
+#    SARIF + DB directories under notes/benchmarks/artifacts/raw/codeql.
+python3 scripts/synth-bench-results-codeql.py
+diff <regen> notes/benchmarks/artifacts/bench-results-codeql-partial.json
+```
+
+You can also inspect every other input the headline depends on:
+`manifest.toml`, `provenance/<id>.toml` for each entry,
+`bench/tool-versions.toml`, `bench/rule-id-mapping.toml`,
+`bench/rule-id-mapping-aux-max-breadth.toml`, the methodology spec, the
+results doc, and the raw per-entry SARIF / stdout dumps under
+`notes/benchmarks/artifacts/raw/`.
+
+## Future source-release reproduction (pending)
+
+End-to-end re-execution of the head-to-head sweep requires the Ward
+harness binaries (`ward-eval`, `ward-cli`, `ward-stub-analyzer`), which
+live in the private Ward repository while Ward is under heavy
+development. The commands below will run as published once the source
+is released; until then this section is the contract for what
+reproduction will look like, not a runnable recipe today.
+
+```bash
+# Source release pending — these commands will run end-to-end once
+# the Ward source tree is published.
+
+# 3. Build the harness binaries.
+cargo build --release -p ward-eval -p ward-cli -p ward-stub-analyzer
+
+# 4. Full head-to-head sweep.
+#    Wall-clock is dominated by CodeQL DB-create on large repos.
+#    Expect ~6–10 hours total (Ward + Semgrep + Rudra + cargo-geiger
+#    finish in ~60–90 min; CodeQL alone takes ~14h to complete the
+#    full 160 entries, of which 53% time out at the 10-min cap — that
+#    rate is itself a documented headline finding).
+./target/release/ward-eval bench-run \
+  --manifest tests/cve-registry/benchmarks/unsafe-rust-bench/manifest.toml \
+  --tool-versions bench/tool-versions.toml \
+  --rule-id-mapping bench/rule-id-mapping.toml \
+  --tools ward,semgrep,rudra,cargo-geiger,codeql \
+  --out target/bench/repro
+
+# 5. Paired finding-identity reclassification.
+./target/release/ward-eval bench-score \
+  --raw target/bench/repro \
+  --out target/bench/repro/paired
+
+# 6. Bootstrap CIs + McNemar pairwise + per-class breakdown.
+./target/release/ward-eval bench-stats \
+  --raw target/bench/repro \
+  --paired target/bench/repro/paired \
+  --manifest tests/cve-registry/benchmarks/unsafe-rust-bench/manifest.toml \
+  --out target/bench/repro/stats.json
 ```
 
 If you want to split CodeQL into a separate (much longer) sweep so
 the fast tools' results land first, run step 4 twice:
 
 ```bash
-# When Ward source is released:
-# # 4a. Fast tools first (~60–90 min).
-# ./target/release/ward-eval bench-run \
-#   --manifest tests/cve-registry/benchmarks/unsafe-rust-bench/manifest.toml \
-#   --tool-versions bench/tool-versions.toml \
-#   --rule-id-mapping bench/rule-id-mapping.toml \
-#   --tools ward,semgrep,rudra,cargo-geiger \
-#   --out target/bench/repro
-#
-# # 4b. CodeQL alone (allow ~14h wall-clock).
-# ./target/release/ward-eval bench-run \
-#   --manifest tests/cve-registry/benchmarks/unsafe-rust-bench/manifest.toml \
-#   --tool-versions bench/tool-versions.toml \
-#   --rule-id-mapping bench/rule-id-mapping.toml \
-#   --tools codeql \
-#   --out target/bench/repro
+# Source release pending — see note above.
+
+# 4a. Fast tools first (~60–90 min).
+./target/release/ward-eval bench-run \
+  --manifest tests/cve-registry/benchmarks/unsafe-rust-bench/manifest.toml \
+  --tool-versions bench/tool-versions.toml \
+  --rule-id-mapping bench/rule-id-mapping.toml \
+  --tools ward,semgrep,rudra,cargo-geiger \
+  --out target/bench/repro
+
+# 4b. CodeQL alone (allow ~14h wall-clock).
+./target/release/ward-eval bench-run \
+  --manifest tests/cve-registry/benchmarks/unsafe-rust-bench/manifest.toml \
+  --tool-versions bench/tool-versions.toml \
+  --rule-id-mapping bench/rule-id-mapping.toml \
+  --tools codeql \
+  --out target/bench/repro
 ```
 
 ## Tolerance
@@ -147,7 +177,7 @@ TP after the in-image parser fix; Semgrep and CodeQL stay at 0).
 | Semgrep | ~10 min | Mean 3.0s/entry; no timeouts. |
 | Rudra | ~3 min | 154/160 fail fast at toolchain layer; 6 entries take 0–1s each. |
 | cargo-geiger | ~30 min | Mean 9.9s/entry; no timeouts. |
-| CodeQL | ~14h (extrapolated) | 53% timeout rate at DB-create on big repos; 110/160 entries unreachable within the wall-clock budget we held to. The published headline ran CodeQL until 6h 36m wall-clock and synthesized partial results from on-disk SARIF + DB artifacts via `scripts/synth-bench-results-codeql.py`. |
+| CodeQL | ~14h (extrapolated) | 53% timeout rate at DB-create on big repos; 110/160 entries unreachable within the wall-clock budget we held to. The published headline ran CodeQL until 6h 36m wall-clock; `bench-results-codeql.json` was materialized from on-disk SARIF + DB artifacts using `scripts/synth-bench-results-codeql.py`. The classification rule is mechanical and pre-locked — see [CodeQL outcome classification rule](#codeql-outcome-classification-rule) below. |
 
 Total end-to-end (combined run with CodeQL) is therefore
 approximately **6–10 hours** if you cap CodeQL at the same wall-clock
@@ -213,7 +243,7 @@ replacement.
 target/bench/<run-name>/
 ├── bench-results-ward.json           # full Ward results
 ├── bench-results-semgrep.json
-├── bench-results-codeql.json         # (may be synthesized from raw/codeql/ if CodeQL interrupted)
+├── bench-results-codeql.json         # (may be materialized from raw/codeql/ when CodeQL is killed before all 160 entries finish — see CodeQL outcome classification rule below)
 ├── bench-results-rudra.json
 ├── bench-results-cargo-geiger.json
 ├── raw/
@@ -224,13 +254,58 @@ target/bench/<run-name>/
 └── stats.json                        # bootstrap CIs + McNemar + per-class + latency
 ```
 
+### CodeQL outcome classification rule
+
+CodeQL DB-create exceeds the 10-min per-entry cap on ~half of the
+larger repos in this corpus (53% measured rate on the headline run).
+Because the budget is part of the locked methodology, we cannot just
+let CodeQL run longer; the resulting on-disk state per entry can be
+one of three cases. `scripts/synth-bench-results-codeql.py` walks the
+raw artifact tree and applies this **pre-locked, mechanical**
+classification rule (lifted from the script's module docstring):
+
+| On-disk state for entry `<id>` | Classification |
+|---|---|
+| `raw/codeql/<id>/results.sarif` present **and** parses cleanly | `success` — TP/FP/TN/FN per `(expected, detected)` from SARIF parse, exactly as for any other tool's SARIF output. |
+| `raw/codeql/<id>/codeql-db/` present **but no SARIF** (timeout during the analyze step after DB-create completed) | `timed_out=true`, `detected=false`, `error="codeql_db_create_timed_out"`, `duration_secs=600.0` (the cap). Classification per `expected`: `tp→FN`, `tn→TN`. |
+| Neither DB nor SARIF (sweep killed before this entry reached analysis) | `not_run`, `detected=false`, `error="not_run"`, `duration_secs=0.0`. Classification per `expected`: `tp→FN`, `tn→TN`. |
+
+**The rule is not a judgment call.** Missing SARIF after timeout is
+recorded as `timed_out` or `not_run`; it is **never** silently
+collapsed to FN/TN as if CodeQL had returned a confident negative.
+The script's source is the authoritative implementation; the
+docstring at the top of `scripts/synth-bench-results-codeql.py`
+re-states the rule alongside the SARIF parser logic.
+
+**Audit trail for the headline run:**
+
+- Raw per-entry SARIF and `codeql-db/` directories:
+  `notes/benchmarks/artifacts/raw/codeql/<entry-id>/` for each of the
+  50/160 entries CodeQL reached. Each directory is the unmodified
+  on-disk output `codeql database analyze` left behind.
+- Sweep timeout log: `notes/benchmarks/artifacts/codeql-timeout-log.txt`
+  (one line per entry recording wall-clock at DB-create + analyze
+  steps).
+- Aggregator script: `scripts/synth-bench-results-codeql.py` (Python,
+  no external state — given the raw tree above, regenerates
+  `bench-results-codeql.json` byte-for-byte on the same Python
+  version).
+- Resulting JSON: `notes/benchmarks/artifacts/bench-results-codeql-partial.json`.
+
+To audit the materialization: run the script on the raw tree, diff
+the output against the committed JSON. If they disagree, the script
+is wrong, not the headline.
+
+
+
 Committed reference artifacts (so you can diff your reproduction
 against the canonical run) live under
 [`notes/benchmarks/artifacts/`](../../../../notes/benchmarks/artifacts/):
 
-- `bench-results-codeql-partial.json` — synthesized partial CodeQL
-  results (50/160 entries: 25 SARIF + 25 DB-timeout; 110 marked
-  `not_run`).
+- `bench-results-codeql-partial.json` — partial CodeQL results
+  materialized from the on-disk artifact tree per the CodeQL outcome
+  classification rule above (50/160 entries: 25 SARIF + 25
+  DB-timeout; 110 marked `not_run`).
 - `bench-results-semgrep.json` — full Semgrep results.
 - `bench-results-rudra.json` — full Rudra results (154 errored, 6
   ran).
