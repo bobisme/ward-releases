@@ -37,8 +37,8 @@
     <section class="page-title">
       <div class="page-title-inner">
         <div class="page-title-eyebrow">Notes · 2026-05-13</div>
-        <h1 class="page-title-h">Ward is best-in-class on Rust unsafe-class vulnerability detection</h1>
-        <p class="page-title-sub">A locked, reproducible head-to-head benchmark against Semgrep, CodeQL, Rudra, and cargo-geiger.</p>
+        <h1 class="page-title-h">Ward leads the tested off-the-shelf scanners on Rust unsafe-class vulnerability detection</h1>
+        <p class="page-title-sub">A locked, internal pre-release head-to-head benchmark against Semgrep, CodeQL, Rudra, and cargo-geiger, with full public reproduction planned at Ward source release.</p>
         <p class="note-gh-link"><span class="mono">View source on GitHub:</span> <a href="https://github.com/bobisme/ward-releases/blob/main/benchmark/writeup.md"><code>benchmark/writeup.md</code></a></p>
       </div>
     </section>
@@ -62,8 +62,8 @@
 <h2 id="headline">Headline</h2>
 <p>On a locked, paired benchmark of 80 RUSTSEC advisories targeting Rust
 unsafe-class vulnerabilities (memory-safety, use-after-free, type
-confusion, soundness), <strong>Ward is the only scanner in scope that fires
-any in-class true positive at user-facing severity</strong>.</p>
+confusion, soundness), <strong>among the tested off-the-shelf scanner configurations,
+Ward is the only one that fires any in-class true positive at user-facing severity</strong>.</p>
 <ul>
 <li>Ward: TP=39, FP=0, TN=77, FN=41 over 80 paired pairs (160 entries).</li>
 <li>Ward precision: 1.000 (95% CI [1.000, 1.000]).</li>
@@ -86,6 +86,11 @@ available rulesets</strong> for each tool (Semgrep across 1,079 rules in
 <code>rust-security-and-quality.qls</code>; Rudra with the in-image stdout-parser
 bug patched). <strong>The ranking did not change.</strong> Details in the
 <em>Fairness audit</em> section below.</p>
+<aside class="note-callout" aria-label="Pre-release status">
+  <span class="note-callout-eyebrow">Pre-release status</span>
+  <p>This is an <strong>internal pre-release benchmark</strong>. The methodology spec, corpus manifest, per-entry provenance, Dockerfile, tool pins, and rule-id mapping are <strong>public now</strong> on this site and at <a href="https://github.com/bobisme/ward-releases/tree/main/benchmark"><code>github.com/bobisme/ward-releases</code></a>. The Ward source release that closes the loop on <em>fully external</em> third-party reproduction is <strong>pending</strong>; until then, reproduction requires the locked container image. Full reproducibility — including building <code>ward-eval</code> from source against the pinned tree — unlocks at Ward's source release.</p>
+  <p>The numbers below are not under embargo and will not be retracted; they reflect a real run of a real benchmark. The "locked, reproducible head-to-head" framing should be read as <em>locked spec, internal run, public reproduction planned</em> rather than <em>fully reproducible by any third party today</em>.</p>
+</aside>
 <p>This document is the public, reviewer-facing summary. The locked
 methodology spec, full results document, fairness-audit aux document,
 corpus manifest, and reproduction kit are all linked at the bottom.

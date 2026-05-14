@@ -8,6 +8,11 @@ audience: external reviewers, downstream corpus/runner/measurement bones
 
 # Unsafe-Rust Head-to-Head Benchmark — Methodology
 
+> **Pre-release status.** Locked spec, internal pre-release. Public
+> reproduction unlocks at Ward source release (planned). Corpus,
+> Dockerfile, tool pins, and rule-id mapping are published now for
+> external review at `github.com/bobisme/ward-releases`.
+
 ## Executive summary
 
 This document specifies a public, reproducible benchmark whose claim under
@@ -38,7 +43,8 @@ shapes Ward already detects.
 9. [Reproduction requirements](#reproduction-requirements)
 10. [Out of scope](#out-of-scope)
 11. [Threats to validity](#threats-to-validity)
-12. [Open questions](#open-questions)
+12. [Resolutions log](#resolutions-log)
+13. [Amendment log](#amendment-log)
 
 ## Motivation and claim under test
 
@@ -683,9 +689,10 @@ remains.
   persists.
 - A separate **held-out validation** corpus of 20+ entries collected
   *after* methodology lock that no Ward author touches until the
-  benchmark publishes. The held-out numbers are reported alongside the
-  headline; if they're materially worse than the main corpus, that's
-  the bias signal.
+  benchmark publishes. **Deferred to a follow-up pass** (see
+  [Resolutions log](#resolutions-log) item 4). The current headline
+  does *not* incorporate held-out numbers; they will be reported in
+  a future pass and treated as the canonical bias signal at that time.
 
 **Disclosure**: we explicitly document this in the writeup. "Ward was
 developed against a partially overlapping corpus" is a stronger
@@ -757,36 +764,69 @@ Ward's per-entry classification, (c) we publish the full inclusion-
 rule application log so a reviewer can audit which candidates were
 rejected and why.
 
-## Open questions
+## Resolutions log
 
-These are flagged for the parent goal (bn-1ti5m) to resolve before
-publication; methodology can proceed to corpus collection
-(downstream bone) without them, but the writeup must answer each.
+This document was locked before corpus collection. The items below
+were flagged as open at lock time and have since been resolved (or,
+where noted, explicitly deferred). Each entry records the decision
+and the dispositive evidence so reviewers can audit the state at
+headline time.
 
-1. **Final corpus size**: target N = 80 minimum, cap 200. Decision
-   depends on RUSTSEC unsafe-class advisory yield 2024–2026 (need to
-   audit how many novel entries are even available).
-2. **Ward version pin**: tag Ward at the benchmark publication date.
-   What we publish ships a release tag; we do not benchmark a moving
-   `main`.
-3. **Rudra inclusion**: best-effort (Rudra is dormant). If Rudra
-   cannot be made to build on ≥30% of the corpus with reasonable
-   toolchain pinning, drop it from the head-to-head and report only
-   "Rudra: dormant, did not run" in the comparison.
-4. **Held-out corpus size**: target 20 entries. Decision pending
-   feasibility of agent-driven novel collection.
-5. **Held-out collection process**: who collects the held-out set,
-   and how do they avoid leakage? Recommendation: a single agent run,
-   under a fresh memory snapshot, that has not seen the main corpus
-   or Ward's rule sources. The held-out manifest is sealed until
-   benchmark publication day.
-6. **Publication venue**: blog post + benchmark repo, vs. arXiv
-   submission. Blog + repo is faster and acceptable; arXiv adds
-   citability. Decision deferred to bn-1ti5m owner.
-7. **CI wiring**: do we re-run the benchmark on every Ward release?
-   Recommendation: yes, but only on quarterly releases, not every
-   PR — the benchmark takes 4–6 hours and corpus drift means we'd
-   want to publish quarterly anyway.
+1. **Final corpus size** — **Resolved 2026-05-12 (bn-2tdyf)**: 80
+   paired pairs / 160 entries. RUSTSEC unsafe-class advisory yield
+   supported the locked 80-pair size without dropping inclusion-rule
+   strictness.
+2. **Ward version pin** — **Resolved 2026-05-13**: Ward HEAD at
+   2026-05-13, materialized as image digest
+   `sha256:b7707fe926c96be99348030445cb355141f43afae2243d86a8f7862cc134308e`
+   pinned in `bench/tool-versions.toml`. The Ward source release that
+   this digest corresponds to is pending — until then, the image is
+   the canonical version pin.
+3. **Rudra inclusion** — **Resolved 2026-05-13**: included best-effort
+   per §4. Coverage on this corpus is 3.75% (6/160 runnable), which is
+   below the §10 30% threshold. Rudra is therefore reported as "did
+   not run" for the competitive head-to-head claim, with its coverage
+   and the 1 paired TP recovered in the max-breadth aux run preserved
+   for transparency.
+4. **Held-out validation corpus** — **Deferred**. The current pass
+   does **not** deliver a separate held-out corpus, and the headline
+   does **not** incorporate any held-out numbers. A follow-up bone
+   will collect a sealed held-out set (target 20 entries, agent-driven
+   novel collection under a fresh memory snapshot per the
+   recommendation below) and re-run the head-to-head against it.
+   Held-out numbers will be reported in a future pass.
+5. **Held-out collection process** — **Deferred** (paired with the
+   item above). Recommendation stands: a single agent run under a
+   fresh memory snapshot that has not seen the main corpus or Ward's
+   rule sources, with the held-out manifest sealed until publication.
+6. **Publication venue** — **Resolved 2026-05-13**: blog post +
+   benchmark repo (this site + `github.com/bobisme/ward-releases`).
+   arXiv submission is not committed and can follow if useful.
+7. **CI wiring** — **Deferred**: not committed yet; revisit
+   post-public-release once the Ward source tree is published and
+   the benchmark harness can be wired into a public CI pipeline.
+
+## Amendment log
+
+Changes to this methodology since lock are recorded here. Each entry
+records the date, the change, the rationale, and the downstream impact.
+
+- **2026-05-12 — Semgrep ruleset substitution (bn-tlxo4)**: locked
+  ruleset specified `p/rust-security` in an early draft of §3; the
+  actual locked-bench config uses `p/rust ∪ r/rust.lang.security`
+  (the community packs that exist under those names at lock time).
+  The substitution does not change which Rust rules are loaded —
+  `p/rust-security` was the older pack name and resolves to the same
+  shipped content as `p/rust` in Semgrep's current registry. Tracked
+  for transparency rather than impact.
+- **2026-05-13 — Rudra rule-id mapping fix (bn-bums5)**: extended
+  `bench/rule-id-mapping.toml`'s Rudra arm from the methodology-spec
+  dash-separated names (`RUDRA-SEND-SYNC`, etc) to the no-dash
+  CamelCase form Rudra actually emits (`SendSyncVariance`,
+  `UnsafeDataflow`, `PanicSafety`). This is a strict refinement of
+  §5's vuln-class → rule-id keyword mapping; identical numerical
+  impact on headline (Rudra still 0 paired TPs in the locked run; +1
+  in the max-breadth aux once the parser is also fixed).
 
 ## References
 

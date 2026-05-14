@@ -2062,3 +2062,52 @@ button {
     font-size: 20px;
   }
 }
+
+/* Pre-release / status callout used at the head of notes pages
+   to flag that some elements (public reproducibility, etc.) unlock
+   at a future Ward source release. */
+.note-callout {
+  border: 1px solid var(--accent-line);
+  background: var(--accent-soft);
+  padding: 14px 18px;
+  margin: 0 0 28px;
+  max-width: 880px;
+  border-left: 3px solid var(--accent);
+  border-radius: 2px;
+}
+.note-callout-eyebrow {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+.note-callout p {
+  margin: 0;
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--fg-1);
+}
+.note-callout p + p {
+  margin-top: 8px;
+}
+
+/* Small chip used on the main landing benchmark blurb to flag
+   that the headline result comes from a pre-release benchmark. */
+.pre-release-chip {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border: 1px solid var(--accent-line);
+  padding: 2px 8px;
+  border-radius: 99px;
+  margin-left: 6px;
+  vertical-align: middle;
+}

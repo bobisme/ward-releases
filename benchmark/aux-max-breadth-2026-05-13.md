@@ -10,6 +10,11 @@ image_digest: sha256:b7707fe926c96be99348030445cb355141f43afae2243d86a8f7862cc13
 
 # Unsafe-Rust Head-to-Head Benchmark — Auxiliary Max-Breadth Pass
 
+> **Pre-release status.** Locked spec, internal pre-release. Public
+> reproduction unlocks at Ward source release (planned). Corpus,
+> Dockerfile, tool pins, and rule-id mapping are published now for
+> external review at `github.com/bobisme/ward-releases`.
+
 ## Executive summary
 
 **Did broader competitor rulesets change the verdict? NO.** Ward retains

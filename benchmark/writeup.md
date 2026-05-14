@@ -10,14 +10,15 @@ aux_results: notes/benchmarks/unsafe-rust-bench-aux-max-breadth-2026-05-13.md
 corpus_tag: bench/unsafe-rust-v1
 ---
 
-# Ward is best-in-class on Rust unsafe-class vulnerability detection
+# Ward leads the tested off-the-shelf scanners on Rust unsafe-class vulnerability detection
 
 ## Headline
 
 On a locked, paired benchmark of 80 RUSTSEC advisories targeting Rust
 unsafe-class vulnerabilities (memory-safety, use-after-free, type
-confusion, soundness), **Ward is the only scanner in scope that fires
-any in-class true positive at user-facing severity**.
+confusion, soundness), **among the tested off-the-shelf scanner
+configurations, Ward is the only one that fires any in-class true
+positive at user-facing severity**.
 
 - Ward: TP=39, FP=0, TN=77, FN=41 over 80 paired pairs (160 entries).
 - Ward precision: 1.000 (95% CI [1.000, 1.000]).
@@ -41,6 +42,19 @@ available rulesets** for each tool (Semgrep across 1,079 rules in
 `rust-security-and-quality.qls`; Rudra with the in-image stdout-parser
 bug patched). **The ranking did not change.** Details in the
 *Fairness audit* section below.
+
+> **Pre-release status.** This is an internal pre-release benchmark.
+> The methodology spec, corpus manifest, per-entry provenance,
+> Dockerfile, tool pins, and rule-id mapping are public now at
+> `github.com/bobisme/ward-releases`. The Ward source release that
+> closes the loop on fully external third-party reproduction is
+> pending; until then, reproduction requires the locked container
+> image. Full reproducibility — including building `ward-eval` from
+> source against the pinned tree — unlocks at Ward's source release.
+> The numbers below reflect a real run of a real benchmark and are
+> not under embargo; the "locked, reproducible head-to-head" framing
+> should be read as *locked spec, internal run, public reproduction
+> planned* rather than *fully reproducible by any third party today*.
 
 This document is the public, reviewer-facing summary. The locked
 methodology spec, full results document, fairness-audit aux document,
