@@ -1,0 +1,317 @@
+# bench/rule-id-mapping.toml — extended vuln-class → rule-id keyword map
+# for the unsafe-Rust head-to-head benchmark (bn-38laq, parent bn-1ti5m).
+#
+# Methodology spec: notes/benchmarks/unsafe-rust-bench-methodology.md §5
+# "Vuln-class → rule-id mapping".
+#
+# Ward's `crates/ward-eval/src/repo_eval.rs::vuln_class_matches_rule` is
+# the fairness primitive: every tool's finding rule_ids are matched against
+# this table to decide whether the tool fired the right *class* of rule
+# for a given CVE's `vuln_class`. Without this normalization, comparing
+# Ward against CodeQL would unfairly require CodeQL to emit Ward-shaped
+# rule IDs (e.g. `RUST-UNSAFE-SLICE-FROM-RAW-PARTS-001`).
+#
+# The mapping is published alongside the corpus and applied identically
+# to every tool — methodology §5: "we use it for all tools, not just
+# Ward".
+#
+# Match semantics: a tool's `rule_id`, lowercased, is checked against
+# this table's `keywords` for the entry's `vuln_class`. A finding counts
+# toward the tool's TP/FP arithmetic iff
+#   rule_id.lowercase().contains(any keyword in vuln_class.keywords) OR
+#   rule_id.lowercase().contains(any keyword in vuln_class.shared_keywords).
+#
+# `shared_keywords` are present in every Rust-unsafe arm (they catch
+# generic emissions like Ward's `RUST-UNSAFE-*` namespace). Per-class
+# keywords are the discriminator.
+#
+# The runtime canonical mapping is `vuln_class_matches_rule` in
+# repo_eval.rs; this file MUST be kept in sync. The bench harness asserts
+# at startup that every keyword here also appears under
+# vuln_class_matches_rule for its arm.
+
+schema_version       = "0.1.0"
+methodology_section  = "§5"
+canonical_runtime    = "crates/ward-eval/src/repo_eval.rs::vuln_class_matches_rule"
+
+# Shared keywords applied to every Rust-unsafe arm. Catches generic
+# Ward UOE emissions and the cross-tool `rust-unsafe` token convention.
+shared_keywords = [
+  "rust-unsafe",
+  "rust_unsafe",
+  "taint-generic",
+]
+
+# ───────────────────────────────────────────────────────────────────────
+# memory_safety / use_after_free / type_confusion
+# ───────────────────────────────────────────────────────────────────────
+[vuln_classes.memory_safety]
+ward_rules = [
+  "RUST-UNSAFE-SLICE-FROM-RAW-PARTS-001",
+  "RUST-UNSAFE-LEN-CAP-CONFUSION-001",
+  "RUST-UNSAFE-INT-OVERFLOW-SAFETY-001",
+  "RUST-UNSAFE-DEBUG-GUARD-001",
+  "RUST-UNSAFE-TRANSMUTE-VALIDITY-001",
+  "RUST-UNSAFE-MAYBEUNINIT-001",
+  "RUST-UNSAFE-CSTR-NUL-001",
+]
+codeql_rules = [
+  "rust/uninitialized-memory",
+  "rust/unsafe-deref",
+  "rust/incorrect-pointer-arith",
+  "rust/access-of-invalid-pointer",
+  "rust/access-after-lifetime",
+  "rust/uncontrolled-allocation-size",
+  "rust/buffer-overflow",
+]
+semgrep_rules = [
+  "rust.lang.security.unsafe-block",
+  "rust.lang.correctness.transmute-pod-to-non-pod",
+  "rust.lang.security.slice-from-raw-parts",
+  "rust.lang.security.uninitialized-memory",
+]
+# Rudra: post bn-bums5 fairness audit, the methodology-spec names
+# (RUDRA-PANIC-SAFETY, RUDRA-UNINIT) do NOT match what real Rudra emits.
+# Observed in `notes/benchmarks/artifacts/bench-results-rudra.json`:
+#   - RUDRA-SENDSYNCVARIANCE:-PHANTOMSENDFORSEND-NAIVESENDFORSEND
+#   - RUDRA-UNSAFEDATAFLOW:-WRITEFLOW
+# Authoritative bug-pattern names from https://github.com/sslab-gatech/Rudra:
+#   - SendSyncVariance         (Send/Sync auto-trait unsoundness)
+#   - UnsafeDataflow           (ReadFlow / WriteFlow / TransmuteFlow)
+#   - PanicSafety              (panic between unsafe ops → drop-order bugs)
+#   - Lifetime                 (lifetime bypass / dangling refs)
+# Real-emit substrings (rudra-sendsyncvariance, rudra-unsafedataflow, etc.)
+# are added to `keywords` below so a finding's rule_id matches when
+# substring-checked against this arm.
+rudra_rules = [
+  "RUDRA-SENDSYNCVARIANCE",
+  "RUDRA-UNSAFEDATAFLOW",
+  "RUDRA-PANICSAFETY",
+  "RUDRA-LIFETIME",
+  # Methodology-spec names kept as aliases (in case some Rudra version
+  # emits them); harmless prefixes for substring match.
+  "RUDRA-PANIC-SAFETY",
+  "RUDRA-SEND-SYNC",
+  "RUDRA-UNINIT",
+]
+keywords = [
+  "len-cap", "len_cap",
+  "from-raw-parts", "slice-from-raw",
+  "set-len", "uninit",
+  "transmute", "layout-cast",
+  "debug-assert", "debug_assert",
+  "debug-guard", "debug_guard",
+  "ffi-boundary",
+  "int-overflow", "int_overflow", "overflow-safety",
+  "noverlap", "lifetime",
+  "panic-sequence", "mem-forget-dangling", "mem_forget_dangling",
+  "provenance", "provenance-loss",
+  "send-sync", "trait-law",
+  "manuallydrop",
+  "uninitialized-memory", "unsafe-deref",
+  "incorrect-pointer-arith", "access-of-invalid-pointer",
+  "access-after-lifetime", "uncontrolled-allocation-size",
+  "buffer-overflow",
+  "transmute-pod-to-non-pod",
+  # bn-bums5: real Rudra emit substrings (lowercased rule_id is checked
+  # via .contains() — anchor on these tokens, not the methodology-spec
+  # dash-separated names).
+  "rudra-sendsyncvariance", "sendsyncvariance",
+  "rudra-unsafedataflow", "unsafedataflow",
+  "rudra-panicsafety", "panicsafety",
+  "phantomsendforsend", "naivesendforsend",
+  "writeflow", "readflow", "transmuteflow",
+  # Pre-bn-bums5 methodology-spec keyword aliases kept for any tool/version
+  # that still emits the dash-separated forms.
+  "rudra-panic-safety", "rudra-uninit", "rudra-send-sync",
+]
+
+[vuln_classes.use_after_free]
+ward_rules = [
+  "RUST-UNSAFE-MANUALLYDROP-PUBLIC-ZOMBIE-001",
+  "RUST-UNSAFE-PANIC-SEQUENCE-001",
+]
+codeql_rules = [
+  "rust/access-after-lifetime",
+  "rust/use-after-free",
+  "rust/dangling-pointer",
+]
+semgrep_rules = [
+  "rust.lang.security.use-after-free",
+  "rust.lang.correctness.dangling-reference",
+]
+# bn-bums5: keep methodology-spec RUDRA-LIFETIME and add real-emit names.
+# Rudra's Lifetime category in practice emits as `RUDRA-LIFETIME` directly
+# (no subcategory suffix) so substring match works on the dash form, but
+# we also accept the no-dash form for future-proofing.
+rudra_rules = [
+  "RUDRA-LIFETIME",
+  "RUDRA-UNSAFEDATAFLOW",        # ReadFlow / WriteFlow can implicate UAF
+  "RUDRA-PANICSAFETY",           # panic-during-unsafe → drop-order → UAF
+  "RUDRA-PANIC-SAFETY",          # alias
+]
+keywords = [
+  "use-after-free", "uaf",
+  "dangling-pointer", "dangling-reference",
+  "access-after-lifetime",
+  "manuallydrop", "manualdrop",
+  "public-zombie", "zombie",
+  "panic-sequence", "drop-order", "drop_order",
+  "rudra-lifetime",
+  "lifetime",
+  # bn-bums5: Rudra real-emit substrings — UAF-implicating dataflow
+  # (WriteFlow/ReadFlow) and panic-safety drop-order cases.
+  "rudra-unsafedataflow", "unsafedataflow",
+  "rudra-panicsafety", "panicsafety",
+  "writeflow", "readflow",
+]
+
+[vuln_classes.type_confusion]
+ward_rules = [
+  "RUST-UNSAFE-TRANSMUTE-VALIDITY-001",
+  "RUST-UNSAFE-LAYOUT-CAST-001",
+]
+codeql_rules = [
+  "rust/incorrect-transmute",
+  "rust/incompatible-layout-cast",
+]
+semgrep_rules = [
+  "rust.lang.correctness.transmute-pod-to-non-pod",
+  "rust.lang.security.layout-cast-mismatch",
+]
+rudra_rules = []
+keywords = [
+  "transmute", "layout-cast", "layout_cast",
+  "incorrect-transmute", "incompatible-layout",
+  "validity",
+]
+
+# ───────────────────────────────────────────────────────────────────────
+# undefined_behavior
+# ───────────────────────────────────────────────────────────────────────
+[vuln_classes.undefined_behavior]
+ward_rules = [
+  "RUST-UNSAFE-DEBUG-GUARD-001",
+  "RUST-UNSAFE-INT-OVERFLOW-SAFETY-001",
+  "RUST-UNSAFE-MAYBEUNINIT-001",
+]
+codeql_rules = [
+  "rust/undefined-behavior",
+  "rust/uninitialized-memory",
+  "rust/incorrect-pointer-arith",
+]
+semgrep_rules = [
+  "rust.lang.correctness.undefined-behavior",
+  "rust.lang.security.uninitialized-memory",
+]
+# bn-bums5: real Rudra UB-implicating categories are UnsafeDataflow
+# (TransmuteFlow especially → UB) and PanicSafety.
+rudra_rules = [
+  "RUDRA-PANICSAFETY",
+  "RUDRA-UNSAFEDATAFLOW",
+  "RUDRA-PANIC-SAFETY",          # methodology-spec alias
+]
+keywords = [
+  "undefined-behavior", "ub",
+  "uninitialized-memory", "uninit",
+  "int-overflow", "overflow-safety",
+  "debug-guard", "debug_assert",
+  "rudra-panic-safety",
+  # bn-bums5: real Rudra emit substrings.
+  "rudra-panicsafety", "panicsafety",
+  "rudra-unsafedataflow", "unsafedataflow",
+  "transmuteflow",
+]
+
+# ───────────────────────────────────────────────────────────────────────
+# data_race
+# ───────────────────────────────────────────────────────────────────────
+[vuln_classes.data_race]
+ward_rules = [
+  "RUST-UNSAFE-IMPL-SEND-SYNC-001",
+  "RUST-UNSAFE-ATOMIC-UNALIGNED-001",
+  "RUST-UNSAFE-DEALLOC-RACE-001",
+]
+codeql_rules = [
+  "rust/data-race",
+  "rust/missing-sync-impl",
+  "rust/incorrect-sync-impl",
+]
+semgrep_rules = [
+  "rust.lang.security.send-sync-unsoundness",
+]
+# bn-bums5: real Rudra Send/Sync category emits as
+# RUDRA-SENDSYNCVARIANCE (no dash). Methodology-spec RUDRA-SEND-SYNC kept
+# as alias.
+rudra_rules = [
+  "RUDRA-SENDSYNCVARIANCE",
+  "RUDRA-SEND-SYNC",
+]
+keywords = [
+  "data-race", "data_race",
+  "send-sync", "send_sync",
+  "missing-sync", "incorrect-sync",
+  "atomic-unaligned", "atomic_unaligned",
+  "dealloc-race",
+  "rudra-send-sync",
+  # bn-bums5: real Rudra emit substrings.
+  "rudra-sendsyncvariance", "sendsyncvariance",
+  "phantomsendforsend", "naivesendforsend",
+]
+
+# ───────────────────────────────────────────────────────────────────────
+# soundness (catch-all for Rust unsafe soundness gaps)
+# ───────────────────────────────────────────────────────────────────────
+[vuln_classes.soundness]
+ward_rules = [
+  "RUST-UNSAFE-TRAIT-LAW-001",
+  "RUST-UNSAFE-IMPL-SEND-SYNC-001",
+  "RUST-UNSAFE-PANIC-SEQUENCE-001",
+  "RUST-UNSAFE-MANUALLYDROP-PUBLIC-ZOMBIE-001",
+]
+codeql_rules = [
+  "rust/unsound-public-api",
+  "rust/safe-encapsulation-violation",
+]
+semgrep_rules = [
+  "rust.lang.security.unsafe-block",
+  "rust.lang.correctness.unsound-public-api",
+]
+# bn-bums5: soundness is the catch-all arm — accept ALL 4 real Rudra
+# bug-pattern categories plus the methodology-spec aliases. The existing
+# `rudra-` keyword prefix below already substring-matches every Rudra
+# emit, so this list is documentation; keywords below are what actually
+# gates.
+rudra_rules = [
+  "RUDRA-SENDSYNCVARIANCE",
+  "RUDRA-UNSAFEDATAFLOW",
+  "RUDRA-PANICSAFETY",
+  "RUDRA-LIFETIME",
+  "RUDRA-PANIC-SAFETY",
+  "RUDRA-SEND-SYNC",
+]
+keywords = [
+  "soundness", "unsound",
+  "trait-law", "borrow-alias",
+  "trusted-len", "size-hint",
+  "iterator", "callback",
+  "send-sync", "panic-sequence",
+  "manuallydrop", "public-zombie",
+  "safe-encapsulation", "unsafe-block",
+  "rudra-",
+]
+
+# ───────────────────────────────────────────────────────────────────────
+# Per-tool severity gate (methodology §5 "What counts as a finding").
+# ───────────────────────────────────────────────────────────────────────
+[severity_gates]
+ward    = "Medium"   # ward review default profile threshold
+codeql  = "warning"  # excludes `note`
+semgrep = "WARNING"  # excludes INFO and INVENTORY
+rudra   = "all"      # Rudra has no severity tier
+cargo_geiger = "context_only"
+
+# Order: when a tool emits multiple findings on the same affected_file we
+# count the file as detected (file-level matching per methodology §5
+# "Line-level vs file-level matching"). Line-level persistence is only
+# used for the diff-aware FP→TN reclassification step, which is intra-tool.

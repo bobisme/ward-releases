@@ -1,0 +1,2722 @@
+[
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2021-0130",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/lib.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.003117647
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2021-0130-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/lib.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.503210042
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2021-0128",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/functions.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.503331511
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2021-0128-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/functions.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.253173237
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2021-0110",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "crates/runtime/src/externref.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 0.250344418
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2021-0110-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "crates/runtime/src/externref.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 0.250374379
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2021-0031",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/lib.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.003225827
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2021-0031-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/lib.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.50318789
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2023-0044",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "openssl/src/x509/verify.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.503329142
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2023-0044-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "openssl/src/x509/verify.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.003101067
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2023-0030",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/primitives/string.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.753209451
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2023-0030-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/primitives/string.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.003031798
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2022-0102",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "crates/runtime/src/instance.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 0.250373873
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2022-0102-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "crates/runtime/src/instance.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 0.250346762
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2021-0115",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "derive/src/lib.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.753264229
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2021-0115-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "derive/src/lib.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 12.003432397
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2021-0038",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "fltk/src/prelude.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.003128741
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2021-0038-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "fltk/src/prelude.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.753241403
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2021-0033",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/stack.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 0.250408367
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2021-0033-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/stack.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 0.250310208
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2021-0032",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/lib.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.753255136
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2021-0032-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/lib.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.003102324
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2021-0028",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/lib.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.503263378
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2021-0028-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/lib.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.003109965
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2025-0020",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/types/string.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.253130422
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2025-0020-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/types/string.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.003132371
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2025-0005",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/covdir.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.753424899
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2025-0005-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/covdir.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.753301282
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2023-0074",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/lib.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.503279416
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2023-0074-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/lib.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.753360434
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2022-0098",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "crates/runtime/src/instance.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 0.250319879
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2022-0098-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "crates/runtime/src/instance.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 0.250370658
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2022-0012",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/array/growable.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.003105701
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2022-0012-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/array/growable.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.503323392
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2022-0002",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/mapref/multiple.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 0.250325054
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2022-0002-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/mapref/multiple.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 0.250354413
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2021-0124",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "tokio/src/sync/oneshot.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.753369786
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2021-0124-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "tokio/src/sync/oneshot.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.75336334
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2021-0122",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "rust/flatbuffers/src/follow.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 0.250382389
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2021-0122-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "rust/flatbuffers/src/follow.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 0.250361069
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2021-0114",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/tls.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.253190783
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2021-0114-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/tls.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.75333507
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2021-0113",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "metrics-util/src/registry.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.003153675
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2021-0113-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "metrics-util/src/registry.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.253143863
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2021-0072",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "tokio/src/runtime/task/mod.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.003206873
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2021-0072-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "tokio/src/runtime/task/mod.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.253242822
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2021-0050",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/lib.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.003248542
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2021-0050-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/lib.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.753260186
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2021-0048",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/lib.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.753375048
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2021-0048-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/lib.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.253105932
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2021-0040",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/lib.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.503139335
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2021-0040-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/lib.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.503280875
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2021-0036",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/lib.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 22.006089406
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2021-0036-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/lib.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.753284679
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2021-0030",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/lib.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.253235499
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2021-0030-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/lib.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.253215057
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2021-0018",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/imp/vec.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.503353928
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2021-0018-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/imp/vec.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.503220096
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2021-0011",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/standard/buffer.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.503081332
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2021-0011-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/standard/buffer.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.253062275
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rocket-cve-2020-35882",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "core/lib/src/local/request.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.253150313999999
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rocket-cve-2020-35882-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "core/lib/src/local/request.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.753361551
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rocket-cve-2021-29935",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "core/http/src/uri/formatter.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.503324557
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rocket-cve-2021-29935-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "core/http/src/uri/formatter.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.00317202
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-mio-cve-2020-35922",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/sys/unix/tcp.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.25321949
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-mio-cve-2020-35922-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/sys/unix/tcp.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.003119632
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-smallvec-rustsec-2021-0003",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.503308313
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-smallvec-rustsec-2021-0003-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.253195002
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-beef-rustsec-2020-0122",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/generic.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.25325935
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-beef-rustsec-2020-0122-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/generic.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.503107363
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-dbn-rustsec-2024-0377",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.753311937
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-dbn-rustsec-2024-0377-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.753272306
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-slab-rustsec-2025-0047",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/lib.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.753374147
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-slab-rustsec-2025-0047-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/lib.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.253146371
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-self-cell-rustsec-2023-0070",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/lib.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.253213831
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-self-cell-rustsec-2023-0070-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/lib.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.253149851
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-id-map-rustsec-2025-0050",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.503100062
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-id-map-rustsec-2025-0050-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.753180807
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rand-core-rustsec-2019-0035",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "rand_core/src/block.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.753270368
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rand-core-rustsec-2019-0035-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "rand_core/src/block.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.753370557
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-ouch-rustsec-2024-0374",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 0.250282096
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-ouch-rustsec-2024-0374-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.753368076
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-ruint-rustsec-2025-0137",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.503273685
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-ruint-rustsec-2025-0137-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.00314867
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-gix-date-rustsec-2025-0140",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 12.003352083
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-gix-date-rustsec-2025-0140-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 12.00348008
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-safe-transmute-rustsec-2018-0013",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/lib.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 0.250355251
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-safe-transmute-rustsec-2018-0013-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/lib.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 0.250299211
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-borsh-rustsec-2023-0033",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "borsh/src/de/mod.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.753258844
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-borsh-rustsec-2023-0033-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "borsh/src/de/mod.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.253116349
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-openssl-ghsa-4fcv",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "openssl/src/md.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.503266781
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-openssl-ghsa-4fcv-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "openssl/src/md.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.50322553
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-thin-vec-rustsec-2026-0103",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/lib.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.753346873
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-thin-vec-rustsec-2026-0103-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/lib.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.003075202
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-pyo3-rustsec-2026-0013",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/pycell/impl_.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.003087714
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-pyo3-rustsec-2026-0013-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/pycell/impl_.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.003201688
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2025-0106",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/concurrent_pinned_vec.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.503372526
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2025-0106-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/concurrent_pinned_vec.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.25311262
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2025-0062",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/toodee.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.003190212
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2025-0062-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/toodee.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.753267194
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2024-0020",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/os/unix.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 0.25035781
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2024-0020-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/os/unix.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 0.25031594
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2025-0051",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/base.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.753429378
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2025-0051-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/base.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.003174904
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2024-0359",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "gix-attributes/src/lib.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 12.003381874
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2024-0359-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "gix-attributes/src/lib.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 12.003404946
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2025-0023",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "tokio/src/sync/broadcast.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.253112595
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2025-0023-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "tokio/src/sync/broadcast.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.503210507
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2024-0007",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "crates/support/src/atomic_str.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.253190169
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2024-0007-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "crates/support/src/atomic_str.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.003077428
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2024-0354",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/cipher/key.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.503285635
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2024-0354-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/cipher/key.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.253097804
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2024-0342",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/olm/account/mod.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.503280986
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2024-0342-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/olm/account/mod.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.503250241
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2026-0005",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/lib.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.753399213
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2026-0005-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/lib.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.753433658
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2025-0042",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "static-alloc/src/unsync/bump.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.753367463
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2025-0042-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "static-alloc/src/unsync/bump.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.503187605
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2026-0008",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/buf.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.75340087
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2026-0008-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/buf.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.753432143
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2024-0365",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "diesel/src/pg/connection/stmt/mod.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 0.250339066
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2024-0365-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "diesel/src/pg/connection/stmt/mod.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 0.250376656
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2026-0111",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "diesel/src/deserialize.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 0.250422656
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2026-0111-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "diesel/src/deserialize.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 0.250357774
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2024-0443",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/encoder.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.503296651
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2024-0443-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/encoder.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.753279017
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2024-0435",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "fyrox-core/src/lib.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.50326296
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2024-0435-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "fyrox-core/src/lib.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.753455344
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2025-0105",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "benches/benchmarks.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.253194961
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2025-0105-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "benches/benchmarks.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.003091135
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2024-0363",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "sqlx-postgres/src/arguments.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 0.25037508
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2024-0363-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "sqlx-postgres/src/arguments.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 0.25036768
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2024-0017",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "examples/collections.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.003064522
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2024-0017-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "examples/collections.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.253166072
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2025-0019",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "crates/array-init-cursor/src/lib.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.753372746
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2025-0019-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "crates/array-init-cursor/src/lib.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.753361047
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2024-0429",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "glib/src/variant_iter.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.75328502
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2024-0429-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "glib/src/variant_iter.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.753368621
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2024-0431",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "apps/transientdisk/src/flash_drive.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.003034029
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2024-0431-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "apps/transientdisk/src/flash_drive.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.253199277
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2025-0033",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/lib.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.753311361
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2025-0033-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/lib.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.753337719
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2025-0045",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/lib.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.002980406
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2025-0045-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/lib.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.753192981
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2025-0049",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/array_iter.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.503204977
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2025-0049-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/array_iter.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.753260613
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2026-0122",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "rkyv/src/util/inline_vec.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.753255421
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2026-0122-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "rkyv/src/util/inline_vec.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.503240926
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2025-0027",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/metadata.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.503278271
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2025-0027-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/metadata.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.5032052
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2026-0002",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/lib.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.253228842
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2026-0002-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/lib.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.503306218
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2026-0115",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/binary_descriptors/brief.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.003157615
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2026-0115-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/binary_descriptors/brief.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.753322261
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2026-0116",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/kernel.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.753352868
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2026-0116-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "src/kernel.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.253173658
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2026-0117",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "examples/projection.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 10.753090506
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2026-0117-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "examples/projection.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.753389933
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2026-0041",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "fuzz/fuzz_targets/fuzz_decomp_corrupt_block.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 11.003183288
+  },
+  {
+    "tool": "cargo-geiger",
+    "harness_id": "rs-bench-rustsec-2026-0041-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "cargo-geiger/unsafe-density",
+        "file": "fuzz/fuzz_targets/fuzz_decomp_corrupt_block.rs",
+        "start_line": null,
+        "message": "unsafe_density_pct=0.000",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 10.753170424
+  }
+]

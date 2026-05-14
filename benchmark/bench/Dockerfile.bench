@@ -1,0 +1,280 @@
+# Dockerfile.bench — single image with pinned tool versions for the
+# unsafe-Rust head-to-head benchmark (bn-38laq, parent bn-1ti5m).
+#
+# Methodology spec: notes/benchmarks/unsafe-rust-bench-methodology.md
+#
+# This image bundles every in-scope scanner at a locked version + ruleset
+# SHA so the harness can invoke them via `podman run --network=none`
+# (or `docker run --network=none`), satisfying the §5 "Fairness controls"
+# network-isolation invariant. The Dockerfile is OCI-standard and either
+# runtime consumes it unchanged.
+#
+# Tools (must match bench/tool-versions.toml):
+#   * Ward             — built from the current workspace (release profile)
+#   * CodeQL CLI       — pinned tag (default 2.18.4) + rust-queries SHA
+#   * Semgrep          — pinned pip version (default 1.95.0)
+#   * Rudra            — best-effort; pinned rust-toolchain
+#   * cargo-geiger     — pinned cargo install version
+#
+# Build (podman, preferred — rootless, no daemon):
+#   podman build -t ward-bench:locked -f bench/Dockerfile.bench .
+#
+# Build (docker alternative):
+#   docker build -t ward-bench:locked -f bench/Dockerfile.bench .
+#
+# The image pre-warms each tool's extractor / ruleset cache so first-scan
+# vs nth-scan latency does not skew per-tool numbers (methodology §5
+# "Cache state").
+
+ARG UBUNTU_VERSION=24.04
+# CodeQL CLI 2.18.4 (bare CLI) ships NO Rust extractor — Rust was added
+# to the *bundle* release line only in 2.20+. The bench harness needs
+# `--language=rust` to work, so we install the codeql-bundle (which
+# carries the extractor + pre-installed qlpacks including rust-queries).
+# bn-1f5ig switched from bare CLI v2.18.4 to bundle v2.25.4 after the
+# bn-36plr container smoke surfaced `no CodeQL extractor named 'rust' installed`.
+ARG CODEQL_VERSION=2.25.4
+# codeql/rust-queries pack version. The codeql-bundle preinstalls this
+# pack, so we don't need a separate `pack download` step. Pin verified
+# by listing the bundle contents:
+# `codeql/qlpacks/codeql/rust-queries/0.1.34/codeql-suites/rust-security-extended.qls`.
+# Bump in lockstep with CODEQL_VERSION and re-run the determinism smoke.
+ARG CODEQL_RUST_QUERIES_PACK=0.1.34
+ARG SEMGREP_VERSION=1.95.0
+ARG RUDRA_REV=master
+ARG RUDRA_TOOLCHAIN=nightly-2021-10-21
+ARG CARGO_GEIGER_VERSION=0.12.0
+ARG RUST_STABLE=1.88.0
+
+# ───────────────────────────────────────────────────────────────────────
+# Stage 0 — base image with common deps (apt cache, git, curl, jq).
+# ───────────────────────────────────────────────────────────────────────
+FROM ubuntu:${UBUNTU_VERSION} AS base
+
+ENV DEBIAN_FRONTEND=noninteractive
+ENV LANG=C.UTF-8
+ENV LC_ALL=C.UTF-8
+
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends \
+        bash \
+        build-essential \
+        ca-certificates \
+        cmake \
+        curl \
+        git \
+        jq \
+        libssl-dev \
+        pkg-config \
+        python3 \
+        python3-pip \
+        python3-venv \
+        unzip \
+        xz-utils \
+ && rm -rf /var/lib/apt/lists/*
+
+# ───────────────────────────────────────────────────────────────────────
+# Stage 1 — Ward builder (offline-built; the bench harness mounts the
+# pre-built ward + ward-stub-analyzer binaries into the image at runtime
+# unless the WARD_PREBUILT path is empty, in which case this stage rebuilds
+# from a source bind-mount).
+# ───────────────────────────────────────────────────────────────────────
+FROM base AS ward-builder
+
+ARG RUST_STABLE
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs \
+      | bash -s -- -y --default-toolchain ${RUST_STABLE} \
+                      --profile minimal --no-modify-path
+ENV PATH=/root/.cargo/bin:${PATH}
+
+WORKDIR /ward-src
+# Copy the workspace source from the build context. .containerignore at
+# the workspace root excludes target/, .git, notes/, etc. so context
+# stays compact. The image is one-shot for the benchmark — rebuild
+# when Ward source changes, then re-pin the image digest in
+# bench/tool-versions.toml.
+COPY . /ward-src
+RUN cargo build --release -p ward-cli -p ward-stub-analyzer \
+ && cp /ward-src/target/release/ward /tmp/ward \
+ && cp /ward-src/target/release/ward-stub-analyzer /tmp/ward-stub-analyzer
+
+# ───────────────────────────────────────────────────────────────────────
+# Stage 2 — final image with pinned scanners.
+# ───────────────────────────────────────────────────────────────────────
+FROM base AS bench
+
+ARG CODEQL_VERSION
+ARG CODEQL_RUST_QUERIES_PACK
+ARG SEMGREP_VERSION
+ARG RUDRA_REV
+ARG RUDRA_TOOLCHAIN
+ARG CARGO_GEIGER_VERSION
+ARG RUST_STABLE
+
+ENV PATH=/opt/codeql:/opt/cargo/bin:/opt/rustup/bin:${PATH}
+ENV RUSTUP_HOME=/opt/rustup
+ENV CARGO_HOME=/opt/cargo
+
+# Rust toolchain — stable for Ward consumption + cargo-geiger; rudra
+# pinned nightly is installed separately.
+RUN mkdir -p ${RUSTUP_HOME} ${CARGO_HOME} \
+ && curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs \
+      | sh -s -- -y --default-toolchain ${RUST_STABLE} \
+                    --profile minimal --no-modify-path \
+ && rustup component add rustfmt clippy --toolchain ${RUST_STABLE} \
+ && rustc --version
+
+# ── CodeQL bundle (extractor + preinstalled qlpacks) ───────────────────
+#
+# Methodology §4 specifies `rust-security-extended.qls`, which lives in
+# the `codeql/rust-queries` pack. We install the **codeql-bundle**
+# release (not the bare codeql-cli-binaries), because:
+#
+#   * The bare CLI archive ships only the toolchain, no language
+#     extractors. `codeql database create --language=rust` fails with
+#     "no CodeQL extractor named 'rust' installed".
+#   * `codeql pack download codeql/rust-queries` cannot install the
+#     extractor — only the queries — so even pre-fetching the pack at
+#     build time leaves the runtime container unable to ingest Rust
+#     source.
+#
+# The bundle archive bundles:
+#   * The CLI toolchain
+#   * Every language extractor (rust, cpp, java, javascript, …)
+#   * Every official qlpack at a matched version (codeql/rust-queries
+#     0.1.34 in v2.25.4, which carries `rust-security-extended.qls`)
+#
+# Tarball is ~770 MiB; final image carries the extracted contents
+# (~1.5 GiB). Acceptable for an offline benchmark image.
+RUN curl -sSL \
+      "https://github.com/github/codeql-action/releases/download/codeql-bundle-v${CODEQL_VERSION}/codeql-bundle-linux64.tar.gz" \
+      -o /tmp/codeql-bundle.tar.gz \
+ && tar -xzf /tmp/codeql-bundle.tar.gz -C /opt \
+ && rm /tmp/codeql-bundle.tar.gz \
+ && /opt/codeql/codeql --version \
+ && /opt/codeql/codeql resolve languages | grep -q '^rust ' \
+ && /opt/codeql/codeql resolve qlpacks 2>/dev/null | grep -q "codeql/rust-queries"
+
+# ── Semgrep ────────────────────────────────────────────────────────────
+#
+# Newer Semgrep ships as an OCaml binary (`osemgrep`) that internally
+# `execvp`s the Python wrapper `pysemgrep`. Both scripts live in the
+# venv's bin dir, but execvp resolves via PATH (not absolute paths) — so
+# `semgrep --version` only works once PATH includes /opt/semgrep-venv/bin.
+# Declare ENV PATH FIRST so the version check inside the install RUN
+# inherits it.
+ENV PATH=/opt/semgrep-venv/bin:${PATH}
+# Pin setuptools<70 BEFORE semgrep. Newer setuptools (>=70 deprecated,
+# >=75 removed) no longer ships `pkg_resources`, which semgrep 1.95.0's
+# transitive deps (opentelemetry-instrumentation-requests) still import
+# at module load time. Without the pin pip pulls in setuptools 82+ and
+# semgrep crashes at first run with ModuleNotFoundError: pkg_resources.
+RUN python3 -m venv /opt/semgrep-venv \
+ && /opt/semgrep-venv/bin/pip install --no-cache-dir \
+      "setuptools<70" \
+ && /opt/semgrep-venv/bin/pip install --no-cache-dir \
+      "semgrep==${SEMGREP_VERSION}" \
+ && /opt/semgrep-venv/bin/semgrep --version
+
+# Pre-download the Semgrep Rust rulesets as local YAML files so the
+# runtime container can run --network=none.
+#
+# Discovery from bn-1f5ig container smoke (2026-05-12): semgrep's
+# `--config p/rust` and `--config r/rust.lang.security` always hit
+# semgrep.dev at scan time (even after a prior on-host warm-up run);
+# there is no on-disk registry cache that survives across invocations.
+# The previous `--output=/dev/null` warmup did nothing — runtime scans
+# under --network=none failed with NameResolutionError on semgrep.dev,
+# making semgrep exit 2 with "no rules to run".
+#
+# Fix: fetch the rulesets at build time via the public registry's YAML
+# endpoint (https://semgrep.dev/c/<pack>) and stash them under
+# /opt/semgrep-rules/. The runner consumes those local paths, which
+# semgrep accepts as `--config <local.yml>` without any network access.
+# bn-1ti5m methodology delta: same ruleset content, different
+# transport.
+RUN mkdir -p /opt/semgrep-rules \
+ && curl -sSL "https://semgrep.dev/c/p/rust" \
+        -o /opt/semgrep-rules/p-rust.yml \
+ && curl -sSL "https://semgrep.dev/c/r/rust.lang.security" \
+        -o /opt/semgrep-rules/r-rust-security.yml \
+ && /opt/semgrep-venv/bin/semgrep \
+        --config=/opt/semgrep-rules/p-rust.yml \
+        --config=/opt/semgrep-rules/r-rust-security.yml \
+        --metrics=off \
+        --json \
+        --output=/dev/null \
+        /tmp \
+        2>/dev/null \
+ && test -s /opt/semgrep-rules/p-rust.yml \
+ && test -s /opt/semgrep-rules/r-rust-security.yml \
+ && head -1 /opt/semgrep-rules/p-rust.yml | grep -q "^rules:" \
+ && head -1 /opt/semgrep-rules/r-rust-security.yml | grep -q "^rules:"
+
+# ── cargo-geiger ───────────────────────────────────────────────────────
+RUN cargo install --locked \
+      cargo-geiger \
+      --version "${CARGO_GEIGER_VERSION}" \
+ && cargo geiger --version
+
+# ── Rudra (best-effort) ────────────────────────────────────────────────
+# Rudra is dormant (last touched ~2024) and requires a specific nightly
+# toolchain. If the build fails the image still ships — rudra.rs runner
+# reports "rudra_unavailable" per-entry instead of failing the harness.
+RUN rustup toolchain install "${RUDRA_TOOLCHAIN}" \
+        --profile minimal \
+        --component rustc-dev,llvm-tools-preview,rust-src \
+    || echo "WARN: rudra toolchain install failed; rudra runner will skip"
+
+# Build BOTH `rudra` and `cargo-rudra` binaries — Rudra's normal usage
+# is `cargo rudra` (cargo subcommand discovery), which requires
+# `cargo-rudra` on PATH. The previous `cargo build --bin rudra` only
+# built the standalone binary, leaving `cargo +nightly-... rudra` to
+# fail with "no such subcommand".
+#
+# bn-1f5ig fix: use `cargo install --path` which copies BOTH binaries
+# into /opt/cargo/bin/. Wrap the whole sequence in a `|| true` fallback
+# so toolchain-build failures still let the image ship; the runner
+# detects missing binaries and reports `rudra_unavailable`.
+RUN git clone https://github.com/sslab-gatech/Rudra.git /opt/rudra \
+ && (cd /opt/rudra && git checkout "${RUDRA_REV}") \
+ && (cd /opt/rudra \
+     && RUSTUP_TOOLCHAIN="${RUDRA_TOOLCHAIN}" \
+        cargo install --locked --path . --root /opt/cargo --force \
+     || echo "WARN: rudra build/install failed; runner will report rudra_unavailable") \
+ && rm -rf /opt/rudra/target 2>/dev/null || true
+
+# Verify Rudra binaries are on PATH (best-effort — failure is logged
+# but does not fail the build).
+RUN (which rudra cargo-rudra && echo "rudra: OK") \
+ || echo "WARN: rudra binaries missing from PATH; runner will report rudra_unavailable"
+
+# Ward binaries live at /opt/ward/{ward,ward-stub-analyzer} inside the
+# image, built by Stage 1 ward-builder against the image's glibc so they
+# work under --network=none without host-glibc compatibility issues. The
+# bench is one-shot per publication — rebuild the image when Ward source
+# changes and re-pin the digest in bench/tool-versions.toml.
+RUN mkdir -p /opt/ward
+COPY --from=ward-builder /tmp/ward /opt/ward/ward
+COPY --from=ward-builder /tmp/ward-stub-analyzer /opt/ward/ward-stub-analyzer
+ENV PATH=/opt/ward:${PATH}
+
+# Pre-create scratch + cache mounts so --network=none containers don't
+# need to mkdir at runtime.
+RUN mkdir -p /scratch /tool-cache /repo /bench-out \
+ && chmod 1777 /scratch /tool-cache /bench-out
+
+# Final sanity stamps. The harness reads /BENCH_VERSIONS.json at startup
+# and compares to bench/tool-versions.toml. Mismatch = startup failure.
+RUN echo "{\
+\"codeql\": \"${CODEQL_VERSION}\",\
+\"codeql_rust_queries_pack\": \"${CODEQL_RUST_QUERIES_PACK}\",\
+\"semgrep\": \"${SEMGREP_VERSION}\",\
+\"rudra_rev\": \"${RUDRA_REV}\",\
+\"rudra_toolchain\": \"${RUDRA_TOOLCHAIN}\",\
+\"cargo_geiger\": \"${CARGO_GEIGER_VERSION}\",\
+\"rust_stable\": \"${RUST_STABLE}\"\
+}" > /BENCH_VERSIONS.json
+
+WORKDIR /repo
+CMD ["bash"]

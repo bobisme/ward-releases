@@ -1,0 +1,293 @@
+{
+  "per_tool": [
+    {
+      "tool": "ward",
+      "tp": 30,
+      "fp": 0,
+      "tn": 66,
+      "fn_": 38,
+      "noise": 2,
+      "errored": 22,
+      "precision": 1.0,
+      "recall": 0.4411764705882353,
+      "f1": 0.6122448979591837,
+      "mcc": 0.5291288837000026,
+      "precision_ci_lo": 1.0,
+      "precision_ci_hi": 1.0,
+      "recall_ci_lo": 0.3382352941176471,
+      "recall_ci_hi": 0.5588235294117647,
+      "f1_ci_lo": 0.5054945054945055,
+      "f1_ci_hi": 0.7169811320754718,
+      "mcc_ci_lo": 0.4441890606134143,
+      "mcc_ci_hi": 0.6183469424008423
+    }
+  ],
+  "mcnemar": [],
+  "per_vuln_class": [
+    {
+      "tool": "ward",
+      "subgroup_kind": "vuln_class",
+      "subgroup": "memory_safety",
+      "tp": 24,
+      "fp": 0,
+      "tn": 48,
+      "fn_": 25,
+      "n": 97,
+      "precision": 1.0,
+      "recall": 0.4897959183673469
+    },
+    {
+      "tool": "ward",
+      "subgroup_kind": "vuln_class",
+      "subgroup": "soundness",
+      "tp": 2,
+      "fp": 0,
+      "tn": 8,
+      "fn_": 6,
+      "n": 16,
+      "precision": 1.0,
+      "recall": 0.25
+    },
+    {
+      "tool": "ward",
+      "subgroup_kind": "vuln_class",
+      "subgroup": "type_confusion",
+      "tp": 1,
+      "fp": 0,
+      "tn": 3,
+      "fn_": 3,
+      "n": 7,
+      "precision": 1.0,
+      "recall": 0.25
+    },
+    {
+      "tool": "ward",
+      "subgroup_kind": "vuln_class",
+      "subgroup": "use_after_free",
+      "tp": 3,
+      "fp": 0,
+      "tn": 7,
+      "fn_": 4,
+      "n": 14,
+      "precision": 1.0,
+      "recall": 0.42857142857142855
+    }
+  ],
+  "per_bug_shape": [
+    {
+      "tool": "ward",
+      "subgroup_kind": "bug_shape",
+      "subgroup": "debug-guard-only",
+      "tp": 1,
+      "fp": 0,
+      "tn": 1,
+      "fn_": 0,
+      "n": 2,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    {
+      "tool": "ward",
+      "subgroup_kind": "bug_shape",
+      "subgroup": "ffi-boundary-contract",
+      "tp": 3,
+      "fp": 0,
+      "tn": 4,
+      "fn_": 1,
+      "n": 8,
+      "precision": 1.0,
+      "recall": 0.75
+    },
+    {
+      "tool": "ward",
+      "subgroup_kind": "bug_shape",
+      "subgroup": "impl-send-sync",
+      "tp": 1,
+      "fp": 0,
+      "tn": 6,
+      "fn_": 5,
+      "n": 12,
+      "precision": 1.0,
+      "recall": 0.16666666666666666
+    },
+    {
+      "tool": "ward",
+      "subgroup_kind": "bug_shape",
+      "subgroup": "int-overflow-safety",
+      "tp": 2,
+      "fp": 0,
+      "tn": 4,
+      "fn_": 2,
+      "n": 8,
+      "precision": 1.0,
+      "recall": 0.5
+    },
+    {
+      "tool": "ward",
+      "subgroup_kind": "bug_shape",
+      "subgroup": "layout-cast",
+      "tp": 1,
+      "fp": 0,
+      "tn": 1,
+      "fn_": 0,
+      "n": 2,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    {
+      "tool": "ward",
+      "subgroup_kind": "bug_shape",
+      "subgroup": "len-cap-confusion",
+      "tp": 1,
+      "fp": 0,
+      "tn": 2,
+      "fn_": 1,
+      "n": 4,
+      "precision": 1.0,
+      "recall": 0.5
+    },
+    {
+      "tool": "ward",
+      "subgroup_kind": "bug_shape",
+      "subgroup": "panic-sequence",
+      "tp": 7,
+      "fp": 0,
+      "tn": 12,
+      "fn_": 5,
+      "n": 24,
+      "precision": 1.0,
+      "recall": 0.5833333333333334
+    },
+    {
+      "tool": "ward",
+      "subgroup_kind": "bug_shape",
+      "subgroup": "safe-encap",
+      "tp": 5,
+      "fp": 0,
+      "tn": 18,
+      "fn_": 13,
+      "n": 36,
+      "precision": 1.0,
+      "recall": 0.2777777777777778
+    },
+    {
+      "tool": "ward",
+      "subgroup_kind": "bug_shape",
+      "subgroup": "set-len-init",
+      "tp": 3,
+      "fp": 0,
+      "tn": 9,
+      "fn_": 6,
+      "n": 18,
+      "precision": 1.0,
+      "recall": 0.3333333333333333
+    },
+    {
+      "tool": "ward",
+      "subgroup_kind": "bug_shape",
+      "subgroup": "slice-from-raw-parts-init-violation",
+      "tp": 2,
+      "fp": 0,
+      "tn": 1,
+      "fn_": 0,
+      "n": 3,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    {
+      "tool": "ward",
+      "subgroup_kind": "bug_shape",
+      "subgroup": "transmute-chained-cast",
+      "tp": 1,
+      "fp": 0,
+      "tn": 1,
+      "fn_": 0,
+      "n": 2,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    {
+      "tool": "ward",
+      "subgroup_kind": "bug_shape",
+      "subgroup": "transmute-size-mismatch",
+      "tp": 0,
+      "fp": 0,
+      "tn": 0,
+      "fn_": 1,
+      "n": 1,
+      "precision": 0.0,
+      "recall": 0.0
+    },
+    {
+      "tool": "ward",
+      "subgroup_kind": "bug_shape",
+      "subgroup": "transmute-utf8-range-invariant",
+      "tp": 1,
+      "fp": 0,
+      "tn": 3,
+      "fn_": 2,
+      "n": 6,
+      "precision": 1.0,
+      "recall": 0.3333333333333333
+    },
+    {
+      "tool": "ward",
+      "subgroup_kind": "bug_shape",
+      "subgroup": "unclassified",
+      "tp": 1,
+      "fp": 0,
+      "tn": 3,
+      "fn_": 2,
+      "n": 6,
+      "precision": 1.0,
+      "recall": 0.3333333333333333
+    },
+    {
+      "tool": "ward",
+      "subgroup_kind": "bug_shape",
+      "subgroup": "zst-ptr-arith",
+      "tp": 1,
+      "fp": 0,
+      "tn": 1,
+      "fn_": 0,
+      "n": 2,
+      "precision": 1.0,
+      "recall": 1.0
+    }
+  ],
+  "p_at_k": [
+    {
+      "tool": "ward",
+      "p_at_5": 0.4,
+      "p_at_10": 0.2,
+      "p_at_20": 0.1,
+      "p_at_40": 0.05,
+      "n_findings": 13657
+    }
+  ],
+  "latency": [
+    {
+      "tool": "ward",
+      "n": 136,
+      "p50": 0.0,
+      "p95": 0.0,
+      "p99": 0.002000093460083008,
+      "mean": 0.000051470363841337315,
+      "max": 0.003000020980834961,
+      "timeouts": 0,
+      "ooms": 0,
+      "errored": 22
+    }
+  ],
+  "witness_audit": {
+    "ward_tps_phase5": 9,
+    "witness_present": 0,
+    "positive": 0,
+    "negative": 0,
+    "skipped": 9,
+    "positive_rate": 0.0
+  },
+  "paired_pair_count": 68,
+  "strata_count": 4,
+  "bootstrap_reps": 1000
+}

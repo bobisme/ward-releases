@@ -1,0 +1,191 @@
+# bench/tool-versions.toml — locked tool versions for the unsafe-Rust
+# head-to-head benchmark (bn-38laq, parent bn-1ti5m).
+#
+# This file is the authoritative source of tool version pins. The bench
+# harness (`ward-eval bench-run`) verifies these at startup against the
+# image manifest at /BENCH_VERSIONS.json. Mismatch = startup failure.
+#
+# Methodology §4 "Tool selection and version pinning" requires:
+#   * Each tool pinned by SHA or release tag
+#   * Each ruleset pinned by SHA
+#   * The pin file checksummed and shipped alongside the corpus
+#
+# Update protocol: bump a version → rebuild Dockerfile.bench → re-run
+# determinism smoke (bench/smoke-determinism.sh) → if SARIF byte-identical
+# across 3 runs, commit the new pin. Otherwise file a determinism bug and
+# record best-of-three in the published results.
+schema_version = "0.1.0"
+locked_at      = "2026-05-11"
+methodology    = "notes/benchmarks/unsafe-rust-bench-methodology.md"
+methodology_locked_at = "2026-05-07"
+parent_bone    = "bn-1ti5m"
+
+# Image digest of the built Dockerfile.bench, populated by the harness
+# after `podman build` (or `docker build`) succeeds. The harness rejects
+# scans whose image digest does not match this field once it is populated.
+image_digest   = "sha256:b7707fe926c96be99348030445cb355141f43afae2243d86a8f7862cc134308e"
+
+# ───────────────────────────────────────────────────────────────────────
+# Ward (subject of the head-to-head claim)
+# ───────────────────────────────────────────────────────────────────────
+[tools.ward]
+display_name   = "Ward"
+binary         = "ward"
+# Ward is built from the current workspace; the harness fingerprints the
+# release binary and the rule catalog SHAs at startup. The
+# `expected_workspace_sha` is set when a bench-tagged release is cut.
+expected_workspace_sha = ""    # release-tag commit SHA; "" => use HEAD
+rule_set       = "RUST-UNSAFE-*"
+profile        = "local-interactive"
+in_scope       = true
+notes          = """
+Ward emits SARIF via `ward review --format sarif` (bn-24faq, commit
+bd71d7b942d5). The bench runner consumes that SARIF directly so it
+does not depend on the JSON-result shape, which is more fluid.
+
+Phase 5 Miri witness gate is intentionally disabled in the head-to-head
+runs — its outputs feed the Ward-only axis sidecar, not the head-to-head
+MCC (methodology §6).
+"""
+
+# ───────────────────────────────────────────────────────────────────────
+# CodeQL CLI
+# ───────────────────────────────────────────────────────────────────────
+[tools.codeql]
+display_name   = "CodeQL CLI"
+binary         = "codeql"
+version        = "2.25.4"
+release_url    = "https://github.com/github/codeql-action/releases/tag/codeql-bundle-v2.25.4"
+# Pinned codeql/rust-queries pack version. The codeql-bundle release
+# preinstalls this pack at a matched version (we do NOT do a separate
+# `pack download` step). Bump in lockstep with `version` above and
+# re-run the determinism smoke. Bare codeql-cli-binaries does NOT ship
+# the Rust extractor — only the bundle does — which is why bn-1f5ig
+# switched the image to the bundle URL after the bn-36plr smoke hit
+# `no CodeQL extractor named 'rust' installed` on v2.18.4 bare CLI.
+rust_queries_pack  = "0.1.34"
+suite          = "codeql/rust-queries:codeql-suites/rust-security-extended.qls"
+in_scope       = true
+notes          = """
+Methodology §4 mandates the *security-extended* suite. The narrower
+`rust-security-and-quality` and `rust-security` suites are out of scope —
+extended is the strict superset and the suite GHAS uses for elevated
+recall.
+"""
+
+# ───────────────────────────────────────────────────────────────────────
+# Semgrep
+# ───────────────────────────────────────────────────────────────────────
+[tools.semgrep]
+display_name   = "Semgrep"
+binary         = "semgrep"
+version        = "1.95.0"
+# Methodology §4: `p/rust-security` + `r/rust-security` community pack.
+# Snapshot the rule set into a tarball under bench/cache/semgrep-rules at
+# image build time so the runtime container is offline.
+configs        = ["p/rust-security", "r/rust"]
+ruleset_snapshot = "bench/cache/semgrep-rules.tar.gz"
+ruleset_snapshot_sha256 = ""  # populated at build time
+in_scope       = true
+notes          = """
+Semgrep's `r/rust` community pack is a strict superset of `r/rust-security`
+when both are installed; the harness consumes the union and tags each
+finding with its source rule pack for per-pack subgroup analysis.
+"""
+
+# ───────────────────────────────────────────────────────────────────────
+# Rudra (best-effort)
+# ───────────────────────────────────────────────────────────────────────
+[tools.rudra]
+display_name   = "Rudra"
+binary         = "rudra"
+git            = "https://github.com/sslab-gatech/Rudra.git"
+rev            = "master"
+rust_toolchain = "nightly-2021-10-21"
+in_scope       = true
+best_effort    = true
+notes          = """
+Rudra is dormant (last commit 2024). Methodology §3 explicitly permits
+"best-effort" inclusion: if Rudra fails to build for an entry, the harness
+records `tool=rudra, error="rudra_unavailable"` for that entry and the
+entry is excluded from Rudra's per-tool aggregate (but remains in the
+head-to-head corpus for every other tool).
+
+If <30% of the corpus is Rudra-runnable, methodology §10 says drop Rudra
+from the head-to-head table and report only "Rudra: dormant, partial
+coverage" in the writeup.
+"""
+
+# ───────────────────────────────────────────────────────────────────────
+# cargo-geiger (context column only — NOT a competitor row)
+# ───────────────────────────────────────────────────────────────────────
+[tools.cargo_geiger]
+display_name   = "cargo-geiger"
+binary         = "cargo-geiger"
+version        = "0.12.0"
+in_scope       = true
+context_only   = true
+notes          = """
+cargo-geiger measures unsafe-block density per crate. The bench harness
+reports it as a context column ("is this repo unsafe-dense?") so reviewers
+can sanity-check whether high-detection-rate tools are simply firing on
+every unsafe block. Methodology §4: NOT scored in the head-to-head MCC.
+"""
+
+# ───────────────────────────────────────────────────────────────────────
+# Out-of-scope tools (kept here so future PRs that try to add them are
+# explicit about which methodology section they would have to amend).
+# ───────────────────────────────────────────────────────────────────────
+[tools.out_of_scope]
+ids = [
+  "codeql-hosted",     # methodology §4 — requires network, not reproducible
+  "veracode",          # methodology §4 — proprietary
+  "snyk-code",         # methodology §4 — proprietary
+  "sonatype",          # methodology §4 — proprietary
+  "coverity",          # methodology §4 — proprietary
+  "codesonar",         # methodology §4 — proprietary
+  "cargo-audit",       # methodology §4 — supply-chain advisory, different lane
+  "cargo-deny",        # methodology §4 — supply-chain advisory, different lane
+  "cargo-vet",         # methodology §4 — supply-chain advisory, different lane
+  "clippy",            # methodology §4 — non-security lints; cargo-geiger is
+                       #                   the unsafe-density baseline instead
+  "rust-analyzer",     # methodology §4 — not a security scanner
+  "cargo-check",       # methodology §4 — not a security scanner
+  "miri-standalone",   # methodology §4 — appears only in Ward's witness gate
+  "llm-only-scanners", # methodology §4 — non-deterministic, version-drifting
+]
+
+# ───────────────────────────────────────────────────────────────────────
+# Fairness controls (mirror methodology §5; harness reads these and
+# applies them via systemd-run / podman/docker run flags).
+# ───────────────────────────────────────────────────────────────────────
+[fairness]
+# OCI container runtime. "podman" (preferred — rootless, no daemon) or
+# "docker". The image format is OCI-standard, so `podman build` and
+# `docker build` produce interchangeable images. The CLI flags we pass
+# (run --rm --network=none --memory=Ng --cpus=N --cpuset-cpus=X -v src:dst:ro
+# --stop-signal=SIGKILL --stop-timeout=N) are identical between the two.
+# Override at invocation time via `ward-eval bench-run --runtime <name>`.
+runtime            = "podman"
+
+# Per-repo per-tool hard cap.
+time_budget_secs   = 600
+
+# Cores allocated per scan invocation. All tools get identical core count.
+cpu_cores          = 4
+cpu_pinning        = "0-3"     # taskset -c
+
+# Memory ceiling per scan invocation. OOM = record null + report separately.
+memory_max_gib     = 16
+
+# Network isolation — every tool runs offline.
+network            = "none"     # podman/docker --network=none
+
+# Scratch directory wiped between repos; tool caches persist within a
+# single benchmark run.
+scratch_root       = "/scratch"
+tool_cache_root    = "/tool-cache"
+
+# Determinism smoke — 3-run identity check on the 5-entry smoke subset.
+determinism_runs   = 3
+determinism_smoke_size = 5

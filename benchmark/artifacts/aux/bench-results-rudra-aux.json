@@ -1,0 +1,1487 @@
+[
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0130",
+    "expected": "tp",
+    "duration_secs": 0.37499570846557617,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0130-fix",
+    "expected": "tn",
+    "duration_secs": 0.3515923023223877,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0128",
+    "expected": "tp",
+    "duration_secs": 0.4635653495788574,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0128-fix",
+    "expected": "tn",
+    "duration_secs": 0.4096648693084717,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0110",
+    "expected": "tp",
+    "duration_secs": 0.3520076274871826,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0110-fix",
+    "expected": "tn",
+    "duration_secs": 0.33943939208984375,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0031",
+    "expected": "tp",
+    "duration_secs": 0.6764504909515381,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0031-fix",
+    "expected": "tn",
+    "duration_secs": 0.5782601833343506,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2023-0044",
+    "expected": "tp",
+    "duration_secs": 0.47818589210510254,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2023-0044-fix",
+    "expected": "tn",
+    "duration_secs": 0.43541693687438965,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2023-0030",
+    "expected": "tp",
+    "duration_secs": 0.3549928665161133,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2023-0030-fix",
+    "expected": "tn",
+    "duration_secs": 0.3456735610961914,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2022-0102",
+    "expected": "tp",
+    "duration_secs": 0.35604429244995117,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2022-0102-fix",
+    "expected": "tn",
+    "duration_secs": 0.7332127094268799,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0115",
+    "expected": "tp",
+    "duration_secs": 1.3424341678619385,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0115-fix",
+    "expected": "tn",
+    "duration_secs": 1.0412952899932861,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0038",
+    "expected": "tp",
+    "duration_secs": 0.36425328254699707,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0038-fix",
+    "expected": "tn",
+    "duration_secs": 0.3555259704589844,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0033",
+    "expected": "tp",
+    "duration_secs": 1.0226693153381348,
+    "findings": [],
+    "rule_ids_fired": [],
+    "detected": false,
+    "classification": "FN",
+    "error": ""
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0033-fix",
+    "expected": "tn",
+    "duration_secs": 1.5452392101287842,
+    "findings": [
+      {
+        "rule_id": "RUDRA-UNSAFEDATAFLOW-WRITEFLOW",
+        "file": "src/stack.rs",
+        "start_line": 154,
+        "message": "Potential unsafe dataflow issue in `stack::StackA::<[T], D>::push_cloned`",
+        "confidence": 0.0,
+        "level": "Warning"
+      }
+    ],
+    "rule_ids_fired": [
+      "RUDRA-UNSAFEDATAFLOW-WRITEFLOW"
+    ],
+    "detected": true,
+    "classification": "FP",
+    "error": ""
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0032",
+    "expected": "tp",
+    "duration_secs": 0.602349042892456,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0032-fix",
+    "expected": "tn",
+    "duration_secs": 0.4080471992492676,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0028",
+    "expected": "tp",
+    "duration_secs": 0.667837381362915,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0028-fix",
+    "expected": "tn",
+    "duration_secs": 0.6622140407562256,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2025-0020",
+    "expected": "tp",
+    "duration_secs": 0.47153186798095703,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2025-0020-fix",
+    "expected": "tn",
+    "duration_secs": 0.45351362228393555,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2025-0005",
+    "expected": "tp",
+    "duration_secs": 0.4660212993621826,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2025-0005-fix",
+    "expected": "tn",
+    "duration_secs": 0.4599273204803467,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2023-0074",
+    "expected": "tp",
+    "duration_secs": 0.5258584022521973,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2023-0074-fix",
+    "expected": "tn",
+    "duration_secs": 0.46860194206237793,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2022-0098",
+    "expected": "tp",
+    "duration_secs": 0.34084582328796387,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2022-0098-fix",
+    "expected": "tn",
+    "duration_secs": 0.34597015380859375,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2022-0012",
+    "expected": "tp",
+    "duration_secs": 0.46710705757141113,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2022-0012-fix",
+    "expected": "tn",
+    "duration_secs": 0.46146178245544434,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2022-0002",
+    "expected": "tp",
+    "duration_secs": 0.3773784637451172,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2022-0002-fix",
+    "expected": "tn",
+    "duration_secs": 0.9643723964691162,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0124",
+    "expected": "tp",
+    "duration_secs": 0.5592904090881348,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0124-fix",
+    "expected": "tn",
+    "duration_secs": 0.5569519996643066,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0122",
+    "expected": "tp",
+    "duration_secs": 0.30850958824157715,
+    "error": "rudra_internal_error",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0122-fix",
+    "expected": "tn",
+    "duration_secs": 0.3087160587310791,
+    "error": "rudra_internal_error",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0114",
+    "expected": "tp",
+    "duration_secs": 0.8000571727752686,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0114-fix",
+    "expected": "tn",
+    "duration_secs": 0.7075111865997314,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0113",
+    "expected": "tp",
+    "duration_secs": 1.0272154808044434,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0113-fix",
+    "expected": "tn",
+    "duration_secs": 1.0329670906066895,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0072",
+    "expected": "tp",
+    "duration_secs": 0.5326073169708252,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0072-fix",
+    "expected": "tn",
+    "duration_secs": 0.5484402179718018,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0050",
+    "expected": "tp",
+    "duration_secs": 0.37334132194519043,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0050-fix",
+    "expected": "tn",
+    "duration_secs": 0.33542728424072266,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0048",
+    "expected": "tp",
+    "duration_secs": 0.3368492126464844,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0048-fix",
+    "expected": "tn",
+    "duration_secs": 0.3319244384765625,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0040",
+    "expected": "tp",
+    "duration_secs": 0.4142928123474121,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0040-fix",
+    "expected": "tn",
+    "duration_secs": 0.42066383361816406,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0036",
+    "expected": "tp",
+    "duration_secs": 0.35470128059387207,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0036-fix",
+    "expected": "tn",
+    "duration_secs": 0.37192201614379883,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0030",
+    "expected": "tp",
+    "duration_secs": 0.33890581130981445,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0030-fix",
+    "expected": "tn",
+    "duration_secs": 0.34615182876586914,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0018",
+    "expected": "tp",
+    "duration_secs": 0.3582324981689453,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0018-fix",
+    "expected": "tn",
+    "duration_secs": 0.5525045394897461,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0011",
+    "expected": "tp",
+    "duration_secs": 0.8950204849243164,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0011-fix",
+    "expected": "tn",
+    "duration_secs": 0.6987416744232178,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rocket-cve-2020-35882",
+    "expected": "tp",
+    "duration_secs": 0.554307222366333,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rocket-cve-2020-35882-fix",
+    "expected": "tn",
+    "duration_secs": 0.5508968830108643,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rocket-cve-2021-29935",
+    "expected": "tp",
+    "duration_secs": 0.6200594902038574,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rocket-cve-2021-29935-fix",
+    "expected": "tn",
+    "duration_secs": 0.5722546577453613,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-mio-cve-2020-35922",
+    "expected": "tp",
+    "duration_secs": 0.3304438591003418,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-mio-cve-2020-35922-fix",
+    "expected": "tn",
+    "duration_secs": 0.3500638008117676,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-smallvec-rustsec-2021-0003",
+    "expected": "tp",
+    "duration_secs": 0.3541874885559082,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-smallvec-rustsec-2021-0003-fix",
+    "expected": "tn",
+    "duration_secs": 0.3491780757904053,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-beef-rustsec-2020-0122",
+    "expected": "tp",
+    "duration_secs": 0.8592104911804199,
+    "findings": [
+      {
+        "rule_id": "RUDRA-SENDSYNCVARIANCE-PHANTOMSENDFORSEND-NAIVESENDFORSEND",
+        "file": "src/generic.rs",
+        "start_line": 531,
+        "message": "Suspicious impl of `Send` found",
+        "confidence": 0.0,
+        "level": "Warning"
+      }
+    ],
+    "rule_ids_fired": [
+      "RUDRA-SENDSYNCVARIANCE-PHANTOMSENDFORSEND-NAIVESENDFORSEND"
+    ],
+    "detected": true,
+    "classification": "TP",
+    "error": ""
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-beef-rustsec-2020-0122-fix",
+    "expected": "tn",
+    "duration_secs": 0.8744561672210693,
+    "findings": [
+      {
+        "rule_id": "RUDRA-SENDSYNCVARIANCE-PHANTOMSENDFORSEND-NAIVESENDFORSEND",
+        "file": "src/generic.rs",
+        "start_line": 532,
+        "message": "Suspicious impl of `Send` found",
+        "confidence": 0.0,
+        "level": "Warning"
+      }
+    ],
+    "rule_ids_fired": [
+      "RUDRA-SENDSYNCVARIANCE-PHANTOMSENDFORSEND-NAIVESENDFORSEND"
+    ],
+    "detected": true,
+    "classification": "FP",
+    "error": ""
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-dbn-rustsec-2024-0377",
+    "expected": "tp",
+    "duration_secs": 0.26603078842163086,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-dbn-rustsec-2024-0377-fix",
+    "expected": "tn",
+    "duration_secs": 0.27148890495300293,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-slab-rustsec-2025-0047",
+    "expected": "tp",
+    "duration_secs": 0.3545074462890625,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-slab-rustsec-2025-0047-fix",
+    "expected": "tn",
+    "duration_secs": 0.36286091804504395,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-self-cell-rustsec-2023-0070",
+    "expected": "tp",
+    "duration_secs": 0.32784152030944824,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-self-cell-rustsec-2023-0070-fix",
+    "expected": "tn",
+    "duration_secs": 0.3388848304748535,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-id-map-rustsec-2025-0050",
+    "expected": "tp",
+    "duration_secs": 0.33629798889160156,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-id-map-rustsec-2025-0050-fix",
+    "expected": "tn",
+    "duration_secs": 0.3242807388305664,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rand-core-rustsec-2019-0035",
+    "expected": "tp",
+    "duration_secs": 0.5923106670379639,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rand-core-rustsec-2019-0035-fix",
+    "expected": "tn",
+    "duration_secs": 0.5888597965240479,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-ouch-rustsec-2024-0374",
+    "expected": "tp",
+    "duration_secs": 0.5685102939605713,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-ouch-rustsec-2024-0374-fix",
+    "expected": "tn",
+    "duration_secs": 0.2615184783935547,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-ruint-rustsec-2025-0137",
+    "expected": "tp",
+    "duration_secs": 0.2721121311187744,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-ruint-rustsec-2025-0137-fix",
+    "expected": "tn",
+    "duration_secs": 0.2741255760192871,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-gix-date-rustsec-2025-0140",
+    "expected": "tp",
+    "duration_secs": 0.42435407638549805,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-gix-date-rustsec-2025-0140-fix",
+    "expected": "tn",
+    "duration_secs": 0.4155409336090088,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-safe-transmute-rustsec-2018-0013",
+    "expected": "tp",
+    "duration_secs": 1.058892011642456,
+    "findings": [],
+    "rule_ids_fired": [],
+    "detected": false,
+    "classification": "FN",
+    "error": ""
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-safe-transmute-rustsec-2018-0013-fix",
+    "expected": "tn",
+    "duration_secs": 1.5834107398986816,
+    "findings": [],
+    "rule_ids_fired": [],
+    "detected": false,
+    "classification": "TN",
+    "error": ""
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-borsh-rustsec-2023-0033",
+    "expected": "tp",
+    "duration_secs": 0.33449625968933105,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-borsh-rustsec-2023-0033-fix",
+    "expected": "tn",
+    "duration_secs": 0.2683982849121094,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-openssl-ghsa-4fcv",
+    "expected": "tp",
+    "duration_secs": 0.2799046039581299,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-openssl-ghsa-4fcv-fix",
+    "expected": "tn",
+    "duration_secs": 0.26879024505615234,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-thin-vec-rustsec-2026-0103",
+    "expected": "tp",
+    "duration_secs": 0.33108949661254883,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-thin-vec-rustsec-2026-0103-fix",
+    "expected": "tn",
+    "duration_secs": 0.3659510612487793,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-pyo3-rustsec-2026-0013",
+    "expected": "tp",
+    "duration_secs": 0.27525901794433594,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-pyo3-rustsec-2026-0013-fix",
+    "expected": "tn",
+    "duration_secs": 0.2924058437347412,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2025-0106",
+    "expected": "tp",
+    "duration_secs": 0.2806665897369385,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2025-0106-fix",
+    "expected": "tn",
+    "duration_secs": 0.4711000919342041,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2025-0062",
+    "expected": "tp",
+    "duration_secs": 0.2782552242279053,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2025-0062-fix",
+    "expected": "tn",
+    "duration_secs": 0.28502988815307617,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2024-0020",
+    "expected": "tp",
+    "duration_secs": 0.4939713478088379,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2024-0020-fix",
+    "expected": "tn",
+    "duration_secs": 0.4928405284881592,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2025-0051",
+    "expected": "tp",
+    "duration_secs": 0.3599860668182373,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2025-0051-fix",
+    "expected": "tn",
+    "duration_secs": 0.3673896789550781,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2024-0359",
+    "expected": "tp",
+    "duration_secs": 0.38927531242370605,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2024-0359-fix",
+    "expected": "tn",
+    "duration_secs": 0.37544989585876465,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2025-0023",
+    "expected": "tp",
+    "duration_secs": 0.4774949550628662,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2025-0023-fix",
+    "expected": "tn",
+    "duration_secs": 0.468538761138916,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2024-0007",
+    "expected": "tp",
+    "duration_secs": 0.41607165336608887,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2024-0007-fix",
+    "expected": "tn",
+    "duration_secs": 0.8448469638824463,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2024-0354",
+    "expected": "tp",
+    "duration_secs": 0.8112142086029053,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2024-0354-fix",
+    "expected": "tn",
+    "duration_secs": 0.3650190830230713,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2024-0342",
+    "expected": "tp",
+    "duration_secs": 0.37151098251342773,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2024-0342-fix",
+    "expected": "tn",
+    "duration_secs": 0.3821580410003662,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2026-0005",
+    "expected": "tp",
+    "duration_secs": 0.4263334274291992,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2026-0005-fix",
+    "expected": "tn",
+    "duration_secs": 0.45027780532836914,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2025-0042",
+    "expected": "tp",
+    "duration_secs": 0.33799219131469727,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2025-0042-fix",
+    "expected": "tn",
+    "duration_secs": 0.33969974517822266,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2026-0008",
+    "expected": "tp",
+    "duration_secs": 0.2610926628112793,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2026-0008-fix",
+    "expected": "tn",
+    "duration_secs": 0.25647759437561035,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2024-0365",
+    "expected": "tp",
+    "duration_secs": 0.3656632900238037,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2024-0365-fix",
+    "expected": "tn",
+    "duration_secs": 0.35004758834838867,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2026-0111",
+    "expected": "tp",
+    "duration_secs": 0.36847710609436035,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2026-0111-fix",
+    "expected": "tn",
+    "duration_secs": 0.3686528205871582,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2024-0443",
+    "expected": "tp",
+    "duration_secs": 0.37707018852233887,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2024-0443-fix",
+    "expected": "tn",
+    "duration_secs": 0.391676664352417,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2024-0435",
+    "expected": "tp",
+    "duration_secs": 0.3679356575012207,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2024-0435-fix",
+    "expected": "tn",
+    "duration_secs": 0.3526904582977295,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2025-0105",
+    "expected": "tp",
+    "duration_secs": 0.49208712577819824,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2025-0105-fix",
+    "expected": "tn",
+    "duration_secs": 0.4347257614135742,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2024-0363",
+    "expected": "tp",
+    "duration_secs": 0.35796475410461426,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2024-0363-fix",
+    "expected": "tn",
+    "duration_secs": 0.3696911334991455,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2024-0017",
+    "expected": "tp",
+    "duration_secs": 0.49672603607177734,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2024-0017-fix",
+    "expected": "tn",
+    "duration_secs": 0.5564553737640381,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2025-0019",
+    "expected": "tp",
+    "duration_secs": 0.3000209331512451,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2025-0019-fix",
+    "expected": "tn",
+    "duration_secs": 0.3439505100250244,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2024-0429",
+    "expected": "tp",
+    "duration_secs": 0.2762258052825928,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2024-0429-fix",
+    "expected": "tn",
+    "duration_secs": 0.30437707901000977,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2024-0431",
+    "expected": "tp",
+    "duration_secs": 0.4846007823944092,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2024-0431-fix",
+    "expected": "tn",
+    "duration_secs": 0.4128549098968506,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2025-0033",
+    "expected": "tp",
+    "duration_secs": 1.555962324142456,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2025-0033-fix",
+    "expected": "tn",
+    "duration_secs": 0.37085413932800293,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2025-0045",
+    "expected": "tp",
+    "duration_secs": 0.3226282596588135,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2025-0045-fix",
+    "expected": "tn",
+    "duration_secs": 0.2992539405822754,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2025-0049",
+    "expected": "tp",
+    "duration_secs": 0.3146951198577881,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2025-0049-fix",
+    "expected": "tn",
+    "duration_secs": 0.3234364986419678,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2026-0122",
+    "expected": "tp",
+    "duration_secs": 0.261263370513916,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2026-0122-fix",
+    "expected": "tn",
+    "duration_secs": 0.2645719051361084,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2025-0027",
+    "expected": "tp",
+    "duration_secs": 0.8527257442474365,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2025-0027-fix",
+    "expected": "tn",
+    "duration_secs": 0.8064560890197754,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2026-0002",
+    "expected": "tp",
+    "duration_secs": 0.33341479301452637,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2026-0002-fix",
+    "expected": "tn",
+    "duration_secs": 0.3514370918273926,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2026-0115",
+    "expected": "tp",
+    "duration_secs": 0.2623739242553711,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2026-0115-fix",
+    "expected": "tn",
+    "duration_secs": 0.3146932125091553,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2026-0116",
+    "expected": "tp",
+    "duration_secs": 0.2578294277191162,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2026-0116-fix",
+    "expected": "tn",
+    "duration_secs": 0.43120288848876953,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2026-0117",
+    "expected": "tp",
+    "duration_secs": 0.26424312591552734,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2026-0117-fix",
+    "expected": "tn",
+    "duration_secs": 0.2700998783111572,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2026-0041",
+    "expected": "tp",
+    "duration_secs": 0.3044443130493164,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "FN"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2026-0041-fix",
+    "expected": "tn",
+    "duration_secs": 0.330031156539917,
+    "error": "rudra_failed",
+    "detected": false,
+    "classification": "TN"
+  }
+]

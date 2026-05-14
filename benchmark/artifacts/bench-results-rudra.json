@@ -1,0 +1,1472 @@
+[
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0130",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0130-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0128",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0128-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0110",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0110-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0031",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0031-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2023-0044",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2023-0044-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2023-0030",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2023-0030-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2022-0102",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2022-0102-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0115",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0115-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0038",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0038-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0033",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 1.000556134
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0033-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "RUDRA-UNSAFEDATAFLOW:-WRITEFLOW",
+        "file": "Potential unsafe dataflow issue in `stack",
+        "start_line": null,
+        "message": ":<[T], D>::push_cloned`",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 1.000517455,
+    "rule_ids_fired": [
+      "RUDRA-UNSAFEDATAFLOW:-WRITEFLOW"
+    ]
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0032",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0032-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0028",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0028-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2025-0020",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2025-0020-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2025-0005",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2025-0005-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2023-0074",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2023-0074-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2022-0098",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2022-0098-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2022-0012",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2022-0012-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2022-0002",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2022-0002-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0124",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0124-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0122",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0122-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0114",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0114-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0113",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0113-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0072",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0072-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0050",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0050-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0048",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0048-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0040",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0040-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0036",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0036-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0030",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0030-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0018",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0018-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0011",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2021-0011-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rocket-cve-2020-35882",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rocket-cve-2020-35882-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rocket-cve-2021-29935",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rocket-cve-2021-29935-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-mio-cve-2020-35922",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-mio-cve-2020-35922-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-smallvec-rustsec-2021-0003",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-smallvec-rustsec-2021-0003-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-beef-rustsec-2020-0122",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "RUDRA-SENDSYNCVARIANCE:-PHANTOMSENDFORSEND-NAIVESENDFORSEND",
+        "file": "Suspicious impl of `Send` found",
+        "start_line": null,
+        "message": "",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 1.000533848,
+    "rule_ids_fired": [
+      "RUDRA-SENDSYNCVARIANCE:-PHANTOMSENDFORSEND-NAIVESENDFORSEND"
+    ]
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-beef-rustsec-2020-0122-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "RUDRA-SENDSYNCVARIANCE:-PHANTOMSENDFORSEND-NAIVESENDFORSEND",
+        "file": "Suspicious impl of `Send` found",
+        "start_line": null,
+        "message": "",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 1.0005217,
+    "rule_ids_fired": [
+      "RUDRA-SENDSYNCVARIANCE:-PHANTOMSENDFORSEND-NAIVESENDFORSEND"
+    ]
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-dbn-rustsec-2024-0377",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-dbn-rustsec-2024-0377-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-slab-rustsec-2025-0047",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-slab-rustsec-2025-0047-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-self-cell-rustsec-2023-0070",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-self-cell-rustsec-2023-0070-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-id-map-rustsec-2025-0050",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-id-map-rustsec-2025-0050-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rand-core-rustsec-2019-0035",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rand-core-rustsec-2019-0035-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-ouch-rustsec-2024-0374",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-ouch-rustsec-2024-0374-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-ruint-rustsec-2025-0137",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-ruint-rustsec-2025-0137-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-gix-date-rustsec-2025-0140",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-gix-date-rustsec-2025-0140-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-safe-transmute-rustsec-2018-0013",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 1.000529856
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-safe-transmute-rustsec-2018-0013-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 1.000539558
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-borsh-rustsec-2023-0033",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-borsh-rustsec-2023-0033-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-openssl-ghsa-4fcv",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-openssl-ghsa-4fcv-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-thin-vec-rustsec-2026-0103",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-thin-vec-rustsec-2026-0103-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-pyo3-rustsec-2026-0013",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-pyo3-rustsec-2026-0013-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2025-0106",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2025-0106-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2025-0062",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2025-0062-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2024-0020",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2024-0020-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2025-0051",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2025-0051-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2024-0359",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2024-0359-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2025-0023",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2025-0023-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2024-0007",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2024-0007-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2024-0354",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2024-0354-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2024-0342",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2024-0342-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2026-0005",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2026-0005-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2025-0042",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2025-0042-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2026-0008",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2026-0008-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2024-0365",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2024-0365-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2026-0111",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2026-0111-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2024-0443",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2024-0443-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2024-0435",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2024-0435-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2025-0105",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2025-0105-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2024-0363",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2024-0363-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2024-0017",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2024-0017-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2025-0019",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2025-0019-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2024-0429",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2024-0429-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2024-0431",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2024-0431-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2025-0033",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2025-0033-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2025-0045",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2025-0045-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2025-0049",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2025-0049-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2026-0122",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2026-0122-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2025-0027",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2025-0027-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2026-0002",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2026-0002-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2026-0115",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2026-0115-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2026-0116",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2026-0116-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2026-0117",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2026-0117-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2026-0041",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  },
+  {
+    "tool": "rudra",
+    "harness_id": "rs-bench-rustsec-2026-0041-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 0.0,
+    "error": "rudra_failed"
+  }
+]

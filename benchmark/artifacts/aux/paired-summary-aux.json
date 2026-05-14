@@ -1,0 +1,67 @@
+[
+  {
+    "tool": "cargo-geiger",
+    "tp": 0,
+    "fp": 0,
+    "tn": 80,
+    "fn_": 80,
+    "noise": 0,
+    "errored": 0,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0,
+    "mcc": 0.0
+  },
+  {
+    "tool": "codeql",
+    "tp": 0,
+    "fp": 0,
+    "tn": 12,
+    "fn_": 13,
+    "noise": 0,
+    "errored": 135,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0,
+    "mcc": 0.0
+  },
+  {
+    "tool": "rudra",
+    "tp": 1,
+    "fp": 0,
+    "tn": 2,
+    "fn_": 2,
+    "noise": 1,
+    "errored": 154,
+    "precision": 1.0,
+    "recall": 0.3333333333333333,
+    "f1": 0.5,
+    "mcc": 0.4082482904638631
+  },
+  {
+    "tool": "semgrep",
+    "tp": 0,
+    "fp": 0,
+    "tn": 80,
+    "fn_": 80,
+    "noise": 0,
+    "errored": 0,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0,
+    "mcc": 0.0
+  },
+  {
+    "tool": "ward",
+    "tp": 39,
+    "fp": 0,
+    "tn": 70,
+    "fn_": 34,
+    "noise": 3,
+    "errored": 14,
+    "precision": 1.0,
+    "recall": 0.5342465753424658,
+    "f1": 0.6964285714285715,
+    "mcc": 0.5996574364550901
+  }
+]

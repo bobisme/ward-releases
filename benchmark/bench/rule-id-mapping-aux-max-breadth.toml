@@ -1,0 +1,254 @@
+# bench/rule-id-mapping-aux-max-breadth.toml — AUX (NOT methodology-locked).
+#
+# This file is used by the bn-1h7qp aux max-breadth run (post-headline
+# fairness audit, 2026-05-13) to be honest about Rudra's actual emitted
+# rule_id shape. The methodology-locked `rule-id-mapping.toml` has
+# `RUDRA-SEND-SYNC` / `RUDRA-PANIC-SAFETY` / `RUDRA-UNINIT` / `RUDRA-LIFETIME`
+# placeholder ids that do NOT match what Rudra actually prints
+# (`SendSyncVariance`, `UnsafeDataflow`, `PanicSafety`, etc).
+#
+# This aux mapping extends per-class keywords to include the actual
+# Rudra category names so that fairly-parsed Rudra findings are
+# attributed to the right vuln class. The original (locked) mapping is
+# UNCHANGED. The methodology is unamended. This is auxiliary.
+#
+# Match semantics: identical to rule-id-mapping.toml — `rule_id.lower()`
+# is substring-matched against the keyword list.
+
+schema_version       = "0.1.0"
+methodology_section  = "aux (not methodology-locked)"
+canonical_runtime    = "crates/ward-eval/src/repo_eval.rs::vuln_class_matches_rule"
+locked               = false
+parent_bone          = "bn-1h7qp"
+
+shared_keywords = [
+  "rust-unsafe",
+  "rust_unsafe",
+  "taint-generic",
+  # Aux additions: catch the actual Rudra emitted shape.
+  "rudra-",
+]
+
+# memory_safety
+[vuln_classes.memory_safety]
+ward_rules = [
+  "RUST-UNSAFE-SLICE-FROM-RAW-PARTS-001",
+  "RUST-UNSAFE-LEN-CAP-CONFUSION-001",
+  "RUST-UNSAFE-INT-OVERFLOW-SAFETY-001",
+  "RUST-UNSAFE-DEBUG-GUARD-001",
+  "RUST-UNSAFE-TRANSMUTE-VALIDITY-001",
+  "RUST-UNSAFE-MAYBEUNINIT-001",
+  "RUST-UNSAFE-CSTR-NUL-001",
+]
+codeql_rules = [
+  "rust/uninitialized-memory",
+  "rust/unsafe-deref",
+  "rust/incorrect-pointer-arith",
+  "rust/access-of-invalid-pointer",
+  "rust/access-after-lifetime",
+  "rust/uncontrolled-allocation-size",
+  "rust/buffer-overflow",
+]
+semgrep_rules = [
+  "rust.lang.security.unsafe-block",
+  "rust.lang.correctness.transmute-pod-to-non-pod",
+  "rust.lang.security.slice-from-raw-parts",
+  "rust.lang.security.uninitialized-memory",
+  # Aux additions from r/rust / p/default broader rules
+  "rust.lang.security.unsafe-usage",
+]
+rudra_rules = [
+  "RUDRA-PANICSAFETY",
+  "RUDRA-UNSAFEDATAFLOW",
+  "RUDRA-UNSAFEDATAFLOW-WRITEFLOW",
+  "RUDRA-UNSAFEDATAFLOW-READFLOW",
+  "RUDRA-UNSAFEDATAFLOW-COPYFLOW",
+  "RUDRA-UNSAFEDATAFLOW-VECFROMRAWPARTS",
+]
+keywords = [
+  "len-cap", "len_cap",
+  "from-raw-parts", "slice-from-raw",
+  "set-len", "uninit",
+  "transmute", "layout-cast",
+  "debug-assert", "debug_assert",
+  "debug-guard", "debug_guard",
+  "ffi-boundary",
+  "int-overflow", "int_overflow", "overflow-safety",
+  "noverlap", "lifetime",
+  "panic-sequence", "mem-forget-dangling", "mem_forget_dangling",
+  "provenance", "provenance-loss",
+  "send-sync", "trait-law",
+  "manuallydrop",
+  "uninitialized-memory", "unsafe-deref",
+  "incorrect-pointer-arith", "access-of-invalid-pointer",
+  "access-after-lifetime", "uncontrolled-allocation-size",
+  "buffer-overflow",
+  "transmute-pod-to-non-pod",
+  "rudra-panic-safety", "rudra-uninit",
+  # Aux additions
+  "unsafe-usage", "unsafe_usage",
+  "panicsafety", "unsafedataflow",
+  "writeflow", "readflow", "copyflow",
+  "vecfromrawparts", "fromrawparts",
+]
+
+[vuln_classes.use_after_free]
+ward_rules = [
+  "RUST-UNSAFE-MANUALLYDROP-PUBLIC-ZOMBIE-001",
+  "RUST-UNSAFE-PANIC-SEQUENCE-001",
+]
+codeql_rules = [
+  "rust/access-after-lifetime",
+  "rust/use-after-free",
+  "rust/dangling-pointer",
+]
+semgrep_rules = [
+  "rust.lang.security.use-after-free",
+  "rust.lang.correctness.dangling-reference",
+  "rust.lang.security.unsafe-usage",
+]
+rudra_rules = [
+  "RUDRA-PANICSAFETY",
+  "RUDRA-UNSAFEDATAFLOW",
+]
+keywords = [
+  "use-after-free", "uaf",
+  "dangling-pointer", "dangling-reference",
+  "access-after-lifetime",
+  "manuallydrop", "manualdrop",
+  "public-zombie", "zombie",
+  "panic-sequence", "drop-order", "drop_order",
+  "rudra-lifetime",
+  "lifetime",
+  # Aux additions
+  "unsafe-usage", "panicsafety", "unsafedataflow",
+]
+
+[vuln_classes.type_confusion]
+ward_rules = [
+  "RUST-UNSAFE-TRANSMUTE-VALIDITY-001",
+  "RUST-UNSAFE-LAYOUT-CAST-001",
+]
+codeql_rules = [
+  "rust/incorrect-transmute",
+  "rust/incompatible-layout-cast",
+]
+semgrep_rules = [
+  "rust.lang.correctness.transmute-pod-to-non-pod",
+  "rust.lang.security.layout-cast-mismatch",
+  "rust.lang.security.unsafe-usage",
+]
+rudra_rules = ["RUDRA-UNSAFEDATAFLOW"]
+keywords = [
+  "transmute", "layout-cast", "layout_cast",
+  "incorrect-transmute", "incompatible-layout",
+  "validity",
+  # Aux additions
+  "unsafe-usage", "unsafedataflow",
+]
+
+[vuln_classes.undefined_behavior]
+ward_rules = [
+  "RUST-UNSAFE-DEBUG-GUARD-001",
+  "RUST-UNSAFE-INT-OVERFLOW-SAFETY-001",
+  "RUST-UNSAFE-MAYBEUNINIT-001",
+]
+codeql_rules = [
+  "rust/undefined-behavior",
+  "rust/uninitialized-memory",
+  "rust/incorrect-pointer-arith",
+]
+semgrep_rules = [
+  "rust.lang.correctness.undefined-behavior",
+  "rust.lang.security.uninitialized-memory",
+  "rust.lang.security.unsafe-usage",
+]
+rudra_rules = [
+  "RUDRA-PANICSAFETY",
+  "RUDRA-UNSAFEDATAFLOW",
+]
+keywords = [
+  "undefined-behavior", "ub",
+  "uninitialized-memory", "uninit",
+  "int-overflow", "overflow-safety",
+  "debug-guard", "debug_assert",
+  "rudra-panic-safety",
+  # Aux additions
+  "unsafe-usage", "panicsafety", "unsafedataflow",
+]
+
+[vuln_classes.data_race]
+ward_rules = [
+  "RUST-UNSAFE-IMPL-SEND-SYNC-001",
+  "RUST-UNSAFE-ATOMIC-UNALIGNED-001",
+  "RUST-UNSAFE-DEALLOC-RACE-001",
+]
+codeql_rules = [
+  "rust/data-race",
+  "rust/missing-sync-impl",
+  "rust/incorrect-sync-impl",
+]
+semgrep_rules = [
+  "rust.lang.security.send-sync-unsoundness",
+]
+rudra_rules = [
+  "RUDRA-SENDSYNCVARIANCE",
+  "RUDRA-SENDSYNCVARIANCE-PHANTOMSENDFORSEND",
+  "RUDRA-SENDSYNCVARIANCE-PHANTOMSENDFORSEND-NAIVESENDFORSEND",
+  "RUDRA-SENDSYNCVARIANCE-NAIVESYNCFORSYNC",
+  "RUDRA-SENDSYNCVARIANCE-RELAXSEND",
+  "RUDRA-SENDSYNCVARIANCE-RELAXSYNC",
+]
+keywords = [
+  "data-race", "data_race",
+  "send-sync", "send_sync",
+  "missing-sync", "incorrect-sync",
+  "atomic-unaligned", "atomic_unaligned",
+  "dealloc-race",
+  "rudra-send-sync",
+  # Aux additions — match real Rudra category names
+  "sendsyncvariance", "phantomsendforsend", "naivesendforsend",
+  "naivesyncforsync", "relaxsend", "relaxsync",
+]
+
+[vuln_classes.soundness]
+ward_rules = [
+  "RUST-UNSAFE-TRAIT-LAW-001",
+  "RUST-UNSAFE-IMPL-SEND-SYNC-001",
+  "RUST-UNSAFE-PANIC-SEQUENCE-001",
+  "RUST-UNSAFE-MANUALLYDROP-PUBLIC-ZOMBIE-001",
+]
+codeql_rules = [
+  "rust/unsound-public-api",
+  "rust/safe-encapsulation-violation",
+]
+semgrep_rules = [
+  "rust.lang.security.unsafe-block",
+  "rust.lang.correctness.unsound-public-api",
+  "rust.lang.security.unsafe-usage",
+]
+rudra_rules = [
+  "RUDRA-PANICSAFETY",
+  "RUDRA-UNSAFEDATAFLOW",
+  "RUDRA-SENDSYNCVARIANCE",
+]
+keywords = [
+  "soundness", "unsound",
+  "trait-law", "borrow-alias",
+  "trusted-len", "size-hint",
+  "iterator", "callback",
+  "send-sync", "panic-sequence",
+  "manuallydrop", "public-zombie",
+  "safe-encapsulation", "unsafe-block",
+  "rudra-",
+  # Aux additions
+  "unsafe-usage", "panicsafety", "unsafedataflow",
+  "sendsyncvariance",
+]
+
+[severity_gates]
+ward    = "Medium"
+codeql  = "warning"
+semgrep = "WARNING"
+rudra   = "all"
+cargo_geiger = "context_only"

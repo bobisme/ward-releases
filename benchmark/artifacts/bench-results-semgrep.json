@@ -1,0 +1,1344 @@
+[
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2021-0130",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 2.000854653
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2021-0130-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 1.750716202
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2021-0128",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 2.751031133
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2021-0128-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 2.750992375
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2021-0110",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 7.5022994149999995
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2021-0110-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 7.252137786
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2021-0031",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 1.500615587
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2021-0031-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 1.500602744
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2023-0044",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 6.251855945
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2023-0044-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 6.251959346
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2023-0030",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 1.500585739
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2023-0030-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 1.5006516300000001
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2022-0102",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 7.502389344
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2022-0102-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 7.502241926
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2021-0115",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 1.750706202
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2021-0115-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 1.7506999749999999
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2021-0038",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 5.251689171
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2021-0038-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 5.25166185
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2021-0033",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 1.500602261
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2021-0033-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 1.500627357
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2021-0032",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 1.500684943
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2021-0032-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 1.500635527
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2021-0028",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 2.000718115
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2021-0028-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 1.750728829
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2025-0020",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 5.001558071
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2025-0020-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 5.001621837
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2025-0005",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "rust.lang.security.insecure-hashes.insecure-hashes",
+        "file": "/repo/src/output.rs",
+        "start_line": 320,
+        "message": "Detected cryptographically insecure hashing function",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 2.000773128,
+    "rule_ids_fired": [
+      "rust.lang.security.insecure-hashes.insecure-hashes"
+    ]
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2025-0005-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "rust.lang.security.insecure-hashes.insecure-hashes",
+        "file": "/repo/src/output.rs",
+        "start_line": 320,
+        "message": "Detected cryptographically insecure hashing function",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 1.750762122,
+    "rule_ids_fired": [
+      "rust.lang.security.insecure-hashes.insecure-hashes"
+    ]
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2023-0074",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 2.50091457
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2023-0074-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 2.500950606
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2022-0098",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 7.252221281
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2022-0098-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 7.25237696
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2022-0012",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 3.001115178
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2022-0012-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 3.001084873
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2022-0002",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 1.7507674899999999
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2022-0002-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 1.750752457
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2021-0124",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 3.5012079480000002
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2021-0124-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 3.501199733
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2021-0122",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 2.000775397
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2021-0122-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 2.000848674
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2021-0114",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 1.750676423
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2021-0114-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 1.750669598
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2021-0113",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 1.7507016499999999
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2021-0113-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 1.750731475
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2021-0072",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 3.251165072
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2021-0072-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 3.501278235
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2021-0050",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 1.500681561
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2021-0050-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 1.500610332
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2021-0048",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 1.750700946
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2021-0048-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 1.7507655309999999
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2021-0040",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 1.7506967900000001
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2021-0040-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 1.500612549
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2021-0036",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 1.500612413
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2021-0036-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 1.5006194750000001
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2021-0030",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 2.000761737
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2021-0030-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 2.000746587
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2021-0018",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 1.7506925789999999
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2021-0018-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 1.750685574
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2021-0011",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 4.251352512
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2021-0011-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 4.251449161
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rocket-cve-2020-35882",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 2.250858007
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rocket-cve-2020-35882-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 2.250863029
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rocket-cve-2021-29935",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 2.250854794
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rocket-cve-2021-29935-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 2.250904766
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-mio-cve-2020-35922",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 2.000778809
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-mio-cve-2020-35922-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 2.000747968
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-smallvec-rustsec-2021-0003",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 1.750734078
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-smallvec-rustsec-2021-0003-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 1.750685531
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-beef-rustsec-2020-0122",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 1.500601032
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-beef-rustsec-2020-0122-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 1.500616352
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-dbn-rustsec-2024-0377",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 2.250854845
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-dbn-rustsec-2024-0377-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 2.250899048
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-slab-rustsec-2025-0047",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 1.5006264900000001
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-slab-rustsec-2025-0047-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 1.5005774
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-self-cell-rustsec-2023-0070",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 1.5006956740000001
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-self-cell-rustsec-2023-0070-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 1.5006458230000002
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-id-map-rustsec-2025-0050",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 1.500622725
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-id-map-rustsec-2025-0050-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 1.5006647850000001
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rand-core-rustsec-2019-0035",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 2.000787452
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rand-core-rustsec-2019-0035-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 2.000778149
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-ouch-rustsec-2024-0374",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 1.500626148
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-ouch-rustsec-2024-0374-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 1.500661188
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-ruint-rustsec-2025-0137",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 2.000787552
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-ruint-rustsec-2025-0137-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 2.250868715
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-gix-date-rustsec-2025-0140",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 4.251629831
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-gix-date-rustsec-2025-0140-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 4.25150234
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-safe-transmute-rustsec-2018-0013",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 1.750702427
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-safe-transmute-rustsec-2018-0013-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 1.7507139889999999
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-borsh-rustsec-2023-0033",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 1.7507481980000001
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-borsh-rustsec-2023-0033-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 1.75074839
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-openssl-ghsa-4fcv",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 6.75205412
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-openssl-ghsa-4fcv-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 6.501940432
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-thin-vec-rustsec-2026-0103",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 2.250916475
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-thin-vec-rustsec-2026-0103-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 2.250850355
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-pyo3-rustsec-2026-0013",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 5.751825411
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-pyo3-rustsec-2026-0013-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 5.751787047
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2025-0106",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 1.750711795
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2025-0106-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 1.750647386
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2025-0062",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 2.00079673
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2025-0062-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 2.000798545
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2024-0020",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 1.750670327
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2024-0020-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 1.750734529
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2025-0051",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 2.25076898
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2025-0051-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 2.250889778
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2024-0359",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 4.001343832
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2024-0359-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 4.001390909
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2025-0023",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 4.25157334
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2025-0023-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 4.25139197
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2024-0007",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 1.7507617469999999
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2024-0007-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 1.750919406
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2024-0354",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 1.750716062
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2024-0354-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 1.750749423
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2024-0342",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 1.750742515
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2024-0342-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 1.750778095
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2026-0005",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 1.750744068
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2026-0005-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 2.00084094
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2025-0042",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 2.000824556
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2025-0042-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 2.000751429
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2026-0008",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 5.001551687
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2026-0008-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 5.001534502
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2024-0365",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 3.251143356
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2024-0365-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 3.251155339
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2026-0111",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 3.75133542
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2026-0111-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 3.751270483
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2024-0443",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 1.750738942
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2024-0443-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 1.7507288619999999
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2024-0435",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 4.751513934
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2024-0435-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 4.7515000579999995
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2025-0105",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 1.750639421
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2025-0105-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 1.50066824
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2024-0363",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "findings": [
+      {
+        "rule_id": "rust.lang.security.insecure-hashes.insecure-hashes",
+        "file": "/repo/sqlx-mysql/src/connection/auth.rs",
+        "start_line": 84,
+        "message": "Detected cryptographically insecure hashing function",
+        "confidence": 0.0
+      },
+      {
+        "rule_id": "rust.lang.security.insecure-hashes.insecure-hashes",
+        "file": "/repo/sqlx-postgres/src/message/password.rs",
+        "start_line": 50,
+        "message": "Detected cryptographically insecure hashing function",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 2.500936436,
+    "rule_ids_fired": [
+      "rust.lang.security.insecure-hashes.insecure-hashes"
+    ]
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2024-0363-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "findings": [
+      {
+        "rule_id": "rust.lang.security.insecure-hashes.insecure-hashes",
+        "file": "/repo/sqlx-mysql/src/connection/auth.rs",
+        "start_line": 84,
+        "message": "Detected cryptographically insecure hashing function",
+        "confidence": 0.0
+      },
+      {
+        "rule_id": "rust.lang.security.insecure-hashes.insecure-hashes",
+        "file": "/repo/sqlx-postgres/src/message/password.rs",
+        "start_line": 50,
+        "message": "Detected cryptographically insecure hashing function",
+        "confidence": 0.0
+      }
+    ],
+    "duration_secs": 2.500913904,
+    "rule_ids_fired": [
+      "rust.lang.security.insecure-hashes.insecure-hashes"
+    ]
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2024-0017",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 2.750913581
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2024-0017-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 2.750925904
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2025-0019",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 2.5009111109999997
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2025-0019-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 2.5009631580000002
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2024-0429",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 19.255423135
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2024-0429-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 19.2553274
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2024-0431",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 12.503772458
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2024-0431-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 13.253852934
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2025-0033",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 1.750691453
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2025-0033-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 1.500702802
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2025-0045",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 1.500619508
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2025-0045-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 1.500658064
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2025-0049",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 2.000801313
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2025-0049-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 2.000736802
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2026-0122",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 3.501222956
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2026-0122-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 3.501132623
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2025-0027",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 1.500667699
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2025-0027-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 1.5006683650000001
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2026-0002",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 2.000822612
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2026-0002-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 2.000831181
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2026-0115",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 2.500930531
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2026-0115-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 2.250868791
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2026-0116",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 2.500879028
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2026-0116-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 2.250901973
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2026-0117",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 2.500903855
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2026-0117-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 2.500920668
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2026-0041",
+    "expected": "tp",
+    "detected": false,
+    "classification": "FN",
+    "duration_secs": 2.000797325
+  },
+  {
+    "tool": "semgrep",
+    "harness_id": "rs-bench-rustsec-2026-0041-fix",
+    "expected": "tn",
+    "detected": false,
+    "classification": "TN",
+    "duration_secs": 1.75070445
+  }
+]
