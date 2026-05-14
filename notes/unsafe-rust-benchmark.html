@@ -336,6 +336,47 @@ test to reach significance. The full-corpus claim is supported
 because the 110 not_run entries count against CodeQL — which is itself
 a CodeQL property under this benchmark's budget, not a statistical
 artifact (see <em>What Ward gets right and what it doesn't</em>).</p>
+
+<h3 id="three-views-codeql">Three views of CodeQL scoring (per methodology §5)</h3>
+<p>Methodology §5 requires timeouts be reported separately from "wrong",
+so the headline CodeQL row above can be decomposed three ways. The
+three views answer different questions and <strong>should not be mixed
+without explicit framing</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>View</th>
+<th>What it measures</th>
+<th>CodeQL value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>A. Detection on completed subset</strong></td>
+<td>"When the tool ran successfully, did it find the bug?"</td>
+<td><strong>0 TP / 12 paired pairs</strong> (both sides produced parseable SARIF)</td>
+</tr>
+<tr>
+<td><strong>B. CI-budget effective recall</strong> <em>(operational headline)</em></td>
+<td>"Under the methodology's 10-min/entry offline budget, how useful is the tool operationally?"</td>
+<td><strong>0 TP / 80 pairs</strong> (the headline table row above)</td>
+</tr>
+<tr>
+<td><strong>C. Reliability / completion rate</strong></td>
+<td>"How often did the tool produce usable output?"</td>
+<td><strong>12 / 80 = 15% reliability</strong> (both sides ran)</td>
+</tr>
+</tbody>
+</table>
+<p>View B is the operational headline because it reflects what a real
+CI user sees, but it is not the only honest number. View A
+documents that even on the entries where CodeQL completed, zero
+in-class TPs fired at ≥ WARNING (so the failure is not just a budget
+problem). View C is the reliability story (CodeQL's locked
+configuration runs to completion on only 15% of pairs in this corpus
+under the methodology's CI-realistic 10-min cap). Full per-view
+decomposition is in the
+<a href="unsafe-rust-bench-results.html#three-views-codeql">results document</a>.</p>
 <h2 id="the-fairness-audit">The fairness audit</h2>
 <p>The reflexive objection to a benchmark like this is "you didn't try
 hard enough on the competitors." We took that objection seriously

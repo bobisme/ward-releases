@@ -200,6 +200,26 @@ because the 110 not_run entries count against CodeQL — which is itself
 a CodeQL property under this benchmark's budget, not a statistical
 artifact (see *What Ward gets right and what it doesn't*).
 
+### Three views of CodeQL scoring (per methodology §5)
+
+Methodology §5 requires timeouts be reported separately from
+"wrong", so the headline CodeQL row above can be decomposed three
+ways. The three views answer different questions and **should not
+be mixed without explicit framing**:
+
+| View | What it measures | CodeQL value |
+|---|---|---|
+| **A. Detection on completed subset** | "When the tool ran successfully, did it find the bug?" | **0 TP / 12 paired pairs** (both sides produced parseable SARIF) |
+| **B. CI-budget effective recall** *(operational headline)* | "Under the methodology's 10-min/entry offline budget, how useful is the tool operationally?" | **0 TP / 80 pairs** (the headline table row above) |
+| **C. Reliability / completion rate** | "How often did the tool produce usable output?" | **12 / 80 = 15% reliability** (both sides ran) |
+
+View B is the operational headline because it reflects what a real
+CI user sees, but it is not the only honest number. View A
+documents that even on the entries where CodeQL completed, zero
+in-class TPs fired at ≥ WARNING (so the failure is not just a
+budget problem). View C is the reliability story. Full per-view
+decomposition is in the results document.
+
 ## The fairness audit
 
 The reflexive objection to a benchmark like this is "you didn't try

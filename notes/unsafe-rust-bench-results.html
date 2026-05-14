@@ -228,8 +228,60 @@ The 110 not_run entries are counted as wrong for CodeQL in the
 per-pair fully-correct tally (<code>errored=135</code> in the per-entry paired
 summary). Treat the CodeQL row above as the <strong>full-corpus</strong> scoring;
 a restricted-to-processed view appears in
-<a href="#codeql-restricted-view">CodeQL restricted view</a>.</p>
+<a href="#codeql-restricted-view">CodeQL restricted view</a>. Methodology §5
+requires timeouts be reported separately from "wrong"; the three views
+below decompose CodeQL's outcome along that axis. <strong>Do not mix views
+without explicit framing</strong>.</p>
 </blockquote>
+
+<h2 id="three-views-codeql">Three views of CodeQL scoring (per methodology §5)</h2>
+<p>The methodology distinguishes <em>detection quality on entries that
+completed</em> from <em>operational usefulness under a fixed budget</em> from
+<em>reliability of producing usable output at all</em>. CodeQL's headline
+row above is the operational (view B) framing. The full triplet:</p>
+<table>
+<thead>
+<tr>
+<th>View</th>
+<th>What it measures</th>
+<th>CodeQL value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>A. Detection on completed subset</strong></td>
+<td>"When the tool ran successfully, did it find the bug?" — TPs ÷ pairs where the tool produced parseable SARIF on both sides.</td>
+<td><strong>0 TP / 12 paired pairs</strong> (restricted to pairs where both vuln and fix sides produced parseable SARIF; see <a href="#codeql-restricted-view">CodeQL restricted view</a>)</td>
+</tr>
+<tr>
+<td><strong>B. CI-budget effective recall</strong> <em>(operational headline)</em></td>
+<td>"Under the methodology's 10-min/entry offline budget, how useful is the tool operationally?" — TPs ÷ ALL 80 paired pairs in the corpus, with timeouts / not-runs counted as failures.</td>
+<td><strong>0 TP / 80 pairs</strong> (= 0.0% recall; the headline table row above)</td>
+</tr>
+<tr>
+<td><strong>C. Reliability / completion rate</strong></td>
+<td>"How often did the tool produce usable output?" — paired pairs where both sides completed ÷ ALL 80 pairs.</td>
+<td><strong>12 / 80 = 15.0% reliability</strong> (both sides ran; the remaining 85% either timed out at DB-create on one or both sides, or never reached analysis before the sweep wall-clock cap was hit)</td>
+</tr>
+</tbody>
+</table>
+<p>Reading the three views together: <em>on the 15% of pairs where CodeQL
+produced parseable output, it still fired zero in-class true positives
+at ≥ WARNING (view A); under the methodology's CI-realistic budget the
+combined ruleset-coverage + budget-exhaustion failure produces 0%
+recall (view B); the operational reliability of the locked CodeQL
+configuration on this corpus is 15% (view C).</em> Each view answers a
+different question, and methodology §5 keeps them separated for that
+reason. View B remains the operational headline for the writeup table
+because it reflects what a real CI user sees, but it should never be
+the only number presented.</p>
+<p>For the other tools the three views collapse to a single value:
+Semgrep ran on 160/160 (reliability 100%); Ward attempted 160/160 with
+14 internal errors (reliability 91%); cargo-geiger ran on 160/160
+(context-only); Rudra ran on 6/160 (reliability 3.75%, the dropout
+that justifies the §10 "did not run" reporting). Only CodeQL needs
+the three-view decomposition because its budget-exhaustion failure
+mode is what makes view A and view B diverge.</p>
 <h2 id="pairwise-mcnemar-tests">Pairwise McNemar tests</h2>
 <p>McNemar's exact two-sided binomial test on per-pair correctness (each pair
 is one trial; <code>fully_correct</code> ≡ TP on vuln side ∧ TN on fix side). Per
