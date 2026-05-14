@@ -92,7 +92,12 @@ were reused via `codeql database analyze --rerun` so we paid only
 the analyze cost (~15s/entry vs full DB-create at ~10min/entry).
 The broader suite added queries like `rust/regex-injection`,
 `rust/ctor-initialization`, `rust/cleartext-storage-database` —
-none of which target unsafe-class memory-safety bugs.
+none of which extend the unsafe-pointer / lifetime coverage already
+in `rust-security-extended.qls` (notably `rust/access-after-lifetime-ended`,
+`rust/access-invalid-pointer`, and `rust/uncontrolled-allocation-size`
+— 2 full + 1 partial out of ~17 total queries). On the unsafe-class
+advisory shapes in this corpus, these did not fire at the methodology's
+WARNING gate in either the locked or the aux run.
 
 ## Aux table — per-tool TP/FP/TN/FN with delta vs headline
 

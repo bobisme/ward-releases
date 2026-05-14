@@ -152,7 +152,13 @@ were reused via <code>codeql database analyze --rerun</code> so we paid only
 the analyze cost (~15s/entry vs full DB-create at ~10min/entry).
 The broader suite added queries like <code>rust/regex-injection</code>,
 <code>rust/ctor-initialization</code>, <code>rust/cleartext-storage-database</code> —
-none of which target unsafe-class memory-safety bugs.</p>
+none of which extend the unsafe-pointer / lifetime coverage already
+in <code>rust-security-extended.qls</code> (notably
+<code>rust/access-after-lifetime-ended</code>, <code>rust/access-invalid-pointer</code>,
+and <code>rust/uncontrolled-allocation-size</code> — 2 full + 1 partial out
+of ~17 total queries). On the unsafe-class advisory shapes in this
+corpus, these did not fire at the methodology's WARNING gate in
+either the locked or the aux run.</p>
 <h2 id="aux-table-per-tool-tpfptnfn-with-delta-vs-headline">Aux table — per-tool TP/FP/TN/FN with delta vs headline</h2>
 <p><strong>Raw (pre-paired) classifications.</strong> Paired finding-identity
 reclassification is applied downstream by <code>ward-eval bench-score</code>;

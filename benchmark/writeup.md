@@ -158,21 +158,43 @@ not relax either gate post-hoc.
 
 ## Results
 
-### Headline table — full corpus (n = 80 paired pairs)
+### Headline table — scanners on the full corpus (n = 80 paired pairs)
 
-| Tool | TP | FP | TN | FN | Precision (95% CI) | Recall (95% CI) | F1 (95% CI) | MCC (95% CI) |
+| Scanner | TP | FP | TN | FN | Precision (95% CI) | Recall (95% CI) | F1 (95% CI) | MCC (95% CI) |
 |------|----|----|----|----|--------------------|-----------------|-------------|--------------|
 | **Ward** | **39** | **0** | **77** | **41** | **1.000 [1.000, 1.000]** | **0.487 [0.388, 0.600]** | **0.655 [0.559, 0.750]** | **+0.564 [+0.484, +0.651]** |
 | Semgrep | 0 | 0 | 80 | 80 | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] | +0.000 [+0.000, +0.000] |
 | Rudra | 0 | 0 | 80 | 80 | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] | +0.000 [+0.000, +0.000] |
-| cargo-geiger | 0 | 0 | 80 | 80 | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] | +0.000 [+0.000, +0.000] |
 | CodeQL (partial, 50/160 entries processed) | 0 | 0 | 80 | 80 | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] | +0.000 [+0.000, +0.000] |
+
+#### Context tools (not in head-to-head)
+
+**cargo-geiger** is an unsafe-usage inventory tool, not a vulnerability
+scanner; methodology §4 carries it as a context column, not a
+head-to-head row. It does not produce detect-class findings (its
+`detected` output is hard-coded to false by design) so per-tool
+TP/FP/TN/FN scoring against an advisory corpus is not its lane. We
+report its unsafe-density numbers separately so reviewers can
+sanity-check whether high-recall scanners might be firing on every
+`unsafe` block. On this corpus cargo-geiger reports unsafe-density
+counts on 160/160 entries (one count per crate). It is intentionally
+excluded from the headline scanner table above.
 
 > **Counting unit.** Per-pair fully-correct counting (above) and the
 > per-entry paired classification yield slightly different Ward
 > numbers. Per-entry: TP=39, FP=0, TN=70, FN=34, F1=0.696,
 > MCC=+0.600. Per-pair: as above. Methodology §7 uses the per-pair
 > unit for resampling, so the per-pair CIs are the canonical headline.
+>
+> **Precision CI caveat.** Observed precision is 1.000 (0 FPs across
+> 39 TPs). The bootstrap 95% CI of [1.000, 1.000] is a *degenerate
+> artifact* — resampling from a sample with zero FPs never produces a
+> non-zero FP, so the percentile method collapses to a single point.
+> The honest summary is a binomial confidence bound: with 39/39
+> successes, the **Wilson 95% lower bound on the population precision
+> is 0.910** (Clopper-Pearson 95% lower bound 0.910 as well; one-sided
+> 95% LCB 0.926). Read the population precision as "≥ 0.91 at 95%
+> confidence", not "exactly 1.000".
 
 ### McNemar pairwise tests
 
@@ -240,10 +262,14 @@ that populate the corpus (CWE-119, -120, -125, -129, -190, -362, -415,
 | Rudra | 4 categories | 4 (100% by design) | **100% coverage; 96% errored** |
 | cargo-geiger | N/A (counter) | N/A | **N/A (context only)** |
 
-CodeQL ships exactly two unsafe-class queries in its security-extended
-suite: `rust/access-after-lifetime-ended` and
-`rust/access-invalid-pointer`. The remaining 17 target web-app, crypto,
-or configuration shapes that don't overlap the corpus.
+CodeQL's `rust-security-extended.qls` ships a small number of
+relevant unsafe-pointer / lifetime queries (notably
+`rust/access-after-lifetime-ended`, `rust/access-invalid-pointer`,
+and `rust/uncontrolled-allocation-size` — 2 full + 1 partial out
+of ~17 total queries). On the unsafe-class advisory shapes in
+this corpus, these did not fire at the methodology's WARNING
+gate. The remaining queries target web-app, crypto, or
+configuration shapes that don't overlap the corpus.
 
 Semgrep's two community packs together carry 11 unique rules. The one
 rule that targets unsafe Rust at all (`rust.lang.security.unsafe-usage`)

@@ -64,12 +64,17 @@ corpus</strong>. Every other tool in the head-to-head — Semgrep, Rudra, CodeQL
 cargo-geiger — produced <strong>zero true positives</strong> under the methodology's
 locked severity threshold and ruleset pins. Ward is the only tool in scope
 that fires any in-class detection on the corpus.</p>
-<p><strong>Headline fairness finding:</strong> Ward completes all 160 entries within the
-budget; CodeQL exceeded the 10-minute per-entry budget on <strong>53% of the
-entries it attempted</strong> (25 timeouts at the DB-build/analyze step) and
-processed only <strong>50 of 160</strong> (31%) before the wall-clock budget was
-exhausted. Methodology §5 mandates timeouts be reported separately, not
-folded into zero-finding; doing so is itself the finding.</p>
+<p><strong>Headline fairness finding:</strong> Ward <em>attempted</em> all 160 entries.
+<strong>146 (91%) completed</strong> under the budget; <strong>14 (9%) hit an internal 600s
+error path</strong> on the largest repos (a dedup/exfiltration heuristic
+runaway filed for hardening as bn-2q4pn). The 14 errored entries are
+counted as <strong>failures</strong> (FN on tp-side, TN on tn-side) in the headline
+numbers, not as successes. By comparison CodeQL exceeded the 10-minute
+per-entry budget on <strong>53% of the entries it attempted</strong> (25 timeouts at
+the DB-build/analyze step) and processed only <strong>50 of 160</strong> (31%) before
+the wall-clock budget was exhausted. Methodology §5 mandates timeouts
+be reported separately from "wrong"; the headline tables apply this
+separation explicitly (see the three-view decomposition below).</p>
 <h2 id="run-provenance">Run provenance</h2>
 <table>
 <thead>
@@ -134,15 +139,17 @@ not zero findings; the 110 not-reached are reported as <code>error="not_run"</co
 <p><code>bench-results-codeql.json</code> was synthesized from on-disk SARIF + DB
 artifacts by <code>scripts/synth-bench-results-codeql.py</code>; the schema matches
 <code>crates/ward-eval/src/bench/mod.rs::BenchToolResult</code>.</p>
-<h2 id="headline-table-full-corpus-n-80-paired-pairs">Headline table — full corpus (n = 80 paired pairs)</h2>
+<h2 id="headline-table-full-corpus-n-80-paired-pairs">Headline table — scanners on the full corpus (n = 80 paired pairs)</h2>
 <p>Bootstrap 95% CIs, 1000 stratified resamples by vuln_class, seed
 <code>0x77617264_62656e63</code> (= <code>"wardbenc"</code> in ASCII hex). Counting unit
 is the <strong>paired pair</strong> (one outcome per <code>&lt;id&gt;</code> / <code>&lt;id&gt;-fix</code> couple),
-matching methodology §7's resampling unit.</p>
+matching methodology §7's resampling unit. cargo-geiger is excluded
+from the scanner table per methodology §4 (context-only) and is
+reported in the <em>Context tools</em> note below.</p>
 <table>
 <thead>
 <tr>
-<th>Tool</th>
+<th>Scanner</th>
 <th>TP</th>
 <th>FP</th>
 <th>TN</th>
@@ -188,17 +195,6 @@ matching methodology §7's resampling unit.</p>
 <td>+0.000 [+0.000, +0.000]</td>
 </tr>
 <tr>
-<td>cargo-geiger</td>
-<td>0</td>
-<td>0</td>
-<td>80</td>
-<td>80</td>
-<td>0.000 [0.000, 0.000]</td>
-<td>0.000 [0.000, 0.000]</td>
-<td>0.000 [0.000, 0.000]</td>
-<td>+0.000 [+0.000, +0.000]</td>
-</tr>
-<tr>
 <td>CodeQL (partial, 50/160 processed)</td>
 <td>0</td>
 <td>0</td>
@@ -211,6 +207,20 @@ matching methodology §7's resampling unit.</p>
 </tr>
 </tbody>
 </table>
+
+<h3 id="context-tools">Context tools (not in head-to-head)</h3>
+<p><strong>cargo-geiger</strong> is an unsafe-usage inventory tool, not a
+vulnerability scanner; methodology §4 carries it as a <em>context-only
+column</em>. It walks the dep graph and emits per-crate counts of
+<code>unsafe</code> blocks / <code>unsafe fn</code> / <code>unsafe impl</code> / <code>unsafe trait</code>; it
+does not produce detect-class findings (its <code>detected</code> output is
+hard-coded to false by design) so per-tool TP/FP/TN/FN scoring
+against an advisory corpus is not its lane. We report its
+unsafe-density numbers separately so reviewers can sanity-check
+whether high-recall scanners might be firing on every <code>unsafe</code>
+block. On this corpus cargo-geiger ran on 160/160 entries cleanly,
+producing one unsafe-density count per crate; it is intentionally
+excluded from the scanner table above.</p>
 <blockquote>
 <p><strong>Counting-unit note</strong>: Per-pair fully-correct counting (above) and
 per-entry paired classification produce slightly different numbers
@@ -220,6 +230,15 @@ yields TP=39, FP=0, TN=77, FN=41, <strong>F1=0.655, MCC=+0.564</strong> with
 bootstrap CIs above (stats.json). Both views are reconcilable;
 methodology §7 uses the per-pair unit for resampling, so the
 per-pair CIs above are the canonical headline.</p>
+<p><strong>Precision CI caveat</strong>: Observed precision is 1.000 (0 FPs across
+39 TPs). The bootstrap 95% CI of [1.000, 1.000] is a <em>degenerate
+artifact</em> — resampling from a sample with zero FPs never produces a
+non-zero FP, so the percentile method collapses to a single point.
+The honest summary is a binomial confidence bound: with 39/39
+successes, the <strong>Wilson 95% lower bound on the population precision
+is 0.910</strong> (Clopper-Pearson 95% lower bound 0.910 as well; one-sided
+95% LCB 0.926). Read the population precision as "≥ 0.91 at 95%
+confidence", not "exactly 1.000".</p>
 <p><strong>CodeQL caveat</strong>: Of the 160 entries, CodeQL produced parseable SARIF
 for <strong>25</strong>, timed out at the DB-build/analyze step on <strong>25</strong>, and never
 ran on <strong>110</strong> (the sweep was killed at 6h 36m elapsed because CodeQL
@@ -844,11 +863,16 @@ positives</strong>:</p>
    attempted entries (50%) exceeded the cap at DB-create — and the 110
    entries it never reached push its effective corpus coverage to 31%.
    Even within the 25 entries that produced parseable SARIF, it fired
-   zero findings on the affected files; CodeQL ships
-   <code>rust-security-extended.qls</code> with 27 rules, none of which target
-   unsafe-class memory-safety bugs (already documented in the bn-1qhpu
-   smoke). This is a ruleset / corpus fit failure, not a CodeQL
-   capability statement at large.</p>
+   zero findings on the affected files at the methodology's WARNING
+   gate. CodeQL's <code>rust-security-extended.qls</code> ships a small number
+   of relevant unsafe-pointer / lifetime queries (notably
+   <code>rust/access-after-lifetime-ended</code>, <code>rust/access-invalid-pointer</code>,
+   and <code>rust/uncontrolled-allocation-size</code> — 2 full + 1 partial out of
+   ~17 total queries; see the Competitor ruleset audit table below).
+   On the unsafe-class advisory shapes in this corpus, none of these
+   fired at the WARNING gate. This is a ruleset / corpus fit failure
+   on the specific bug shapes here, not a CodeQL capability statement
+   at large.</p>
 </li>
 <li>
 <p><strong>Semgrep</strong> completed all 160 entries cleanly (<code>p/rust</code> +

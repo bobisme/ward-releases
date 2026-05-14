@@ -181,11 +181,11 @@ seed <code>0x77617264_62656e63</code> (<code>"wardbenc"</code> in ASCII hex). Bo
 must be cleared simultaneously before a "beats" claim is made. We do
 not relax either gate post-hoc.</p>
 <h2 id="results">Results</h2>
-<h3 id="headline-table-full-corpus-n-80-paired-pairs">Headline table — full corpus (n = 80 paired pairs)</h3>
+<h3 id="headline-table-full-corpus-n-80-paired-pairs">Headline table — scanners on the full corpus (n = 80 paired pairs)</h3>
 <table>
 <thead>
 <tr>
-<th>Tool</th>
+<th>Scanner</th>
 <th>TP</th>
 <th>FP</th>
 <th>TN</th>
@@ -231,17 +231,6 @@ not relax either gate post-hoc.</p>
 <td>+0.000 [+0.000, +0.000]</td>
 </tr>
 <tr>
-<td>cargo-geiger</td>
-<td>0</td>
-<td>0</td>
-<td>80</td>
-<td>80</td>
-<td>0.000 [0.000, 0.000]</td>
-<td>0.000 [0.000, 0.000]</td>
-<td>0.000 [0.000, 0.000]</td>
-<td>+0.000 [+0.000, +0.000]</td>
-</tr>
-<tr>
 <td>CodeQL (partial, 50/160 entries processed)</td>
 <td>0</td>
 <td>0</td>
@@ -254,12 +243,33 @@ not relax either gate post-hoc.</p>
 </tr>
 </tbody>
 </table>
+
+<h4>Context tools (not in head-to-head)</h4>
+<p><strong>cargo-geiger</strong> is an unsafe-usage inventory tool, not a
+vulnerability scanner; methodology §4 carries it as a context column,
+not a head-to-head row. It does not produce detect-class findings
+(its <code>detected</code> output is hard-coded to false by design) so per-tool
+TP/FP/TN/FN scoring against an advisory corpus is not its lane. We
+report its unsafe-density numbers separately so reviewers can sanity-
+check whether high-recall scanners are simply firing on every
+<code>unsafe</code> block. On this corpus cargo-geiger reports unsafe-density
+counts on 160/160 entries (one count per crate). It is intentionally
+excluded from the headline scanner table above.</p>
 <blockquote>
 <p><strong>Counting unit.</strong> Per-pair fully-correct counting (above) and the
 per-entry paired classification yield slightly different Ward
 numbers. Per-entry: TP=39, FP=0, TN=70, FN=34, F1=0.696,
 MCC=+0.600. Per-pair: as above. Methodology §7 uses the per-pair
 unit for resampling, so the per-pair CIs are the canonical headline.</p>
+<p><strong>Precision CI caveat.</strong> Observed precision is 1.000 (0 FPs across
+39 TPs). The bootstrap 95% CI of [1.000, 1.000] is a <em>degenerate
+artifact</em> — resampling from a sample with zero FPs never produces a
+non-zero FP, so the percentile method collapses to a single point.
+The honest summary is a binomial confidence bound: with 39/39
+successes, the <strong>Wilson 95% lower bound on the population precision
+is 0.910</strong> (Clopper-Pearson 95% lower bound 0.910 as well; one-sided
+95% LCB 0.926). Read the population precision as "≥ 0.91 at 95%
+confidence", not "exactly 1.000".</p>
 </blockquote>
 <h3 id="mcnemar-pairwise-tests">McNemar pairwise tests</h3>
 <table>
@@ -422,10 +432,14 @@ that populate the corpus (CWE-119, -120, -125, -129, -190, -362, -415,
 </tr>
 </tbody>
 </table>
-<p>CodeQL ships exactly two unsafe-class queries in its security-extended
-suite: <code>rust/access-after-lifetime-ended</code> and
-<code>rust/access-invalid-pointer</code>. The remaining 17 target web-app, crypto,
-or configuration shapes that don't overlap the corpus.</p>
+<p>CodeQL's <code>rust-security-extended.qls</code> ships a small number of
+relevant unsafe-pointer / lifetime queries (notably
+<code>rust/access-after-lifetime-ended</code>, <code>rust/access-invalid-pointer</code>,
+and <code>rust/uncontrolled-allocation-size</code> — 2 full + 1 partial out
+of ~17 total queries). On the unsafe-class advisory shapes in this
+corpus, these did not fire at the methodology's WARNING gate. The
+remaining queries target web-app, crypto, or configuration shapes
+that don't overlap the corpus.</p>
 <p>Semgrep's two community packs together carry 11 unique rules. The one
 rule that targets unsafe Rust at all (<code>rust.lang.security.unsafe-usage</code>)
 fires on every <code>unsafe</code> block in every file and emits at INFO severity
